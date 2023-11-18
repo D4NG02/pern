@@ -52,7 +52,7 @@ routerCurrency.get('/get/:id', async(req: Request, res: Response) => {
     try {
         console.log("Get selected currency: " +req.params)
         const { id } = req.params.id
-        let currencytable = pool.query(
+        let currencytable = await pool.query(
                                     "SELECT * FROM currencytable WHERE table_id=$1",
                                     [id]
                                     )
@@ -68,7 +68,7 @@ routerCurrency.delete('/delete/:id', async(req: Request, res: Response) => {
     try {
         const { id } = req.params
         console.log(id)
-        let deleteTable = pool.query(
+        let deleteTable = await pool.query(
                                     "DELETE FROM currencytable WHERE table_id=$1",
                                     [id]
                                     )
