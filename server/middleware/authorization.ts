@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from 'express';
 
-module.exports = async (req: Request, res: Response, next: NextFunction) => {
+async function authorize (req: Request, res: Response, next: NextFunction)  {
     try {
         const jwtToken = req.header("token")
 
@@ -11,9 +11,11 @@ module.exports = async (req: Request, res: Response, next: NextFunction) => {
 
         const payload = jwt.verify(jwtToken, process.env.jwtSecret)
         req.user = payload.user
-        
+        next()
     } catch (error) {
         console.log(error.message);
         return res.status(403).json("Not Authorize");
     }
 }
+
+export default authorize

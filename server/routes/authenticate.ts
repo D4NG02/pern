@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import pool from '../db';
 import jwtGenerator from "../utility/jwtGenerator";
 import validInfo from "../middleware/validInfo";
+import authorize from "../middleware/authorization";
 
 const routerAuth = Router();
 
@@ -39,6 +40,7 @@ routerAuth.post('/register', validInfo, async (req: Request, res, Response) => {
     }
 })
 
+// Login
 routerAuth.post('/login', validInfo, async (req: Request, res, Response) => {
     try {
         // 1. Desctructure req.body
@@ -61,6 +63,16 @@ routerAuth.post('/login', validInfo, async (req: Request, res, Response) => {
         // 4. Give jwt token
         const token = jwtGenerator(user.rows[0].user_id)
         res.json({ token })
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).send("Server Error")
+    }
+})
+
+// Verify
+routerAuth.get('/verify', authorize, async (req: Request, res, Response) => {
+    try {
+        res.json(true)
     } catch (error) {
         console.log(error.message)
         res.status(500).send("Server Error")
