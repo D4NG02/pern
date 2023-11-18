@@ -1,33 +1,34 @@
-import { QueryClient, QueryClientProvider } from "react-query";
+import { Fab } from "@mui/material";
 
-import { ThemeProvider, Typography } from '@mui/material';
-import { CustomComponent, constantStyle } from './Utility/CustomStyle';
+import { useStateProvider } from "./Utility/Reducer/StateProvider";
 
-import { StateProvider } from './Utility/Reducer/StateProvider';
-import reducer, { initialState } from './Utility/Reducer/reducer';
+import HomeIcon from '@mui/icons-material/Home';
 
-import CurrencyTable from './Container/Currency/CurrencyTable';
-import CurrencyForm from './Container/Currency/CurrencyForm';
+import { reducerCases } from "./Utility/Reducer/Constant";
+import CardCustom from "./Container/CardCustom";
+import Currency from "./Container/Currency/Currency";
+import CalendarContainer from "./Container/Calender/CalendarContainer";
 
 export default function App() {
-  const queryClient = new QueryClient();
+  const [{ cardType }, dispatch] = useStateProvider()
+
+  const handleBack = () => {
+    dispatch({ type: reducerCases.SET_CARD, cardType: null })
+  }
 
   return (
-    <StateProvider initialState={initialState} reducer={reducer}>
-      <ThemeProvider theme={CustomComponent}>
-        <QueryClientProvider client={queryClient}>
-          <Typography component='div' variant='body1' sx={{ display: "flex",
-                    flexDirection: 'column',
-                    gap: '20px',
-                    padding: '1rem',
-                    border: '2px solid '+constantStyle.color_primary }}>
+    <>
+      { cardType==null && <>
+        <CardCustom />
+      </>
+      }
+      { cardType &&  <Fab sx={{ position: 'absolute', left: '1rem', bottom: '1rem' }} size='small' color="primary" onClick={handleBack} aria-label="Back"><HomeIcon /></Fab> }
 
-            <CurrencyTable />
-            <CurrencyForm />
+      {/* TASK 1 */}
+      { cardType==='Currency' && <Currency />}
 
-          </Typography>
-        </QueryClientProvider>
-      </ThemeProvider>
-    </StateProvider>
+      {/* TASK 2 */}
+      { cardType==='Calendar' && <CalendarContainer /> }
+    </>
   );
 }

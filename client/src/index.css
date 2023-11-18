@@ -1,12 +1,40 @@
+:root {
+  --color-blue: #00718f;
+  --color-lightblue: #5aa2ae;
+  --color-lightgray: #e9eaed;
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-lightblue);
+}
+::-webkit-scrollbar-thumb {
+  cursor: pointer;
+  border-radius: 3px;
+  background: var(--color-blue);
+  -webkit-transition: color .3s ease;
+  transition: color .3s ease;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-lightgray);
+  border-radius: 3px;
+}
+
 body {
   height: 100vh;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Arial', 'Open Sans';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
+}
+
+input {
+  text-align: unset;
 }
 
 #root {
@@ -14,4 +42,21 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+
+
+/* Calendar */
+td.fc-day-sat, td.fc-day-sun {
+  color: red;
+}
+a.fc-h-event {
+  background-color: unset;
+  border: unset;
+}
+.fc .fc-popover {
+  z-index: 100;
+}
+.fc .fc-toolbar {
+  gap: 2rem
 }

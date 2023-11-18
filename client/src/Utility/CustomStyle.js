@@ -80,12 +80,52 @@ const constantStyle = {
 
 const CustomComponent = createTheme({
     components: {
+        // Card Style
+        MuiCard: {
+            styleOverrides: {
+                root: {
+                    // minWidth: '240px',
+                    color: constantStyle.color_primary,
+
+                    '&.outlined': {
+                        border: '2px solid' +constantStyle.color_primary
+                    }
+                },
+            },
+        },
+        MuiCardContent: {
+            styleOverrides: {
+                root: {
+                    '&:last-child': {
+                        padding: '16px'
+                    }
+                },
+            },
+        },
+
         // Typogrphy Style
         MuiTypography: {
             styleOverrides: {
                 body1: {
                     fontFamily: constantStyle.font_family,
                 },
+            },
+        },
+
+        // MuiChip Style
+        MuiChip: {
+            styleOverrides: {
+                root: {
+                    display: 'block',
+                    fontFamily: 'inherit',
+                    height: 'unset',
+                    fontSize: '12px'
+                },
+                label: {
+                    display: 'block',
+                    padding: '4px 8px',
+                    width: '100%'
+                }
             },
         },
 
@@ -117,6 +157,15 @@ const CustomComponent = createTheme({
             styleOverrides: {
                 root: {
                     fontFamily: 'inherit',
+
+                    '&.buttonEvent': {
+                        fontStyle: 'italic',
+                        fontSize: '10px',
+                        padding: 'unset',
+                        minWidth: 'unset',
+                        width: '100%',
+                        border: 'unset'
+                    },
                 },
 
                 textPrimary: {
@@ -128,6 +177,15 @@ const CustomComponent = createTheme({
                         backgroundColor: constantStyle.color_primary,
                     },
                 },
+
+                // outlinedSecondary: {  
+                //     color: constantStyle.color_secondary,
+                //     borderColor: constantStyle.color_secondary,
+                //     ':hover': {
+                //         borderColor: constantStyle.color_secondary,
+                //         backgroundColor: constantStyle.color_on_secondary_lighter,
+                //     }
+                // },
 
                 containedPrimary : {
                     color: constantStyle.color_on_primary,

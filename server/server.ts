@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from "cors";
 import routerCurrency from './routes/currency';
 import routerGraph from './routes/currencyGraph';
+import routerEvent from './routes/event';
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(cors());
 // Routes
 app.use('/table', routerCurrency);
 app.use('/graph', routerGraph);
+app.use('/event', routerEvent);
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello, TypeScript Express!');
