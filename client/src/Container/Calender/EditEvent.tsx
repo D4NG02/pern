@@ -16,13 +16,23 @@ import { inputSchema, inputSchemaType } from './ConstantEvent';
 import DeleteEvent from "./DeleteEvent";
 
 export default function EditEvent() {
+  const [{ token, eventID, eventDate, eventTitle, eventNote, eventPrio }, dispatch] = useStateProvider()
   const queryClient = useQueryClient();
   const updateEvent = async () => {
-    const { data: response } = await axios.post('/event/update/' +eventID,
-    {
-      eventID, eventDate, eventTitle, eventNote, eventPrio
-    });
-    return response.data;
+    const deleteCurrency = async () => {
+        const { data: response } = await fetch('/table/update/' +eventID, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'token': token
+          },
+        }).then((response) => {
+          if (response.ok) {
+            return response.json()
+          }
+        })
+        return response;
+    };
   };
   // eslint-disable-next-line
   const { mutate, isLoading } = useMutation(
@@ -43,8 +53,6 @@ export default function EditEvent() {
   
 
 
-
-  const [{ eventID, eventDate, eventTitle, eventNote, eventPrio }, dispatch] = useStateProvider()
   const { register, handleSubmit, reset, formState: { errors }, } = useForm<inputSchemaType>({ resolver: zodResolver(inputSchema) })
   const handleUpdate: SubmitHandler<inputSchemaType> = (input) => {
     const newEvent = { ...input, eventID, eventDate, eventPrio };
@@ -91,21 +99,23 @@ export default function EditEvent() {
       <Box pb={2}>
         <FormLabel sx={{ color: 'white' }}>Title</FormLabel>
         <TextField sx={{ '& .MuiInputBase-root': {bgcolor: 'white'} }}
-                  placeholder={eventTitle}
+                  value={eventTitle} onChange={(e)=>{
+                    dispatch({ type: reducerCases.SET_EVENT_TITLE, eventTitle: e.target.value })
+                  }}
                   size="small"  fullWidth 
                   label={errors.title?.message}
-                  color={errors.title? "error": 'primary'}
-                  {...register('title')} />
+                  color={errors.title? "error": 'primary'} />
       </Box>
 
       <Box pb={2}>
         <FormLabel sx={{ color: 'white' }}>Note</FormLabel>
         <TextField sx={{ '& .MuiInputBase-root': {bgcolor: 'white'} }}
-                  placeholder={eventNote}
+                  value={eventNote} onChange={(e)=>{
+                    dispatch({ type: reducerCases.SET_EVENT_NOTE, eventNote: e.target.value })
+                  }}
                   size="small" multiline minRows={4} maxRows={4} fullWidth 
                   label={errors.note?.message}
-                  color={errors.note? "error": 'primary'}
-                  {...register('note')} />
+                  color={errors.note? "error": 'primary'} />
       </Box>
 
       <Box sx={{ pb: 2, display: 'flex', alignItems: 'baseline' }}>

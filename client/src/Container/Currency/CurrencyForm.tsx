@@ -1,4 +1,3 @@
-import axios from "axios";
 import { Button, FormLabel, TextField } from "@mui/material"
 
 import { z } from "zod";
@@ -13,25 +12,44 @@ import CurrencyDelete from "./CurrencyDelete";
 
 const inputSchema = z.object({
     country: z.string({
-        required_error: "Country is required",
-        invalid_type_error: "Country must be a string",
-      }).min(4, { message: 'Must 4 or more characters' }),
+            required_error: "Country is required",
+            invalid_type_error: "Country must be a string",
+        }).min(4, { message: 'Must 4 or more characters' }),
 
       
     // input for value is string
     value: z.string({
-        required_error: "Value is required",
-        invalid_type_error: "Value must be a number",
-      }).min(4, { message: 'Must 4 or more digits' }),
+            required_error: "Value is required",
+            invalid_type_error: "Value must be a number",
+        }).min(4, { message: 'Must 4 or more digits' }),
 });
 type inputSchemaType = z.infer<typeof inputSchema>;
 
 export default function CurrencyForm() {
+    const [{ token }, dispatch] = useStateProvider()
 
     // Add Api
     const queryClient = useQueryClient();
     const addCurrency = async (data: inputSchemaType) => {
-        const { data: response } = await axios.post('/table/add', data);
+        const { data: response } = await fetch("/table/add", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'token': token
+                },
+                body: JSON.stringify(data)
+            })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json()
+                } else if (response.status === 403 && response.statusText === "Forbidden") {
+                    sessionStorage.removeItem("token");
+                    dispatch({ type: reducerCases.SET_TOKEN, token: null })
+                    dispatch({ type: reducerCases.SET_CARD, cardType: null })
+                } else {
+                    console.log(response)
+                }
+            })
         return response.data;
     };
     // eslint-disable-next-line
@@ -41,19 +59,22 @@ export default function CurrencyForm() {
             onSuccess: (data: any, variables: inputSchemaType, context: unknown) => {
                 alert("Added New Currency")
             },
-            onError: () => {
-                alert("Has error")
+            onError: (error: any, variables: inputSchemaType, context: unknown) => {
+                if (error.status === 403 && error.statusText === "Forbidden") {
+                    sessionStorage.removeItem("token");
+                    dispatch({ type: reducerCases.SET_TOKEN, token: null })
+                    dispatch({ type: reducerCases.SET_CARD, cardType: null })
+                } else {
+                    console.log(error)
+                }
             },
-            onSettled: () => {
-                queryClient.invalidateQueries('create')
-            }
+            onSettled: () => { }
         }
     );
 
 
     // Submit ux
     // eslint-disable-next-line
-    const [{ row, country }, dispatch] = useStateProvider()
     const { register, handleSubmit, reset, formState: { errors }, } = useForm<inputSchemaType>({ resolver: zodResolver(inputSchema) })
     const onSubmit: SubmitHandler<inputSchemaType> = (input) => {
         const addCurrency = { ...input };

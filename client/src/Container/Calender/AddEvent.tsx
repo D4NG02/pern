@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState } from "react";
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,9 +16,25 @@ import { inputSchema, inputSchemaType } from "./ConstantEvent";
 
 export default function AddEvent() {
   const queryClient = useQueryClient();
+  const [{ token, eventDate, eventPrio }, dispatch] = useStateProvider()
+  
   const addEvent = async (data: inputSchemaType) => {
-    const { data: response } = await axios.post('/event/add', data);
-    return response.data;
+    const { data: response } = await fetch("/event/add",
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'token': token
+        },
+        body: JSON.stringify(data)
+      })
+      .then((response) => {
+        if (response.ok) {
+          return response.json()
+        }
+      }).catch((err) => {
+        return err
+      })
   };
   // eslint-disable-next-line
   const { mutate, isLoading } = useMutation(
@@ -28,7 +43,9 @@ export default function AddEvent() {
       onSuccess: (data: any, variables: inputSchemaType, context: unknown) => {
         alert("Added New Event")
       },
-      onError: () => {
+      onError: (error: any, variables: inputSchemaType, context: unknown) => {
+        console.log(variables)
+        console.log(error)
         alert("Has error")
       },
       onSettled: () => {
@@ -37,7 +54,6 @@ export default function AddEvent() {
     }
   );
 
-  const [{ eventDate, eventPrio }, dispatch] = useStateProvider()
   const { register, handleSubmit, reset, formState: { errors }, } = useForm<inputSchemaType>({ resolver: zodResolver(inputSchema) })
   const onSubmit: SubmitHandler<inputSchemaType> = (input) => {
     const newEvent = { ...input, eventDate, eventPrio };

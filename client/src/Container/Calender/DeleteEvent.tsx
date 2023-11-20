@@ -14,19 +14,31 @@ import { constantStyle } from '../../Utility/CustomStyle';
 
 const inputSchema = z.object({
     eventID: z.number(),
-    eventDate: z.string(),
-    eventTitle: z.string(),
-    eventNote: z.string(),
-    eventPrio: z.number()
 });
 type inputSchemaType = z.infer<typeof inputSchema>;
 
 export default function DeleteEvent() {
     const [modal, setModal] = useState(false)
-    const [{ eventID, eventDate, eventTitle, eventNote, eventPrio }, dispatch] = useStateProvider()
+    const [{ token, eventID }, dispatch] = useStateProvider()
     const queryClient = useQueryClient();
-    const deleteEvent = async () => {
-        const { data: response } = await axios.post('/event/delete/' +eventID);
+    const deleteEvent = async (data: inputSchemaType) => {
+        console.log(data)
+        const { data: response } = await fetch("/event/delete",
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'token': token
+                },
+                body: JSON.stringify(data)
+            })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json()
+                }
+            }).catch((err) => {
+                return err
+            })
         return response.data;
     };
     const { mutate, isLoading } = useMutation(
@@ -35,8 +47,10 @@ export default function DeleteEvent() {
             onSuccess: (data: any, variables: inputSchemaType, context: unknown) => {
                 alert("Delete")
             },
-            onError: () => {
-                alert("Has error")
+            onError: (error: any, variables: inputSchemaType, context: unknown) => {
+                console.log(variables)
+                // console.log(error)
+                // alert("Has error")
             },
             onSettled: () => {
                 queryClient.invalidateQueries('create')
@@ -47,8 +61,8 @@ export default function DeleteEvent() {
         setModal(true)
     }
     const handleDelete = () => {
-        const newEvent: inputSchemaType = { eventID, eventDate, eventTitle, eventNote, eventPrio }
-        mutate(newEvent)
+        const deleteEvent: inputSchemaType = { eventID }
+        mutate(deleteEvent)
         dispatch({ type: reducerCases.SET_IS_EVENT_EDIT, popupEventEdit: false })
         setModal(false)
     }

@@ -129,29 +129,6 @@ const CustomComponent = createTheme({
             },
         },
 
-        // Alert Style
-        MuiInputBase: {
-            styleOverrides: {
-                root: {
-                    fontFamily: 'inherit',
-
-                    MuiInput: {
-                        root: {
-                            marginTop: 'unset'
-                        },
-                    }
-                },
-
-                colorPrimary: {
-                    borderColor: constantStyle.color_primary,
-                },
-                colorError : {
-                    color: constantStyle.color_danger,
-                    borderColor: constantStyle.color_danger,
-                },
-            },
-        },
-
         // Button Style
         MuiButton: {
             styleOverrides: {
@@ -206,6 +183,22 @@ const CustomComponent = createTheme({
                         backgroundColor: constantStyle.color_warning_light,
                     },
                 }
+            },
+        },
+        MuiSelect: {
+            styleOverrides: {
+                root: {
+                    fontFamily: 'inherit',
+                },
+
+                outlined: {  
+                    // color: constantStyle.color_secondary,
+                    // borderColor: constantStyle.color_secondary,
+                    // ':hover': {
+                    //     borderColor: constantStyle.color_secondary,
+                    //     backgroundColor: constantStyle.color_on_secondary_lighter,
+                    // }
+                },
             },
         },
 

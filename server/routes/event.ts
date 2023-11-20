@@ -1,22 +1,24 @@
 import { Router, Request, Response } from 'express';
 import pool from '../db';
+import authorize from "../middleware/authorization";
 
 const routerEvent = Router();
 
 // Get all currency API
-routerEvent.get("/gets", async(req: Request, res: Response) => {
+routerEvent.get("/gets", authorize, async(req: Request, res: Response) => {
   try {
     console.log("Get all event")
     let {rows} = await pool.query("SELECT * FROM event")
     res.json(rows)
   } catch (error) {
     console.log(error.message)
+    res.status(500).send("Server Error")
   }
 })
 
 
 // Add currency API
-routerEvent.post("/add", async(req: Request, res: Response) => {
+routerEvent.post("/add", authorize, async(req: Request, res: Response) => {
   try {
       const { eventDate, eventPrio, note, title } = req.body
       const newCurrency = await pool.query(
@@ -25,12 +27,13 @@ routerEvent.post("/add", async(req: Request, res: Response) => {
 
       res.json({command: newCurrency.command, data: newCurrency.rows[0]})
   } catch (error) {
-      console.log(error)
+    console.log(error.message)
+    res.status(500).send("Server Error")
   }
 })
 
 // Update currency API
-routerEvent.post("/update/:id", async(req: Request, res: Response) => {
+routerEvent.post("/update/:id", authorize, async(req: Request, res: Response) => {
   try {
     console.log("Update event: " +req)
     console.table(req.body)
@@ -44,22 +47,23 @@ routerEvent.post("/update/:id", async(req: Request, res: Response) => {
     
     res.json(updateEvent.command)
   } catch (error) {
-    console.log(error)
+    console.log(error.message)
+    res.status(500).send("Server Error")
   }
 })
 
 // delete currency API
-routerEvent.post("/delete/:id", async(req: Request, res: Response) => {
+routerEvent.post("/delete", authorize, async(req: Request, res: Response) => {
   try {
-    console.log("Update event: " +req)
-    const { id } = req.params
-    console.log(id)
+    const { eventID } = req.body
+    console.log("Delete event: " +eventID)
     
-    const updateEvent = await pool.query( "DELETE FROM event WHERE event_id=$1", [id] )
+    const updateEvent = await pool.query( "DELETE FROM event WHERE event_id=$1", [eventID] )
     
     res.json(updateEvent.command)
   } catch (error) {
-    console.log(error)
+    console.log(error.message)
+    res.status(500).send("Server Error")
   }
 })
 

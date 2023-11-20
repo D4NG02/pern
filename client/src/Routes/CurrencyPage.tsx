@@ -1,8 +1,8 @@
 import { Box } from '@mui/material';
 
-import CurrencyTable from './CurrencyTable';
-import CurrencyForm from './CurrencyForm';
-import { constantStyle } from '../../Utility/CustomStyle';
+import CurrencyTable from '../Container/Currency/CurrencyTable';
+import CurrencyForm from '../Container/Currency/CurrencyForm';
+import { constantStyle } from '../Utility/CustomStyle';
 
 export default function Currency() {
     return (

@@ -14,7 +14,7 @@ async function authorize (req: Request, res: Response, next: NextFunction)  {
         next()
     } catch (error) {
         console.log(error.message);
-        return res.status(403).json("Not Authorize");
+        return res.status(403).json(error.message);
     }
 }
 

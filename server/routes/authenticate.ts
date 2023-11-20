@@ -50,14 +50,18 @@ routerAuth.post('/login', validInfo, async (req: Request, res, Response) => {
         const user = await pool.query('SELECT * FROM users WHERE user_id=$1', [user_id])
         if (user.rows.length === 0) {
             // Unauthenticated
-            return res.status(401).json("Wrong user id")
+            let status = 401
+            let message = "Wrong user id"
+            return res.status(401).json({status, message})
         }
 
         // 3. Check if incoming password same with in db
         const validPassword = await bcrypt.compare(password, user.rows[0].password)
         if (!validPassword) {
             // Unauthenticated
-            return res.status(401).json("Wrong password")
+            let status = 401
+            let message = "Wrong password"
+            return res.status(401).json({status, message})
         }
         
         // 4. Give jwt token

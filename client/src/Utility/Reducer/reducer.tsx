@@ -1,6 +1,15 @@
 import { reducerCases } from "./Constant"
 
+const dateTimeFormat = new Intl.DateTimeFormat('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+})
+const date = dateTimeFormat.formatToParts(new Date)
+
 export const initialState = {
+    token: sessionStorage.getItem("token")? sessionStorage.getItem("token"):null,
     row: null,
     country: '',
 
@@ -16,12 +25,28 @@ export const initialState = {
     eventTitle: null,
     eventNote: null,
     eventPrio: null,
+
+    eventFilterMonth: date.filter((split, index)=>{
+        if(split.type == 'month'){
+            return split.value
+        }
+    })[0].value,
+    eventFilterYear: Number(date.filter((split, index)=>{
+        if(split.type == 'year'){
+            return split.value
+        }
+    })[0].value),
 }
 
 export const initialStateType = typeof initialState
 
 const reducer = (state: any, action: any) => {
     switch (action.type) {
+        case reducerCases.SET_TOKEN:
+            return {
+                ...state, token: action.token
+            }
+
         // Menu feature ???
         case reducerCases.SET_CARD:
             return {
@@ -81,6 +106,18 @@ const reducer = (state: any, action: any) => {
             return {
                 ...state, 
                 eventPrio: action.eventPrio,
+            }
+
+        // Task 2 Date filter
+        case reducerCases.SET_EVENT_FILTER_MONTH:
+            return {
+                ...state, 
+                eventFilterMonth: action.eventFilterMonth,
+            }
+        case reducerCases.SET_EVENT_FILTER_YEAR:
+            return {
+                ...state, 
+                eventFilterYear: action.eventFilterYear,
             }
         default:
             console.log("Error reducerCases type")
