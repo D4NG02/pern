@@ -99,9 +99,7 @@ export default function EditEvent() {
       <Box pb={2}>
         <FormLabel sx={{ color: 'white' }}>Title</FormLabel>
         <TextField sx={{ '& .MuiInputBase-root': {bgcolor: 'white'} }}
-                  value={eventTitle} onChange={(e)=>{
-                    dispatch({ type: reducerCases.SET_EVENT_TITLE, eventTitle: e.target.value })
-                  }}
+                  placeholder={eventTitle} {...register("title")}
                   size="small"  fullWidth 
                   label={errors.title?.message}
                   color={errors.title? "error": 'primary'} />
@@ -110,9 +108,7 @@ export default function EditEvent() {
       <Box pb={2}>
         <FormLabel sx={{ color: 'white' }}>Note</FormLabel>
         <TextField sx={{ '& .MuiInputBase-root': {bgcolor: 'white'} }}
-                  value={eventNote} onChange={(e)=>{
-                    dispatch({ type: reducerCases.SET_EVENT_NOTE, eventNote: e.target.value })
-                  }}
+                  placeholder={eventNote} {...register("note")}
                   size="small" multiline minRows={4} maxRows={4} fullWidth 
                   label={errors.note?.message}
                   color={errors.note? "error": 'primary'} />

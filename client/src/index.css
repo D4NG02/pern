@@ -60,3 +60,6 @@ a.fc-h-event {
 .fc .fc-toolbar {
   gap: 2rem
 }
+.fc .fc-daygrid-day-top {
+  flex-direction: unset;
+}
