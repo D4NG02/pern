@@ -1,5 +1,6 @@
 import { Box, IconButton, Button, TextField, FormControl, InputLabel, OutlinedInput, InputAdornment, Typography } from '@mui/material'
 import { useForm, SubmitHandler } from "react-hook-form"
+import HowToRegIcon from '@mui/icons-material/HowToReg';
 import LoginIcon from '@mui/icons-material/Login';
 import CloseIcon from '@mui/icons-material/Close';
 import Visibility from '@mui/icons-material/Visibility';
@@ -61,72 +62,74 @@ export default function RegisterPage(props: { user_id: string }) {
         mutate(userRegister);
     }
 
-    const handleCancel = () => {
-    }
     const [showPassword, setShowPassword] = useState(false);
 
     return (
         <Fragment>
-            {!token && <Box sx={{ width: '50vw', border: '1px solid ' +constantStyle.color_primary, borderRadius: 2 }}>
-                <Typography variant='h5' sx={{ padding: 2, borderTopLeftRadius: '8px', borderTopRightRadius: '8px', bgcolor: constantStyle.color_primary }}>Register</Typography>
-                <Box p={3}>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <FormControl sx={{ paddingBottom: 3 }} size='small' variant="outlined" fullWidth>
-                            <TextField size="small" value={userID} onChange={(e)=>{ setUserID(e.target.value) }} />
-                        </FormControl>
-                        <FormControl sx={{ paddingBottom: 3 }} size='small' variant="outlined" fullWidth>
-                            <TextField size="small"
-                                label={errors.user_name?.message? errors.user_name?.message : labelUserName}
-                                color={errors.user_name ? "error" : 'primary'}
-                                {...register('user_name')} />
-                        </FormControl>
+            {!token &&
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                    <Box sx={{ width: '50vw', border: '1px solid ' +constantStyle.color_primary, borderRadius: 2 }}>
+                        <Typography variant='h5' sx={{ padding: 2, borderTopLeftRadius: '8px', borderTopRightRadius: '8px', bgcolor: constantStyle.color_primary }}>Register</Typography>
+                        <Box p={3}>
+                            <form onSubmit={handleSubmit(onSubmit)}>
+                                <FormControl sx={{ paddingBottom: 3 }} size='small' variant="outlined" fullWidth>
+                                    <TextField size="small" value={userID} onChange={(e)=>{ setUserID(e.target.value) }} />
+                                </FormControl>
+                                <FormControl sx={{ paddingBottom: 3 }} size='small' variant="outlined" fullWidth>
+                                    <TextField size="small"
+                                        label={errors.user_name?.message? errors.user_name?.message : labelUserName}
+                                        color={errors.user_name ? "error" : 'primary'}
+                                        {...register('user_name')} />
+                                </FormControl>
 
-                        <FormControl sx={{ paddingBottom: 3 }} size='small' variant="outlined" fullWidth>
-                            <InputLabel color={errors.password ? "error" : 'primary'}
-                                        htmlFor="outlined-adornment-password">
-                                {errors.password?.message? errors.password?.message : labelPassword}
-                            </InputLabel>
-                            <OutlinedInput {...register('password')}
-                                id="outlined-adornment-password"
-                                type={showPassword ? 'text' : 'password'}
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={() => { setShowPassword(true) }}
-                                            onMouseDown={() => { setShowPassword(false) }}
-                                            edge="end"
-                                            >
-                                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                }
-                                label={errors.password?.message? errors.password?.message : labelPassword}
-                                color={errors.password ? "error" : 'primary'}
-                                />
-                        </FormControl>
+                                <FormControl sx={{ paddingBottom: 3 }} size='small' variant="outlined" fullWidth>
+                                    <InputLabel color={errors.password ? "error" : 'primary'}
+                                                htmlFor="outlined-adornment-password">
+                                        {errors.password?.message? errors.password?.message : labelPassword}
+                                    </InputLabel>
+                                    <OutlinedInput {...register('password')}
+                                        id="outlined-adornment-password"
+                                        type={showPassword ? 'text' : 'password'}
+                                        endAdornment={
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={() => { setShowPassword(true) }}
+                                                    onMouseDown={() => { setShowPassword(false) }}
+                                                    edge="end"
+                                                    >
+                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        }
+                                        label={errors.password?.message? errors.password?.message : labelPassword}
+                                        color={errors.password ? "error" : 'primary'}
+                                        />
+                                </FormControl>
 
-                        <FormControl sx={{ paddingBottom: 3 }} size='small' variant="outlined" fullWidth>
-                            <TextField size="small"
-                                label={errors.position?.message? errors.position?.message : labelPosition}
-                                color={errors.position ? "error" : 'primary'}
-                                {...register('position')} />
-                        </FormControl>
+                                <FormControl sx={{ paddingBottom: 3 }} size='small' variant="outlined" fullWidth>
+                                    <TextField size="small"
+                                        label={errors.position?.message? errors.position?.message : labelPosition}
+                                        color={errors.position ? "error" : 'primary'}
+                                        {...register('position')} />
+                                </FormControl>
 
-                        <FormControl sx={{ paddingBottom: 3 }} size='small' variant="outlined" fullWidth>
-                            <TextField size="small"
-                                label={errors.country?.message? errors.country?.message : labelCountry}
-                                color={errors.country ? "error" : 'primary'}
-                                {...register('country')} />
-                        </FormControl>
+                                <FormControl sx={{ paddingBottom: 3 }} size='small' variant="outlined" fullWidth>
+                                    <TextField size="small"
+                                        label={errors.country?.message? errors.country?.message : labelCountry}
+                                        color={errors.country ? "error" : 'primary'}
+                                        {...register('country')} />
+                                </FormControl>
 
-                        <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', width: '100' }}>
-                            <Button color="primary" variant='contained' type="submit" startIcon={<LoginIcon />}>Register</Button>
-                            <Button color="info" variant='outlined' type="button" onClick={handleCancel} startIcon={<CloseIcon />}>Cancel</Button>
+                                <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', width: '100' }}>
+                                    <Button color="primary" variant='contained' type="submit" startIcon={<HowToRegIcon />}>Register</Button>
+                                    {/* <Button color="info" variant='outlined' type="button" onClick={handleCancel} startIcon={<CloseIcon />}>Cancel</Button> */}
+                                </Box>
+                            </form>
                         </Box>
-                    </form>
+                    </Box>
                 </Box>
-            </Box>}
+            }
         </Fragment>
     );
 }

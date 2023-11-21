@@ -40,17 +40,15 @@ export default function DashboardPage() {
                     <Typography textAlign='center' variant="h5" color='white'>{cardType}</Typography>
                 </Box>}
                 
-                {token &&
-                    <Box className="container" sx={{ padding: 3 }}>
-                        { cardType==null && <CardCustom /> }
+                <Box className="container" sx={{ padding: 3 }}>
+                    { cardType==null && <CardCustom /> }
 
-                        {/* TASK 1 */}
-                        { cardType==='Currency' && <CurrencyPage />}
+                    {/* TASK 1 */}
+                    { cardType==='Currency' && <CurrencyPage />}
 
-                        {/* TASK 2 */}
-                        { cardType==='Calendar' && <CalendarPage /> }
-                    </Box>
-                }
+                    {/* TASK 2 */}
+                    { cardType==='Calendar' && <CalendarPage /> }
+                </Box>
             </Box>
         </Fragment>
     );

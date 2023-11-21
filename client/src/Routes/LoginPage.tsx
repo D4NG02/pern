@@ -22,6 +22,7 @@ export const loginSchema = z.object({
 export type loginSchemaType = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
+    const [userID, setUserID] = useState('')
     const [ErrorUserID, setErrorUserID] = useState('User ID')
     const [ErrorPassword, setErrorPassword] = useState('Password')
 
@@ -43,6 +44,7 @@ export default function LoginPage() {
                 setErrorPassword("Password")
             },
             onError: (error: any, variables: loginSchemaType, context: unknown) => {
+                console.log(error.response.data)
                 setErrorUserID("User ID")
                 setErrorPassword("Password")
                 if(error.response.data.message === "Wrong user id") {
@@ -60,6 +62,7 @@ export default function LoginPage() {
     const { register, handleSubmit, reset, formState: { errors }, } = useForm<loginSchemaType>({ resolver: zodResolver(loginSchema) })
     const onSubmit: SubmitHandler<loginSchemaType> = (input) => {
         const userLogin = { ...input };
+        setUserID(userLogin.user_id)
 
         mutate(userLogin);
         reset();
@@ -71,52 +74,56 @@ export default function LoginPage() {
 
     return (
         <Fragment>
-            {!token && ErrorUserID!=="Wrong user id" && <Box sx={{ width: '50vw', border: '1px solid ' +constantStyle.color_primary, borderRadius: 2 }}>
-                <Typography variant='h5' sx={{ padding: 2, borderTopLeftRadius: '8px', borderTopRightRadius: '8px', bgcolor: constantStyle.color_primary }}>Login</Typography>
-                <Box p={3}>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <FormControl sx={{ paddingBottom: 3 }} size='small' variant="outlined" fullWidth>
-                            <TextField size="small"
-                                label={errors.user_id?.message? errors.user_id?.message : ErrorUserID}
-                                color={errors.user_id ? "error" : 'primary'}
-                                {...register('user_id')} />
-                        </FormControl>
+            {!token && ErrorUserID!=="Wrong user id" &&
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                    <Box sx={{ width: '50vw', border: '1px solid ' +constantStyle.color_primary, borderRadius: 2 }}>
+                        <Typography variant='h5' sx={{ padding: 2, borderTopLeftRadius: '8px', borderTopRightRadius: '8px', bgcolor: constantStyle.color_primary }}>Login</Typography>
+                        <Box p={3}>
+                            <form onSubmit={handleSubmit(onSubmit)}>
+                                <FormControl sx={{ paddingBottom: 3 }} size='small' variant="outlined" fullWidth>
+                                    <TextField size="small"
+                                        label={errors.user_id?.message? errors.user_id?.message : ErrorUserID}
+                                        color={errors.user_id ? "error" : 'primary'}
+                                        {...register('user_id')} />
+                                </FormControl>
 
-                        <FormControl sx={{ paddingBottom: 3 }} size='small' variant="outlined" fullWidth>
-                            <InputLabel color={errors.password ? "error" : 'primary'}
-                                        htmlFor="outlined-adornment-password">
-                                {errors.password?.message? errors.password?.message : ErrorPassword}
-                            </InputLabel>
-                            <OutlinedInput {...register('password')}
-                                id="outlined-adornment-password"
-                                type={showPassword ? 'text' : 'password'}
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={() => { setShowPassword(true) }}
-                                            onMouseDown={() => { setShowPassword(false) }}
-                                            edge="end"
-                                            >
-                                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                }
-                                label={errors.password?.message? errors.password?.message : ErrorPassword}
-                                color={errors.password ? "error" : 'primary'}
-                                />
-                        </FormControl>
+                                <FormControl sx={{ paddingBottom: 3 }} size='small' variant="outlined" fullWidth>
+                                    <InputLabel color={errors.password ? "error" : 'primary'}
+                                                htmlFor="outlined-adornment-password">
+                                        {errors.password?.message? errors.password?.message : ErrorPassword}
+                                    </InputLabel>
+                                    <OutlinedInput {...register('password')}
+                                        id="outlined-adornment-password"
+                                        type={showPassword ? 'text' : 'password'}
+                                        endAdornment={
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={() => { setShowPassword(true) }}
+                                                    onMouseDown={() => { setShowPassword(false) }}
+                                                    edge="end"
+                                                    >
+                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        }
+                                        label={errors.password?.message? errors.password?.message : ErrorPassword}
+                                        color={errors.password ? "error" : 'primary'}
+                                        />
+                                </FormControl>
 
 
-                        <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', width: '100' }}>
-                            <Button color="primary" variant='contained' type="submit" startIcon={<LoginIcon />}>Login</Button>
-                            <Button color="info" variant='contained' type="button" onClick={handleCancel} startIcon={<CloseIcon />}>Cancel</Button>
+                                <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', width: '100' }}>
+                                    <Button color="primary" variant='contained' type="submit" startIcon={<LoginIcon />}>Login</Button>
+                                    <Button color="info" variant='contained' type="button" onClick={handleCancel} startIcon={<CloseIcon />}>Cancel</Button>
+                                </Box>
+                            </form>
                         </Box>
-                    </form>
+                    </Box>
                 </Box>
-            </Box>}
+            }
 
-            {ErrorUserID=="Wrong user id" && <RegisterPage user_id={'1234'} />}
+            {ErrorUserID=="Wrong user id" && <RegisterPage user_id={userID} />}
         </Fragment>
     );
 }

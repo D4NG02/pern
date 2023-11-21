@@ -86,26 +86,24 @@ export default function CurrencyForm() {
     }
 
     return (
-        <>
-            <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', alignItems: 'flex-end', gap: '10px' }}>
-                <FormLabel sx={{ marginTop: '14px' }}>Country:</FormLabel>
-                <TextField  size="small"
-                            variant="standard"
-                            label={errors.country?.message}
-                            color={errors.country? "error": 'primary'}
-                            {...register("country")} />
+        <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '10px' }}>
+            <FormLabel>Country:</FormLabel>
+            <TextField  size="small"
+                        variant="standard"
+                        label={errors.country?.message}
+                        color={errors.country? "error": 'primary'}
+                        {...register("country")} />
 
-                <FormLabel sx={{ marginTop: '14px' }}>Value:</FormLabel>
-                <TextField  size="small"
-                            inputProps={{ type: 'number' }}
-                            variant="standard"
-                            label={errors.value?.message}
-                            color={errors.value? "error": 'primary'}
-                            {...register("value")} />
+            <FormLabel>Value:</FormLabel>
+            <TextField  size="small"
+                        inputProps={{ type: 'number' }}
+                        variant="standard"
+                        label={errors.value?.message}
+                        color={errors.value? "error": 'primary'}
+                        {...register("value")} />
 
-                <Button variant='contained' type="submit">Add</Button>
-                <CurrencyDelete />
-            </form>
-        </>
+            <Button variant='contained' type="submit">Add</Button>
+            <CurrencyDelete />
+        </form>
     )
 }
