@@ -1,3 +1,4 @@
+import { Fragment, useState } from 'react';
 import { Box, IconButton, Button, TextField, FormControl, InputLabel, OutlinedInput, InputAdornment, Typography } from '@mui/material'
 import { useForm, SubmitHandler } from "react-hook-form"
 import LoginIcon from '@mui/icons-material/Login';
@@ -9,10 +10,10 @@ import axios from 'axios';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from 'react-query';
-import { Fragment, useState } from 'react';
 import { useStateProvider } from '../Utility/Reducer/StateProvider';
 import { reducerCases } from '../Utility/Reducer/Constant';
 import { constantStyle } from '../Utility/CustomStyle';
+import RegisterPage from './RegisterPage';
 
 export const loginSchema = z.object({
     user_id: z.string().min(4, { message: 'User ID must 4 or more characters' }),
@@ -32,7 +33,7 @@ export default function LoginPage() {
         return response;
     };
     // eslint-disable-next-line
-    const { data, mutate, isLoading, isSuccess } = useMutation(
+    const { data, mutate, error, isLoading, isSuccess } = useMutation(
         userLogin,
         {
             onSuccess: (data: any, variables: loginSchemaType, context: unknown) => {
@@ -70,8 +71,8 @@ export default function LoginPage() {
 
     return (
         <Fragment>
-            {!token && <Box border={'1px solid ' +constantStyle.color_primary} borderRadius={2}>
-                <Typography sx={{ padding: 2, borderTopLeftRadius: '8px', borderTopRightRadius: '8px', bgcolor: constantStyle.color_primary }}>Login</Typography>
+            {!token && ErrorUserID!=="Wrong user id" && <Box sx={{ width: '50vw', border: '1px solid ' +constantStyle.color_primary, borderRadius: 2 }}>
+                <Typography variant='h5' sx={{ padding: 2, borderTopLeftRadius: '8px', borderTopRightRadius: '8px', bgcolor: constantStyle.color_primary }}>Login</Typography>
                 <Box p={3}>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <FormControl sx={{ paddingBottom: 3 }} size='small' variant="outlined" fullWidth>
@@ -114,6 +115,8 @@ export default function LoginPage() {
                     </form>
                 </Box>
             </Box>}
+
+            {ErrorUserID=="Wrong user id" && <RegisterPage user_id={'1234'} />}
         </Fragment>
     );
 }

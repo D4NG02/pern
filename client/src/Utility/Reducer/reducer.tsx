@@ -27,12 +27,12 @@ export const initialState = {
     eventPrio: null,
 
     eventFilterMonth: date.filter((split, index)=>{
-        if(split.type == 'month'){
+        if(split.type === 'month'){
             return split.value
         }
     })[0].value,
     eventFilterYear: Number(date.filter((split, index)=>{
-        if(split.type == 'year'){
+        if(split.type === 'year'){
             return split.value
         }
     })[0].value),

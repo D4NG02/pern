@@ -3,16 +3,15 @@ import bcrypt from "bcrypt";
 
 import pool from '../db';
 import jwtGenerator from "../utility/jwtGenerator";
-import validInfo from "../middleware/validInfo";
 import authorize from "../middleware/authorization";
 
 const routerAuth = Router();
 
 // Register
-routerAuth.post('/register', validInfo, async (req: Request, res, Response) => {
+routerAuth.post('/register', async (req: Request, res, Response) => {
     try {
         // 1. Destructure the rea.body (user_id, username, password, position, country)
-        const { user_id, username, password, position, country } = req.body;
+        const { user_id, user_name, password, position, country } = req.body;
 
         // 2. Check if user exist (yes, throw error)
         const user = await pool.query('SELECT * FROM users WHERE user_id=$1', [user_id])
@@ -29,7 +28,7 @@ routerAuth.post('/register', validInfo, async (req: Request, res, Response) => {
         // 4. Enter new user to db
         const newUser = await pool.query(
             "INSERT INTO users (user_id, username, password, position, country) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-            [user_id, username, hash, position, country])
+            [user_id, user_name, hash, position, country])
 
         // 5. Generate jwt token
         const token = jwtGenerator(newUser.rows[0].user_id)
@@ -41,7 +40,7 @@ routerAuth.post('/register', validInfo, async (req: Request, res, Response) => {
 })
 
 // Login
-routerAuth.post('/login', validInfo, async (req: Request, res, Response) => {
+routerAuth.post('/login', async (req: Request, res, Response) => {
     try {
         // 1. Desctructure req.body
         const { user_id, password } = req.body;

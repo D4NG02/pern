@@ -19,27 +19,25 @@ export default function EditEvent() {
   const [{ token, eventID, eventDate, eventTitle, eventNote, eventPrio }, dispatch] = useStateProvider()
   const queryClient = useQueryClient();
   const updateEvent = async () => {
-    const deleteCurrency = async () => {
-        const { data: response } = await fetch('/table/update/' +eventID, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'token': token
-          },
-        }).then((response) => {
-          if (response.ok) {
-            return response.json()
-          }
-        })
-        return response;
-    };
+    const { data: response } = await fetch('/event/update', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'token': token
+      },
+      body: JSON.stringify({ eventID, eventDate, eventTitle, eventNote, eventPrio })
+    }).then((response) => {
+      if (response.ok) {
+        return response.json()
+      }
+    })
+    return response;
   };
   // eslint-disable-next-line
   const { mutate, isLoading } = useMutation(
     updateEvent,
     {
       onSuccess: (data: any, variables: inputSchemaType, context: unknown) => {
-        console.log(variables)
         alert("Updated")
       },
       onError: () => {
@@ -107,9 +105,9 @@ export default function EditEvent() {
 
       <Box pb={2}>
         <FormLabel sx={{ color: 'white' }}>Note</FormLabel>
-        <TextField sx={{ '& .MuiInputBase-root': {bgcolor: 'white'} }}
+        <TextField sx={{ '& .MuiInputBase-root': {bgcolor: 'white'} }} multiline minRows={4} maxRows={4}
                   placeholder={eventNote} {...register("note")}
-                  size="small" multiline minRows={4} maxRows={4} fullWidth 
+                  size="small" fullWidth
                   label={errors.note?.message}
                   color={errors.note? "error": 'primary'} />
       </Box>

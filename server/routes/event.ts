@@ -33,7 +33,7 @@ routerEvent.post("/add", authorize, async(req: Request, res: Response) => {
 })
 
 // Update currency API
-routerEvent.post("/update/:id", authorize, async(req: Request, res: Response) => {
+routerEvent.post("/update", authorize, async(req: Request, res: Response) => {
   try {
     console.log("Update event: " +req)
     console.table(req.body)

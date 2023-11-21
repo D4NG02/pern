@@ -1,3 +1,4 @@
+import $ from "jquery"
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { Box, Button, Chip, Modal, Typography } from '@mui/material';
@@ -43,7 +44,7 @@ export default function CalendarPage() {
   // add event
   const handleDateClick = (info: any) => {
     dispatch({ type: reducerCases.SET_EVENT_DATE, eventDate: info.dateStr })
-    dispatch({ type: reducerCases.SET_IS_EVENT_ADD, popupEventAdd: true })
+    // dispatch({ type: reducerCases.SET_IS_EVENT_ADD, popupEventAdd: true })
   }
   // click on event
   const handleEventClick = (clickInfo: EventClickArg) => {
@@ -87,10 +88,19 @@ export default function CalendarPage() {
     setHoverPriority('')
     dispatch({ type: reducerCases.SET_IS_EVENT_HOVER, popupEventHover: false })
   }
-  const handleDateFilter = (arg: object) => {
-    // console.log('handleDateFilter')
-    // console.log(arg)
+
+
+  const viewDidMount = (arg: object) => {
+    const button = document.createElement("button");
+    button.innerHTML = '+'
+    button.addEventListener("click", function (event) {
+      button.style.backgroundColor = "blue";
+      console.log('click')
+      dispatch({ type: reducerCases.SET_IS_EVENT_ADD, popupEventAdd: true })
+    })
+    $(".fc-day:not(.fc-day-disabled) .fc-daygrid-day-top").append(button)
   }
+
   // render all event
   const renderEventContent = (eventContent: EventContentArg) => {
     // eslint-disable-next-line
@@ -118,7 +128,9 @@ export default function CalendarPage() {
                 headerToolbar={false}
                 events={data}
 
-                viewDidMount={handleDateFilter}
+                unselectAuto={true}
+
+                viewDidMount={viewDidMount}
 
                 // businessHours={true}
 

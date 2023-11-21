@@ -62,4 +62,17 @@ a.fc-h-event {
 }
 .fc .fc-daygrid-day-top {
   flex-direction: unset;
+  justify-content: space-between
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: white;
+}
+
+.fc-day:not(.fc-day-disabled) button {
+  padding: 2px 4px;
+  font-size: 1.2em;
+  border: unset;
+  cursor: pointer;
+  background-color: white;
 }
