@@ -1,4 +1,5 @@
 import { Router, Request, Response } from 'express';
+import authorize from "../middleware/authorization";
 
 const routerGraph = Router();
 
@@ -53,7 +54,7 @@ class Graph {
 
 
 // Get all currency API
-routerGraph.get("/gets", (req: Request, res: Response) => {
+routerGraph.get("/gets", authorize, (req: Request, res: Response) => {
     console.log("Get all graph")
 
     var data = new Graph()

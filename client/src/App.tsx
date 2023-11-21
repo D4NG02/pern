@@ -1,33 +1,17 @@
-import { QueryClient, QueryClientProvider } from "react-query";
+import { Fragment, useEffect, useState } from "react";
 
-import { ThemeProvider, Typography } from '@mui/material';
-import { CustomComponent, constantStyle } from './Utility/CustomStyle';
-
-import { StateProvider } from './Utility/Reducer/StateProvider';
-import reducer, { initialState } from './Utility/Reducer/reducer';
-
-import CurrencyTable from './Container/Currency/CurrencyTable';
-import CurrencyForm from './Container/Currency/CurrencyForm';
+import { useStateProvider } from "./Utility/Reducer/StateProvider";
+import LoginPage from "./Routes/LoginPage";
+import DashboardPage from "./Routes/DashboardPage";
 
 export default function App() {
-  const queryClient = new QueryClient();
+  const [{ token }, dispatch] = useStateProvider()
 
   return (
-    <StateProvider initialState={initialState} reducer={reducer}>
-      <ThemeProvider theme={CustomComponent}>
-        <QueryClientProvider client={queryClient}>
-          <Typography component='div' variant='body1' sx={{ display: "flex",
-                    flexDirection: 'column',
-                    gap: '20px',
-                    padding: '1rem',
-                    border: '2px solid '+constantStyle.color_primary }}>
+    <Fragment>
+      <LoginPage />
 
-            <CurrencyTable />
-            <CurrencyForm />
-
-          </Typography>
-        </QueryClientProvider>
-      </ThemeProvider>
-    </StateProvider>
+      {token && <DashboardPage />}
+    </Fragment>
   );
 }

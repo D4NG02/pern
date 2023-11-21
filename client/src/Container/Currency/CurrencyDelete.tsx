@@ -1,41 +1,54 @@
 import React, { useState, MouseEventHandler } from 'react';
-import axios from "axios";
 import { Box, Button, Dialog, Typography } from '@mui/material';
 import { useStateProvider } from '../../Utility/Reducer/StateProvider';
 import { useMutation, useQueryClient } from 'react-query';
 import { constantStyle } from '../../Utility/CustomStyle';
 import { reducerCases } from '../../Utility/Reducer/Constant';
 
-interface Currency {
+interface CurrencySchemaType {
     id: number,
     country: string,
     value: number,
 }
 
 export default function CurrencyDelete() {
-    const [{ row, country }, dispatch] = useStateProvider()
+    const [{ token, row, country }, dispatch] = useStateProvider()
     const handlePopUp: MouseEventHandler = () => {
         setIsPopup(true)
     }
 
     const queryClient = useQueryClient();
     const deleteCurrency = async () => {
-        const { data: response } = await axios.delete('/table/delete/' + row);
-        return response.data;
+        const { data: response } = await fetch('/table/delete/' +row, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'token': token
+            },
+        }).then((response) => {
+            if (response.ok) {
+                return response.json()
+            }
+        })
+        return response;
     };
     // eslint-disable-next-line
     const { mutate, isLoading } = useMutation(
         deleteCurrency,
         {
-            onSuccess: (data: any, variables: Currency, context: unknown) => {
+            onSuccess: (data: any, variables: CurrencySchemaType, context: unknown) => {
                 alert("Deleted Currency")
             },
-            onError: () => {
-                alert("there was an error")
+            onError: (error: any, variables: CurrencySchemaType, context: unknown) => {
+                if (error.status === 403 && error.statusText === "Forbidden") {
+                    sessionStorage.removeItem("token");
+                    dispatch({ type: reducerCases.SET_TOKEN, token: null })
+                    dispatch({ type: reducerCases.SET_CARD, cardType: null })
+                } else {
+                    console.log(error)
+                }
             },
-            onSettled: () => {
-                queryClient.invalidateQueries('create')
-            }
+            onSettled: () => { }
         }
     );
 
@@ -65,7 +78,7 @@ export default function CurrencyDelete() {
 
                     <Box sx={{ display: 'flex', flexDirection: 'row', gap: '1rem' }}>
                         <Button variant='outlined' onClick={handleDelete}>Confirm</Button>
-                        <Button variant='outlined' onClick={handleCancel}>Cancel</Button>
+                        <Button color='warning' variant='contained' onClick={handleCancel}>Cancel</Button>
                     </Box>
                 </Box>
             </Dialog>
