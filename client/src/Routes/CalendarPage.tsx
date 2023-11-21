@@ -142,7 +142,7 @@ export default function CalendarPage() {
 
                 eventOrder={'priority'}
 
-                dayMaxEvents={1}
+                dayMaxEvents={2}
 
                 selectable={true}
                 dateClick={handleDateClick}
