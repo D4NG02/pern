@@ -87,7 +87,7 @@ export default function CurrencyForm() {
 
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', alignItems: 'flex-end', gap: '10px' }}>
                 <FormLabel sx={{ marginTop: '14px' }}>Country:</FormLabel>
                 <TextField  size="small"
                             variant="standard"

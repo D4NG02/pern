@@ -10,9 +10,8 @@ export default function Currency() {
             gap: '20px',
             padding: '1rem',
             display: "flex",
-            flexDirection: 'column',
-            border: '2px solid '+constantStyle.color_primary
-          }}>
+            flexDirection: 'column' }}>
+
             <CurrencyTable />
             <CurrencyForm />
         </Box>

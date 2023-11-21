@@ -1,5 +1,7 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import { Box, Fab, AppBar } from '@mui/material';
+import { Fragment } from 'react';
+import { Box, IconButton, AppBar, Container, Toolbar, Typography } from '@mui/material';
+
+import CADIT from "../Asset/CADIT.png";
 import HomeIcon from '@mui/icons-material/Home';
 
 import { useStateProvider } from '../Utility/Reducer/StateProvider';
@@ -7,6 +9,7 @@ import { reducerCases } from '../Utility/Reducer/Constant';
 import CardCustom from '../Container/CardCustom';
 import CurrencyPage from "../Routes/CurrencyPage";
 import CalendarPage from "../Routes/CalendarPage";
+import { constantStyle } from '../Utility/CustomStyle';
 
 
 export default function DashboardPage() {
@@ -18,23 +21,37 @@ export default function DashboardPage() {
 
     return (
         <Fragment>
-            <AppBar></AppBar>
-            
-            {token &&
-                <Box className="dashboard">
-                    { cardType==null && <CardCustom /> }
-                    { cardType &&  <Fab sx={{ position: 'absolute', left: '1rem', bottom: '1rem' }}
-                                        size='small' color="primary"
-                                        onClick={handleBack}
-                                        aria-label="Back"><HomeIcon /></Fab> }
+            <AppBar sx={{ bgcolor: 'white', boxShadow: 'unset', position: 'relative',
+                            'img': { height: '2.6em'} }}>
+                <Toolbar>
+                    <img src={CADIT} alt="CADI-IT Logo" />
+                    { cardType &&  
+                        <IconButton sx={{ color: 'gray', 'svg': { width: '1.2em', height: '1.2em' } }}
+                                size='large'
+                                onClick={handleBack} aria-label="Back">
+                            <HomeIcon />
+                        </IconButton>
+                    }
+                </Toolbar>
+            </AppBar>
 
-                    {/* TASK 1 */}
-                    { cardType==='Currency' && <CurrencyPage />}
+            <Box height='100%'>
+                {cardType && <Box sx={{ bgcolor: constantStyle.color_primary, paddingY: 1 }}>
+                    <Typography textAlign='center' variant="h5" color='white'>{cardType}</Typography>
+                </Box>}
+                
+                {token &&
+                    <Box className="container" sx={{ padding: 3 }}>
+                        { cardType==null && <CardCustom /> }
 
-                    {/* TASK 2 */}
-                    { cardType==='Calendar' && <CalendarPage /> }
-                </Box>
-            }
+                        {/* TASK 1 */}
+                        { cardType==='Currency' && <CurrencyPage />}
+
+                        {/* TASK 2 */}
+                        { cardType==='Calendar' && <CalendarPage /> }
+                    </Box>
+                }
+            </Box>
         </Fragment>
     );
 }

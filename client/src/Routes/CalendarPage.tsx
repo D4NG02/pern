@@ -94,7 +94,7 @@ export default function CalendarPage() {
 
   
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <Box sx={{ width: '50vw' }}>
         
         <FilterEvent />
