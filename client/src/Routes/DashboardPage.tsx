@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Box, Fab } from '@mui/material';
+import { Box, Fab, AppBar } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 
 import { useStateProvider } from '../Utility/Reducer/StateProvider';
@@ -7,7 +7,6 @@ import { reducerCases } from '../Utility/Reducer/Constant';
 import CardCustom from '../Container/CardCustom';
 import CurrencyPage from "../Routes/CurrencyPage";
 import CalendarPage from "../Routes/CalendarPage";
-import { useQuery } from 'react-query';
 
 
 export default function DashboardPage() {
@@ -19,9 +18,10 @@ export default function DashboardPage() {
 
     return (
         <Fragment>
-            {token
-                &&
-                <Box>
+            <AppBar></AppBar>
+            
+            {token &&
+                <Box className="dashboard">
                     { cardType==null && <CardCustom /> }
                     { cardType &&  <Fab sx={{ position: 'absolute', left: '1rem', bottom: '1rem' }}
                                         size='small' color="primary"

@@ -51,9 +51,10 @@ export default function EditEvent() {
   
 
 
-  const { register, handleSubmit, reset, formState: { errors }, } = useForm<inputSchemaType>({ resolver: zodResolver(inputSchema) })
+  const { register, handleSubmit, reset, formState: { errors }, } = useForm<inputSchemaType>()
   const handleUpdate: SubmitHandler<inputSchemaType> = (input) => {
     const newEvent = { ...input, eventID, eventDate, eventPrio };
+    console.log(input)
     dispatch({ type: reducerCases.SET_EVENT_DATE, eventDate: eventDate })
     dispatch({ type: reducerCases.SET_EVENT_ID, eventID: eventID })
     dispatch({ type: reducerCases.SET_EVENT_TITLE, eventTitle: input.title })
@@ -97,7 +98,9 @@ export default function EditEvent() {
       <Box pb={2}>
         <FormLabel sx={{ color: 'white' }}>Title</FormLabel>
         <TextField sx={{ '& .MuiInputBase-root': {bgcolor: 'white'} }}
-                  placeholder={eventTitle} {...register("title")}
+                  value={eventTitle}  onChange={(e)=>{
+                    dispatch({ type: reducerCases.SET_EVENT_TITLE, eventTitle: e.target.value })
+                  }}
                   size="small"  fullWidth 
                   label={errors.title?.message}
                   color={errors.title? "error": 'primary'} />
@@ -106,7 +109,9 @@ export default function EditEvent() {
       <Box pb={2}>
         <FormLabel sx={{ color: 'white' }}>Note</FormLabel>
         <TextField sx={{ '& .MuiInputBase-root': {bgcolor: 'white'} }} multiline minRows={4} maxRows={4}
-                  placeholder={eventNote} {...register("note")}
+                  value={eventNote} onChange={(e)=>{
+                    dispatch({ type: reducerCases.SET_EVENT_NOTE, eventNote: e.target.value })
+                  }}
                   size="small" fullWidth
                   label={errors.note?.message}
                   color={errors.note? "error": 'primary'} />
