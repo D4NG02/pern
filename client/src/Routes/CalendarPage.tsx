@@ -45,12 +45,11 @@ export default function CalendarPage() {
   // add event
   const handleDateClick = (info: any) => {
     dispatch({ type: reducerCases.SET_EVENT_DATE, eventDate: info.dateStr })
-    // dispatch({ type: reducerCases.SET_IS_EVENT_ADD, popupEventAdd: true })
+    dispatch({ type: reducerCases.SET_IS_EVENT_ADD, popupEventAdd: true })
   }
   // click on event
   const handleEventClick = (clickInfo: EventClickArg) => {
     const { event_id, note, priority } = clickInfo.event.extendedProps
-    console.log(clickInfo.event.extendedProps)
     const date = clickInfo.event.startStr
     const title = clickInfo.event.title
 
