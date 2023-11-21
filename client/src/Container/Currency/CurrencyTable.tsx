@@ -7,12 +7,13 @@ import CurrencyGraph from "./CurrencyGraph";
 
 export default function CurrencyTable() {
     const [isPopup, setIsPopup] = useState(false)
-    const [{ row }, dispatch] = useStateProvider()
+    const [{ token, row }, dispatch] = useStateProvider()
 
     const options = {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
+            'token': token
         },
     };
     const { data, isLoading } = useQuery({
@@ -20,9 +21,13 @@ export default function CurrencyTable() {
             .then((response) => {
                 if (response.ok) {
                     return response.json()
+                } else if (response.status === 403 && response.statusText === "Forbidden") {
+                    sessionStorage.removeItem("token");
+                    dispatch({ type: reducerCases.SET_TOKEN, token: null })
+                    dispatch({ type: reducerCases.SET_CARD, cardType: null })
+                } else {
+                    console.log(response)
                 }
-            }).catch((err) => {
-                return err
             }),
         queryKey: "getsTable"
     })

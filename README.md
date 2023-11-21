@@ -1,9 +1,9 @@
 # PERN Project
-This project for training purpose
-P - postgres
-E - express
-R - react
-N - node
+This project for training purpose \
+P - postgres \
+E - express \
+R - react \
+N - node \
 
 ## Available Scripts Client side
 
