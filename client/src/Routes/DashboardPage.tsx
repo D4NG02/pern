@@ -17,7 +17,8 @@ export default function DashboardPage() {
     const [{ token, cardType }, dispatch] = useStateProvider()
   
     const handleBack = () => {
-        dispatch({ type: reducerCases.SET_CARD, cardType: null })
+        // dispatch({ type: reducerCases.SET_CARD, cardType: null })
+        window.location.reload()
     }
 
     return (

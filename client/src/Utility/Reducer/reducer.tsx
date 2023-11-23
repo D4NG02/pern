@@ -46,7 +46,7 @@ export const initialState = {
     machineFilterDepartment: 0,
     machineFilterCenter: 0,
     machineFilterWorkstation: 0,
-    machineFilterDate: date[6].value + '-' + date[2].value + '-' + date[4].value,
+    machineFilterDate: typeof Date,
 }
 
 export const initialStateType = typeof initialState

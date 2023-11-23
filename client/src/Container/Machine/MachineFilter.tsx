@@ -294,7 +294,7 @@ export default function MachineFilter() {
           </DemoContainer>
         </LocalizationProvider>
 
-        <Button size='small' sx={{ height: '32px' }} onClick={handleSearch} startIcon={<SearchIcon />}>Search</Button>
+        <Button size='small' sx={{ height: '32px', padding: '0 12px' }} onClick={handleSearch} startIcon={<SearchIcon />}>Search</Button>
       </Stack>
     </>
   );

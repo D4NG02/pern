@@ -7,12 +7,12 @@ import { Timeline } from './MachineConstant';
 
 export default function MachineTimeline(props: { asset_id: number }) {
     const [{ machineTimeline, machineFilterDate }, dispatch] = useStateProvider()
-    const { timelineData } = Timeline(props.asset_id)
-    const [utilize, setUtilize] = useState(0);
+    const { isTimeline, timelineUtilize, timelineColors, timelineData } = Timeline(props.asset_id)
+    const dateArray = machineFilterDate.split("-")
 
     const options = {
         backgroundColor: "#c9cacd",
-        colors: ["green", "orange", "red", "black"],
+        colors: timelineColors,
         timeline: {
             showRowLabels: false,
             groupByRowLabel: true,
@@ -27,23 +27,21 @@ export default function MachineTimeline(props: { asset_id: number }) {
         { type: "date", id: "End" },
     ];
     const rows = [
-        ["Utilize", "Running", new Date(2023, 2, 1), new Date(2023, 2, 2)],
-        ["Utilize", "Idle", new Date(2023, 2, 2), new Date(2023, 2, 3)],
-        ["Utilize", "Down", new Date(2023, 2, 3), new Date(2023, 2, 4)],
-        ["Utilize", "Offline", new Date(2023, 2, 4), new Date(2023, 2, 5)],
+        ["Utilize", "Offline", new Date(machineFilterDate), new Date(Number(dateArray[0]), Number(dateArray[1])-1, Number(dateArray[2])+1)],
     ];
-    const data = [columns, ...timelineData];
+    const data = isTimeline? [columns, ...timelineData]:[columns, ...rows];
     
     return (
         <Stack direction='row'>
             <Box sx={{ padding: '8px 32px' }}>
                 <Box sx={{ padding: 2, bgcolor: 'orange', borderRadius: 2, textAlign: 'center' }}>
                     <Typography variant="subtitle1" color="White">Utilize</Typography>
-                    <Typography variant="subtitle2" color='white'>?%</Typography>
+                    <Typography variant="subtitle2" color='white'>{timelineUtilize}%</Typography>
                 </Box>
             </Box>
             <Box sx={{ padding: '8px 0', width: '100%' }}>
-                {timelineData && <Chart loader={<div>Loading Chart</div>} chartType="Timeline" options={options} data={data} width="100%" height="90px" />}
+                {isTimeline && <Chart loader={<div>Loading Chart</div>} chartType="Timeline" options={options} data={data} height="90px" />}
+                {/* {!isTimeline && <Chart loader={<div>Loading Chart</div>} chartType="Timeline" options={options} data={data} width="100%" height="90px" />} */}
             </Box>
         </Stack>
     );

@@ -15,14 +15,6 @@ export default function MachinePage() {
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, marginTop: 2, maxHeight: '642px', overflowY: 'auto' }}>
                 {
                     machineAsset.map((asset: any, index: number, array: string[]) => {
-
-                        // const transaction: any[] = machineTimeline.map(
-                        //     (timeline: any, index: number, array: any[]) => timeline.asset_id === asset.asset_id? [{
-                        //         'asset_id': timeline.asset_id,
-                        //         'timestamp': timeline.timestamp,
-                        //         'value': timeline.value,
-                        //       }]:[] )
-
                         return (
                             <Stack spacing={1} key={index} direction='row'>
                                 <Box sx={{ width: '20%', bgcolor: constantStyle.color_base_400, padding: 1 }}>
@@ -40,8 +32,8 @@ export default function MachinePage() {
             {machineTimeline.length > 0 && 
                 <Stack paddingTop={2} paddingX={2} spacing={2} direction='row' sx={{ justifyContent: 'flex-end' }}>
                     <Chip label="Running" color="success" variant='filled' />
-                    <Chip label="Idle" color="error" variant='filled' />
-                    <Chip label="Down" color="warning" variant='filled' />
+                    <Chip label="Idle" color="warning" variant='filled' />
+                    <Chip label="Down" color="error" variant='filled' />
                     <Chip label="Offline" sx={{ bgcolor: 'black', color: 'white' }} variant='filled' />
                 </Stack>
             }
