@@ -142,6 +142,11 @@ const reducer = (state: any, action: any) => {
                 ...state,
                 machineTimeline: action.machineTimeline,
             }
+        case reducerCases.SET_TIMELINE_DATE:
+            return {
+                ...state,
+                machineFilterDate: action.machineFilterDate,
+            }
         default:
             console.log("Error reducerCases type")
             break;

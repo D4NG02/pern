@@ -22,4 +22,5 @@ export const reducerCases = {
     // Task 3
     SET_ASSET_DATA: 'SET_ASSET_DATA',
     SET_TIMELINE_DATA: 'SET_TIMELINE_DATA',
+    SET_TIMELINE_DATE: 'SET_TIMELINE_DATE',
 }

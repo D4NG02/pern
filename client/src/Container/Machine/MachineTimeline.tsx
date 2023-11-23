@@ -1,26 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Stack, Box, Typography } from '@mui/material';
 import { Chart, } from "react-google-charts";
 
 import { useStateProvider } from '../../Utility/Reducer/StateProvider';
+import { Timeline } from './MachineConstant';
 
 export default function MachineTimeline(props: { asset_id: number }) {
-    const [{ machineFilterDate }, dispatch] = useStateProvider()
-    const [sheetTransaction, setSheetTransaction] = useState<any[]>([]);
-
-    const columns = [
-        { type: "string", id: "Utilize" },
-        { type: "string", id: "State" },
-        { type: "date", id: "Start" },
-        { type: "date", id: "End" },
-    ];
-    const rows = [
-        ["Utilize", "Running", new Date(2023, 2, 1), new Date(2023, 2, 7)],
-        ["Utilize", "Idle", new Date(2023, 2, 7), new Date(2023, 2, 14)],
-        ["Utilize", "Down", new Date(2023, 2, 14), new Date(2023, 2, 21)],
-        ["Utilize", "Offline", new Date(2023, 2, 21), new Date(2023, 2, 30)],
-    ];
-    const data = [columns, ...rows];
+    const [{ machineTimeline, machineFilterDate }, dispatch] = useStateProvider()
+    const { timelineData } = Timeline(props.asset_id)
+    const [utilize, setUtilize] = useState(0);
 
     const options = {
         backgroundColor: "#c9cacd",
@@ -32,6 +20,20 @@ export default function MachineTimeline(props: { asset_id: number }) {
         },
     };
 
+    const columns = [
+        { type: "string", id: "Utilize" },
+        { type: "string", id: "State" },
+        { type: "date", id: "Start" },
+        { type: "date", id: "End" },
+    ];
+    const rows = [
+        ["Utilize", "Running", new Date(2023, 2, 1), new Date(2023, 2, 2)],
+        ["Utilize", "Idle", new Date(2023, 2, 2), new Date(2023, 2, 3)],
+        ["Utilize", "Down", new Date(2023, 2, 3), new Date(2023, 2, 4)],
+        ["Utilize", "Offline", new Date(2023, 2, 4), new Date(2023, 2, 5)],
+    ];
+    const data = [columns, ...timelineData];
+    
     return (
         <Stack direction='row'>
             <Box sx={{ padding: '8px 32px' }}>
@@ -41,7 +43,7 @@ export default function MachineTimeline(props: { asset_id: number }) {
                 </Box>
             </Box>
             <Box sx={{ padding: '8px 0', width: '100%' }}>
-                <Chart chartType="Timeline" options={options} data={data} width="100%" height="90px" />
+                {timelineData && <Chart loader={<div>Loading Chart</div>} chartType="Timeline" options={options} data={data} width="100%" height="90px" />}
             </Box>
         </Stack>
     );
