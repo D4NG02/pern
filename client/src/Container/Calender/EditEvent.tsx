@@ -18,14 +18,14 @@ import DeleteEvent from "./DeleteEvent";
 export default function EditEvent() {
   const [{ token, eventID, eventDate, eventTitle, eventNote, eventPrio }, dispatch] = useStateProvider()
   const queryClient = useQueryClient();
-  const updateEvent = async () => {
+  const updateEvent = async (data: inputSchemaType) => {
     const { data: response } = await fetch('/event/update', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'token': token
       },
-      body: JSON.stringify({ eventID, eventDate, eventTitle, eventNote, eventPrio })
+      body: JSON.stringify(data)
     }).then((response) => {
       if (response.ok) {
         return response.json()
@@ -53,21 +53,12 @@ export default function EditEvent() {
 
   const { register, handleSubmit, reset, formState: { errors }, } = useForm<inputSchemaType>()
   const handleUpdate: SubmitHandler<inputSchemaType> = (input) => {
-    const newEvent = { ...input, eventID, eventDate, eventPrio };
-    console.log(input)
-    dispatch({ type: reducerCases.SET_EVENT_DATE, eventDate: eventDate })
-    dispatch({ type: reducerCases.SET_EVENT_ID, eventID: eventID })
-    dispatch({ type: reducerCases.SET_EVENT_TITLE, eventTitle: input.title })
-    dispatch({ type: reducerCases.SET_EVENT_NOTE, eventNote: input.note })
-    dispatch({ type: reducerCases.SET_EVENT_PRIO, eventPrio: eventPrio })
+    const newEvent = { ...input, eventTitle, eventNote, eventID, eventDate, eventPrio };
+    mutate(newEvent);
+    reset()
     
-    setTimeout(()=>{
-      mutate(newEvent);
-      reset()
-  
-      clearReducer()
-      handleClose()
-    }, 200)
+    clearReducer()
+    handleClose()
   }
   const handleClose = () => {
     dispatch({ type: reducerCases.SET_IS_EVENT_EDIT, popupEventEdit: false })

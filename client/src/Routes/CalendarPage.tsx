@@ -97,6 +97,7 @@ export default function CalendarPage() {
       <Box sx={{ width: '50vw' }}>
         
         <FilterEvent />
+        <Box>{eventFilterMonth} {eventFilterYear}</Box>
         <FullCalendar plugins={[dayGridPligin, timeGridPlugin, interactionPlugin]}
                 initialView="dayGridMonth"
                 headerToolbar={false}

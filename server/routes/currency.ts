@@ -26,11 +26,11 @@ routerCurrency.put('/update/:id', authorize, async(req: Request, res: Response) 
         const { country } = req.body.country
         const { value } = req.body.value
         const updateCurrency = await pool.query(
-                            "UPDATE currencytable SET country=$1, value=$2 WHERE table_id=$3",
+                            "UPDATE currencytable SET country=$1, value=$2 WHERE table_id=$3 RETURNING *",
                             [country, value, id]
         )
         
-        res.json('Updated currency')
+        res.json({command: updateCurrency.command, data: updateCurrency.rows[0]})
     } catch (error) {
         console.log(error)
     }
