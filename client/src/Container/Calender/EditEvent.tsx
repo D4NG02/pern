@@ -77,17 +77,17 @@ export default function EditEvent() {
 
   return (
     <form onSubmit={handleSubmit(handleUpdate)}>
-
-      <Box sx={{ position: 'relative', pb: 2, display: 'flex', alignItems: 'baseline' }}>
-        <FormLabel sx={{ pr: 1, color: 'white' }} disabled>Date</FormLabel>
-        <TextField size="small" sx={{ width: '100px', textAlign: 'center' }} variant="standard"
-                  value={eventDate} disabled hiddenLabel />
-
-        <IconButton sx={{ position: 'absolute', right: 0 }} onClick={handleClose}><CloseIcon /></IconButton>
-      </Box>
-
       <Box pb={2}>
-        <FormLabel sx={{ color: 'white' }}>Title</FormLabel>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', pb: '4px' }}>
+          <FormLabel sx={{ color: 'white' }}>Title</FormLabel>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+            <FormLabel sx={{ pr: 1, color: 'white' }} disabled>Date</FormLabel>
+            <TextField size="small" sx={{ width: '100px', textAlign: 'center' }} variant="standard"
+                      value={eventDate} disabled hiddenLabel />
+
+            <IconButton size="small" onClick={handleClose}><CloseIcon /></IconButton>
+          </Box>
+        </Box>
         <TextField sx={{ '& .MuiInputBase-root': {bgcolor: 'white'} }} value={eventTitle} size="small" fullWidth
                   label={errors.title?.message} color={errors.title? "error": 'primary'}
                   {...register('title', {
@@ -121,7 +121,7 @@ export default function EditEvent() {
       </Box>
 
       <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', width: '100' }}>
-        <Button color="info" variant='contained' type="submit" startIcon={<UpdateIcon />}>Update</Button>
+        <Button color="secondary" variant='contained' type="submit" startIcon={<UpdateIcon />}>Update</Button>
         <DeleteEvent />
       </Box>
     </form>

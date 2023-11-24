@@ -104,6 +104,7 @@ export default function CalendarPage() {
                 events={data}
 
                 unselectAuto={true}
+                aspectRatio={1.5}
 
                 viewDidMount={viewDidMount}
 
@@ -129,7 +130,7 @@ export default function CalendarPage() {
       {/* Popup for Adding new */}
       <Modal open={popupEventAdd}>
         <Box sx={{ margin: '20vh 20vw', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Box sx={{ height: '60vh', width: '60vw', padding: '2rem', bgcolor: constantStyle.color_primary, borderRadius: 2, boxShadow: 4 }}>
+          <Box sx={{ height: 'max-content', width: '60vw', padding: '1rem 1.4rem', bgcolor: constantStyle.color_primary, borderRadius: 2, boxShadow: 4 }}>
             <AddEvent />
           </Box>
         </Box>
@@ -138,7 +139,7 @@ export default function CalendarPage() {
       {/* Popup for Update/Delete */}
       <Modal open={popupEventEdit}>
         <Box sx={{ margin: '20vh 20vw', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Box sx={{ height: '60vh', width: '60vw', padding: '2rem', bgcolor: constantStyle.color_primary, borderRadius: 2, boxShadow: 4 }}>
+          <Box sx={{ height: 'max-content', width: '60vw', padding: '1rem 1.4rem', bgcolor: constantStyle.color_primary, borderRadius: 2, boxShadow: 4 }}>
             <EditEvent />
           </Box>
         </Box>

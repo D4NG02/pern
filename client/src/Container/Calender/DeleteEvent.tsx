@@ -70,12 +70,12 @@ export default function DeleteEvent() {
 
             <Modal open={modal}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                    <Box sx={{ padding: '1rem', bgcolor: constantStyle.color_base_200, boxShadow: 12 }}>
+                    <Box sx={{ padding: '1rem', bgcolor: constantStyle.color_base_200, boxShadow: 12, borderRadius: 2 }}>
                         <Typography textAlign='center' fontSize='1.5rem' pb={2}>Delete note?</Typography>
 
                         <Box sx={{ display: 'flex', gap: '1rem' }}>
-                            <Button color="warning" variant='contained' onClick={handleDelete} startIcon={<DeleteIcon />}>Delete</Button>
-                            <Button color="info" variant='contained' onClick={()=>{setModal(false)}} startIcon={<CloseIcon />}>Cancel</Button>
+                            <Button color="secondary" variant='outlined' onClick={handleDelete} startIcon={<DeleteIcon />}>Delete</Button>
+                            <Button color="warning" variant='contained' onClick={()=>{setModal(false)}} startIcon={<CloseIcon />}>Cancel</Button>
                         </Box>
                     </Box>
                 </Box>

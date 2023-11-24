@@ -24,7 +24,7 @@ export default function FilterEvent() {
         dispatch({ type: reducerCases.SET_EVENT_RELOAD_CALENDAR, eventReloadCalendar: false })
         dispatch({ type: reducerCases.SET_EVENT_FILTER_YEAR, eventFilterYear: e.target.value })
         setTimeout(() => {
-            dispatch({ type: reducerCases.SET_EVENT_RELOAD_CALENDAR, eventReloadCalendar: false })
+            dispatch({ type: reducerCases.SET_EVENT_RELOAD_CALENDAR, eventReloadCalendar: true })
         }, 100);
     }
 

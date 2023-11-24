@@ -84,14 +84,15 @@ export default function AddEvent() {
   
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Box sx={{ pb: 2, display: 'flex', alignItems: 'baseline' }}>
-        <FormLabel sx={{ pr: 1, color: 'white' }} disabled>Date</FormLabel>
-        <TextField size="small" sx={{ width: '100px', textAlign: 'center' }} variant="standard"
-                  value={eventDate} disabled hiddenLabel />
-      </Box>
-
       <Box pb={2}>
-        <FormLabel sx={{ color: 'white' }}>Title</FormLabel>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <FormLabel sx={{ color: 'white' }}>Title</FormLabel>
+          <Box sx={{ display: 'flex', alignItems: 'center', pb: '4px' }}>
+            <FormLabel sx={{ pr: 1, color: 'white' }} disabled>Date</FormLabel>
+            <TextField size="small" sx={{ width: '100px', textAlign: 'center' }} variant="standard"
+                      value={eventDate} disabled hiddenLabel />
+          </Box>
+        </Box>
         <TextField sx={{ '& .MuiInputBase-root': {bgcolor: 'white'} }} size="small"  fullWidth 
                   label={errors.title?.message}
                   color={errors.title? "error": 'primary'}
@@ -117,7 +118,7 @@ export default function AddEvent() {
 
       <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', width: '100' }}>
         <Button color="secondary" variant='contained' type="submit" startIcon={<AddIcon />}>Add</Button>
-        <Button color="info" variant='contained' type="button" onClick={handleCancel} startIcon={<CloseIcon />}>Cancel</Button>
+        <Button sx={{ color: 'white', borderColor: 'white' }} variant='outlined' type="button" onClick={handleCancel} startIcon={<CloseIcon />}>Cancel</Button>
       </Box>
     </form>
   );
