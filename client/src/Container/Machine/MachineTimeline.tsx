@@ -19,6 +19,15 @@ export default function MachineTimeline(props: { asset_id: number }) {
             barLabelStyle: { fontSize: 10 },
         },
     };
+    const notOptions = {
+        backgroundColor: "#c9cacd",
+        colors: ['black'],
+        timeline: {
+            showRowLabels: false,
+            groupByRowLabel: true,
+            barLabelStyle: { fontSize: 10 },
+        },
+    };
 
     const columns = [
         { type: "string", id: "Utilize" },
@@ -41,7 +50,9 @@ export default function MachineTimeline(props: { asset_id: number }) {
             </Box>
             <Box sx={{ padding: '8px 0', width: '100%' }}>
                 {isTimeline && <Chart loader={<div>Loading Chart</div>} chartType="Timeline" options={options} data={data} height="90px" />}
-                {/* {!isTimeline && <Chart loader={<div>Loading Chart</div>} chartType="Timeline" options={options} data={data} width="100%" height="90px" />} */}
+
+                {/* xaxis */}
+                {/* {!isTimeline && <Chart loader={<div>Loading Chart</div>} chartType="Timeline" options={notOptions} data={data} width="100%" height="90px" />} */}
             </Box>
         </Stack>
     );

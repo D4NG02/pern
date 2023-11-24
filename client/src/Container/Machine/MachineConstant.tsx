@@ -31,7 +31,7 @@ export const Timeline = (asset_id: number) => {
       isTimeline = true
       let machineState: any[] = []
 
-      machineState = getMachineState(filteredDate, assetTimelineArray, index)
+      machineState = getMachineState(assetTimelineArray, index)
       timelineColors.push(machineState[1])
 
       startTime = getMachineStartTime(filteredDate, assetTimeline.timestamp, index, endTime)
@@ -46,47 +46,37 @@ export const Timeline = (asset_id: number) => {
   return { isTimeline, timelineUtilize, timelineColors, timelineData }
 }
 const getAssetTransaction = (machineTimeline: any[], id: number, filteredDate: string[]) => {
-  // const filterYear = Number(filteredDate[0])
-  // const filterMonth = Number(filteredDate[1]) - 1
-  // const filterday = Number(filteredDate[2])
-  // const filterDate = new Date(filterYear, filterMonth, filterday)
-  // let empty = {
-  //   asset_id: id,
-  //   timestamp: filterDate,
-  //   value : 0
-  // }
+  const filterYear = Number(filteredDate[0])
+  const filterMonth = Number(filteredDate[1]) - 1
+  const filterday = Number(filteredDate[2])
+  const filterDate = new Date(filterYear, filterMonth, filterday)
+  let empty = {
+    asset_id: id,
+    timestamp: filterDate,
+    value : 4
+  }
   let data: any[] = []
-
+  let start: any[] = []
+  let end: any[] = []
 
   machineTimeline.map((timeline: any, index: number, timelineArray: any[]) => {
     if (timeline.asset_id == id) {
-      // if ((filterDate != timeline.timestamp) && (index == 0)) {
-      //   // fit timestamp not start at 00:00
-      //   console.log(filterDate, timeline.timestamp)
-      //   data.push(empty)
-      // }
       data.push(timeline)
     }
   })
 
+  data.map((data: any, index: number, dataArray: any[]) => {
+    if ((filterDate.getTime() != (new Date(data.timestamp)).getTime()) && (index == 0)) {
+      // timestamp in 1st array not start time
+      start.push(empty)
+    }
+  })
+
+  data = start.concat(data)
   return data
 }
-const getMachineState = (filteredDate: String[], assetTimelineArray: any[], index: number) => {
-  const filterYear = Number(filteredDate[0])
-  const filterMonth = Number(filteredDate[1])
-  const filterday = Number(filteredDate[2])
-  const filterDate = new Date(filterYear, filterMonth, filterday)
-  let state = 0
-
-  if ((index == 0) && (filterDate == assetTimelineArray[index].timestamp)) {
-    // has start time
-    state = assetTimelineArray[index + 1].value
-  } else if ((index == 0) && (filterDate != assetTimelineArray[index].timestamp)) {
-    // has start time
-    state = assetTimelineArray[index].value
-  } else {
-    state = 0
-  }
+const getMachineState = (assetTimelineArray: any[], index: number) => {
+  let state = assetTimelineArray[index].value
 
   switch (state) {
     case 1:
@@ -151,5 +141,5 @@ const getMachineUtilize = (timelineData: any[]) => {
     }
   })
 
-  return ((running / 24) * 100).toFixed(2)
+  return ((running / 24) * 100).toFixed()
 }
