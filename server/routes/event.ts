@@ -38,11 +38,11 @@ routerEvent.post("/update", authorize, async(req: Request, res: Response) => {
     console.log("Update event: " +req)
     console.table(req.body)
 
-    const { eventID, eventDate, eventTitle, eventNote, eventPrio } = req.body
+    const { eventID, eventDate, title, note, eventPrio } = req.body
 
     const updateEvent = await pool.query(
                         "UPDATE event SET date=$2, title=$3, note=$4, priority=$5 WHERE event_id=$1 RETURNING *",
-                        [eventID, eventDate, eventTitle, eventNote, eventPrio]
+                        [eventID, eventDate, title, note, eventPrio]
     )
     
     res.json(updateEvent.command)

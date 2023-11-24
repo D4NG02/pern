@@ -1,8 +1,8 @@
 import $ from "jquery"
-import { useState } from 'react';
+import { useEffect } from "react";
 import { useQuery } from 'react-query';
-import { Box, Button, Chip, Modal, Typography } from '@mui/material';
-import { EventClickArg, EventContentArg, EventHoveringArg } from '@fullcalendar/core'
+import { Box, Chip, Modal } from '@mui/material';
+import { EventClickArg, EventContentArg } from '@fullcalendar/core'
 import FullCalendar from '@fullcalendar/react';
 import dayGridPligin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -16,7 +16,7 @@ import EditEvent from '../Container/Calender/EditEvent';
 import FilterEvent from "../Container/Calender/FilterEvent";
 
 export default function CalendarPage() {
-  const [{ token, popupEventAdd, popupEventEdit, eventFilterMonth, eventFilterYear }, dispatch] = useStateProvider()
+  const [{ token, eventReloadCalendar, popupEventAdd, popupEventEdit, eventFilterMonth, eventFilterYear }, dispatch] = useStateProvider()
   const options = {
     method: 'GET',
     headers: {
@@ -90,26 +90,25 @@ export default function CalendarPage() {
       </>
     )
   }
-
   
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Box sx={{ width: '50vw' }}>
+      <Box sx={{ width: '50vw' }} id='fullcalendar'>
         
         <FilterEvent />
-        <FullCalendar plugins={[dayGridPligin, timeGridPlugin, interactionPlugin]}
+        { eventReloadCalendar &&
+          <FullCalendar plugins={[dayGridPligin, timeGridPlugin, interactionPlugin]}
+                initialDate={new Date(eventFilterYear, eventFilterMonth-1)}
                 initialView="dayGridMonth"
                 headerToolbar={false}
                 events={data}
 
                 unselectAuto={true}
+                aspectRatio={1.5}
 
                 viewDidMount={viewDidMount}
 
-                // businessHours={true}
-
                 firstDay={1}
-                // aspectRatio={1}
 
                 fixedWeekCount={false}
                 showNonCurrentDates={false}
@@ -123,6 +122,7 @@ export default function CalendarPage() {
 
                 eventClick={handleEventClick}
                 eventContent={renderEventContent} />
+        }
       </Box>
 
 
@@ -130,7 +130,7 @@ export default function CalendarPage() {
       {/* Popup for Adding new */}
       <Modal open={popupEventAdd}>
         <Box sx={{ margin: '20vh 20vw', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Box sx={{ height: '60vh', width: '60vw', padding: '2rem', bgcolor: constantStyle.color_primary, borderRadius: 2, boxShadow: 4 }}>
+          <Box sx={{ height: 'max-content', width: '60vw', padding: '1rem 1.4rem', bgcolor: constantStyle.color_primary, borderRadius: 2, boxShadow: 4 }}>
             <AddEvent />
           </Box>
         </Box>
@@ -139,7 +139,7 @@ export default function CalendarPage() {
       {/* Popup for Update/Delete */}
       <Modal open={popupEventEdit}>
         <Box sx={{ margin: '20vh 20vw', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Box sx={{ height: '60vh', width: '60vw', padding: '2rem', bgcolor: constantStyle.color_primary, borderRadius: 2, boxShadow: 4 }}>
+          <Box sx={{ height: 'max-content', width: '60vw', padding: '1rem 1.4rem', bgcolor: constantStyle.color_primary, borderRadius: 2, boxShadow: 4 }}>
             <EditEvent />
           </Box>
         </Box>

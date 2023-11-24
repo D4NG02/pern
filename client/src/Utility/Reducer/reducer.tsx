@@ -17,6 +17,7 @@ export const initialState = {
     cardType: null,
 
     // EVENT
+    eventReloadCalendar: true,
     popupEventAdd: false,
     popupEventEdit: false,
     popupEventHover: false,
@@ -76,6 +77,11 @@ const reducer = (state: any, action: any) => {
             }
 
         // Task 2 popup
+        case reducerCases.SET_EVENT_RELOAD_CALENDAR:
+            return {
+                ...state,
+                eventReloadCalendar: action.eventReloadCalendar,
+            }
         case reducerCases.SET_IS_EVENT_ADD:
             return {
                 ...state,
