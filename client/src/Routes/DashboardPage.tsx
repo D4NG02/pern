@@ -6,17 +6,19 @@ import HomeIcon from '@mui/icons-material/Home';
 
 import { useStateProvider } from '../Utility/Reducer/StateProvider';
 import { reducerCases } from '../Utility/Reducer/Constant';
+import { constantStyle } from '../Utility/CustomStyle';
 import CardCustom from '../Container/CardCustom';
 import CurrencyPage from "../Routes/CurrencyPage";
 import CalendarPage from "../Routes/CalendarPage";
-import { constantStyle } from '../Utility/CustomStyle';
+import MachinePage from './MachinePage';
 
 
 export default function DashboardPage() {
     const [{ token, cardType }, dispatch] = useStateProvider()
   
     const handleBack = () => {
-        dispatch({ type: reducerCases.SET_CARD, cardType: null })
+        // dispatch({ type: reducerCases.SET_CARD, cardType: null })
+        window.location.reload()
     }
 
     return (
@@ -48,6 +50,9 @@ export default function DashboardPage() {
 
                     {/* TASK 2 */}
                     { cardType==='Calendar' && <CalendarPage /> }
+
+                    {/* TASK 3 */}
+                    { cardType==='Machine Utilization' && <MachinePage /> }
                 </Box>
             </Box>
         </Fragment>
