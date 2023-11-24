@@ -1,8 +1,8 @@
 import $ from "jquery"
-import { useState } from 'react';
+import { useEffect } from "react";
 import { useQuery } from 'react-query';
-import { Box, Button, Chip, Modal, Typography } from '@mui/material';
-import { EventClickArg, EventContentArg, EventHoveringArg } from '@fullcalendar/core'
+import { Box, Chip, Modal } from '@mui/material';
+import { EventClickArg, EventContentArg } from '@fullcalendar/core'
 import FullCalendar from '@fullcalendar/react';
 import dayGridPligin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -16,7 +16,7 @@ import EditEvent from '../Container/Calender/EditEvent';
 import FilterEvent from "../Container/Calender/FilterEvent";
 
 export default function CalendarPage() {
-  const [{ token, popupEventAdd, popupEventEdit, eventFilterMonth, eventFilterYear }, dispatch] = useStateProvider()
+  const [{ token, eventReloadCalendar, popupEventAdd, popupEventEdit, eventFilterMonth, eventFilterYear }, dispatch] = useStateProvider()
   const options = {
     method: 'GET',
     headers: {
@@ -90,15 +90,15 @@ export default function CalendarPage() {
       </>
     )
   }
-
   
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Box sx={{ width: '50vw' }}>
+      <Box sx={{ width: '50vw' }} id='fullcalendar'>
         
         <FilterEvent />
-        <Box>{eventFilterMonth} {eventFilterYear}</Box>
-        <FullCalendar plugins={[dayGridPligin, timeGridPlugin, interactionPlugin]}
+        { eventReloadCalendar &&
+          <FullCalendar plugins={[dayGridPligin, timeGridPlugin, interactionPlugin]}
+                initialDate={new Date(eventFilterYear, eventFilterMonth-1)}
                 initialView="dayGridMonth"
                 headerToolbar={false}
                 events={data}
@@ -107,10 +107,7 @@ export default function CalendarPage() {
 
                 viewDidMount={viewDidMount}
 
-                // businessHours={true}
-
                 firstDay={1}
-                // aspectRatio={1}
 
                 fixedWeekCount={false}
                 showNonCurrentDates={false}
@@ -124,6 +121,7 @@ export default function CalendarPage() {
 
                 eventClick={handleEventClick}
                 eventContent={renderEventContent} />
+        }
       </Box>
 
 

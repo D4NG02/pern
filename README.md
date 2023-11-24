@@ -40,3 +40,14 @@ http://localhost:5000 as root of the api.
 
 The server will reload if you make edits.\
 You will also see any lint errors in the console.
+
+
+## Package
+1. Material ui - https://mui.com/material-ui/getting-started/   \
+2. Full calendar - https://fullcalendar.io/docs  \
+3. Icon - https://mui.com/material-ui/material-icons/  \
+4. Hookform resolver - https://react-hook-form.com/docs/useform#resolver \
+5. Date picker - https://mui.com/x/react-date-pickers/date-picker/ \
+6. Apexcharts - https://apexcharts.com/ \
+7. Timeline chart - https://www.react-google-charts.com/examples/timeline \
+8. Zod - https://zod.dev/ \

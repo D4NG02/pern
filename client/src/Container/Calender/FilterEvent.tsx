@@ -1,26 +1,31 @@
 import { Box, FormControl, FormLabel, MenuItem, Select } from '@mui/material';
 
 import { Calendar } from '@fullcalendar/core'
-import { createCalendarConst, inputDateFilterSchema, inputDateFilterSchemaType, monthList, monthListType, yearList } from './ConstantEvent';
+import dayGridPligin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import { yearList } from './ConstantEvent';
 import { useStateProvider } from '../../Utility/Reducer/StateProvider';
 import { reducerCases } from '../../Utility/Reducer/Constant';
 import { constantStyle } from '../../Utility/CustomStyle';
 
 export default function FilterEvent() {
-    const [{ eventFilterMonth, eventFilterYear }, dispatch] = useStateProvider()
-    const { numberOfWeeks, startDayAtColumn, lastDay, dayArray } = createCalendarConst(eventFilterYear, eventFilterMonth)
+    const [{ eventReloadCalendar, eventFilterMonth, eventFilterYear }, dispatch] = useStateProvider()
 
-    // var fullcalendar = new Calendar(calendarEl, {
-    //     timeZone: 'local',
-    //     initialDate: new Date(2018, 8, 1)
-    // })
     const handleMonth = (e: any) => {
-        console.log({ numberOfWeeks, startDayAtColumn, lastDay, dayArray })
+        dispatch({ type: reducerCases.SET_EVENT_RELOAD_CALENDAR, eventReloadCalendar: false })
         dispatch({ type: reducerCases.SET_EVENT_FILTER_MONTH, eventFilterMonth: e.target.value })
+        setTimeout(() => {
+            dispatch({ type: reducerCases.SET_EVENT_RELOAD_CALENDAR, eventReloadCalendar: true })
+        }, 100);
     }
 
     const handleYear = (e: any) => {
+        dispatch({ type: reducerCases.SET_EVENT_RELOAD_CALENDAR, eventReloadCalendar: false })
         dispatch({ type: reducerCases.SET_EVENT_FILTER_YEAR, eventFilterYear: e.target.value })
+        setTimeout(() => {
+            dispatch({ type: reducerCases.SET_EVENT_RELOAD_CALENDAR, eventReloadCalendar: false })
+        }, 100);
     }
 
     return (

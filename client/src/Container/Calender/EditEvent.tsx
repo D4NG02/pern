@@ -53,7 +53,7 @@ export default function EditEvent() {
 
   const { register, handleSubmit, reset, formState: { errors }, } = useForm<inputSchemaType>({ resolver: zodResolver(inputSchema) })
   const handleUpdate: SubmitHandler<inputSchemaType> = (input) => {
-    const newEvent = { ...input, eventTitle, eventNote, eventID, eventDate, eventPrio };
+    const newEvent = { ...input, eventID, eventDate, eventPrio };
     mutate(newEvent);
     reset()
     
