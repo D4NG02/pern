@@ -29,17 +29,22 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 
 
-## Available Scripts Server side
+## Server side
 
-In the seerver directory, you can run:
+### Available Scripts Server side
 
-### `npm run start`
+In the seerver directory, you can run: `npm run start` \
 
 Runs backend server with nodemon.\
 http://localhost:5000 as root of the api.
 
 The server will reload if you make edits.\
 You will also see any lint errors in the console.
+
+### Server Set Up
+Create .env file which in side it has `jwtSecret = CADIT_pern`. \
+This file needed to set up authentication which user will get token as autorize
+
 
 
 ## Package
