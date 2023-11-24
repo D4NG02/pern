@@ -40,7 +40,7 @@ export default function EditEvent() {
       onSuccess: (data: any, variables: inputSchemaType, context: unknown) => {
         alert("Updated")
       },
-      onError: () => {
+      onError: (error: any, variables: inputSchemaType, context: unknown) => {
         alert("Has error")
       },
       onSettled: () => {
@@ -51,7 +51,7 @@ export default function EditEvent() {
   
 
 
-  const { register, handleSubmit, reset, formState: { errors }, } = useForm<inputSchemaType>()
+  const { register, handleSubmit, reset, formState: { errors }, } = useForm<inputSchemaType>({ resolver: zodResolver(inputSchema) })
   const handleUpdate: SubmitHandler<inputSchemaType> = (input) => {
     const newEvent = { ...input, eventTitle, eventNote, eventID, eventDate, eventPrio };
     mutate(newEvent);
@@ -88,24 +88,27 @@ export default function EditEvent() {
 
       <Box pb={2}>
         <FormLabel sx={{ color: 'white' }}>Title</FormLabel>
-        <TextField sx={{ '& .MuiInputBase-root': {bgcolor: 'white'} }}
-                  value={eventTitle}  onChange={(e)=>{
-                    dispatch({ type: reducerCases.SET_EVENT_TITLE, eventTitle: e.target.value })
-                  }}
-                  size="small"  fullWidth 
-                  label={errors.title?.message}
-                  color={errors.title? "error": 'primary'} />
+        <TextField sx={{ '& .MuiInputBase-root': {bgcolor: 'white'} }} value={eventTitle} size="small" fullWidth
+                  label={errors.title?.message} color={errors.title? "error": 'primary'}
+                  {...register('title', {
+                    setValueAs: (value) => {
+                      dispatch({ type: reducerCases.SET_EVENT_TITLE, eventTitle: value })
+                      return eventTitle
+                    },
+                  })} />
       </Box>
 
       <Box pb={2}>
         <FormLabel sx={{ color: 'white' }}>Note</FormLabel>
         <TextField sx={{ '& .MuiInputBase-root': {bgcolor: 'white'} }} multiline minRows={4} maxRows={4}
-                  value={eventNote} onChange={(e)=>{
-                    dispatch({ type: reducerCases.SET_EVENT_NOTE, eventNote: e.target.value })
-                  }}
-                  size="small" fullWidth
-                  label={errors.note?.message}
-                  color={errors.note? "error": 'primary'} />
+                  value={eventNote} size="small"
+                  fullWidth label={errors.note?.message} color={errors.note? "error": 'primary'}
+                  {...register('note', {
+                    setValueAs: (value) => {
+                      dispatch({ type: reducerCases.SET_EVENT_NOTE, eventNote: value })
+                      return eventNote
+                    },
+                  })} />
       </Box>
 
       <Box sx={{ pb: 2, display: 'flex', alignItems: 'baseline' }}>
