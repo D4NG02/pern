@@ -1,5 +1,12 @@
 import { Fragment } from 'react';
 import { Box, IconButton, AppBar, Container, Toolbar, Typography } from '@mui/material';
+import {
+    useQuery,
+    useMutation,
+    useQueryClient,
+    QueryClient,
+    QueryClientProvider,
+  } from '@tanstack/react-query'
 
 import CADIT from "../Asset/CADIT.png";
 import HomeIcon from '@mui/icons-material/Home';
@@ -14,6 +21,7 @@ import MachinePage from './MachinePage';
 
 
 export default function DashboardPage() {
+    const queryClient = new QueryClient()
     const [{ token, cardType }, dispatch] = useStateProvider()
   
     const handleBack = () => {
@@ -52,7 +60,12 @@ export default function DashboardPage() {
                     { cardType==='Calendar' && <CalendarPage /> }
 
                     {/* TASK 3 */}
-                    { cardType==='Machine Utilization' && <MachinePage /> }
+                    { cardType==='Machine Utilization' && 
+                    <>
+                        <QueryClientProvider client={queryClient}>
+                            <MachinePage />
+                        </QueryClientProvider>
+                    </> }
                 </Box>
             </Box>
         </Fragment>
