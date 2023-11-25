@@ -40,14 +40,15 @@ export const initialState = {
 
 
     // Task 3
-    machineAsset: [],
     machineTimeline: [],
-    machineFilterSide: 0,
+    machineFilterSide: 1,
     machineFilterPlant: 0,
     machineFilterDepartment: 0,
-    machineFilterCenter: 0,
+    machineFilterWorkcenter: 0,
     machineFilterWorkstation: 0,
-    machineFilterDate: typeof Date,
+    machineFilterDate: new Date().getFullYear() +'-'+ new Date().getMonth() +'-'+ new Date().getDate(),
+    machineFilterAsset: [],
+    machineFilterTimeline: [],
 }
 
 export const initialStateType = typeof initialState
@@ -138,20 +139,48 @@ const reducer = (state: any, action: any) => {
             }
 
         // Task 3
-        case reducerCases.SET_ASSET_DATA:
+        case reducerCases.SET_MACHINE_FILTER_SITES:
             return {
                 ...state,
-                machineAsset: action.machineAsset,
+                machineFilterSide: action.machineFilterSide,
             }
+        case reducerCases.SET_MACHINE_FILTER_PLANTS:
+            return {
+                ...state,
+                machineFilterPlant: action.machineFilterPlant,
+            }
+        case reducerCases.SET_MACHINE_FILTER_DEPARTMENTS:
+            return {
+                ...state,
+                machineFilterDepartment: action.machineFilterDepartment,
+            }
+        case reducerCases.SET_MACHINE_FILTER_WORKCENTERS:
+            return {
+                ...state,
+                machineFilterWorkcenter: action.machineFilterWorkcenter,
+            }
+        case reducerCases.SET_MACHINE_FILTER_WORKSTATIONS:
+            return {
+                ...state,
+                machineFilterWorkstation: action.machineFilterWorkstation,
+            }
+        case reducerCases.SET_MACHINE_FILTER_ASSETS:
+            return {
+                ...state,
+                machineFilterAsset: action.machineFilterAsset,
+            }
+        case reducerCases.SET_MACHINE_FILTER_DATE:
+            return {
+                ...state,
+                machineFilterDate: action.machineFilterDate,
+            }
+
+
+            
         case reducerCases.SET_TIMELINE_DATA:
             return {
                 ...state,
                 machineTimeline: action.machineTimeline,
-            }
-        case reducerCases.SET_TIMELINE_DATE:
-            return {
-                ...state,
-                machineFilterDate: action.machineFilterDate,
             }
         default:
             console.log("Error reducerCases type")

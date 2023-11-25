@@ -1,5 +1,6 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { useStateProvider } from '../../Utility/Reducer/StateProvider';
+import { reducerCases } from '../../Utility/Reducer/Constant';
 
 export const inputSchema = {
   Name: String,
@@ -8,10 +9,18 @@ export const inputSchema = {
 export type inputSchemaType = typeof inputSchema;
 
 
+export const FetchGetOptions = () => {
+  const [{ token }, dispatch] = useStateProvider()
+  const options = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'token': token
+    },
+  };
 
-
-
-
+  return { options }
+};
 
 
 
@@ -42,7 +51,7 @@ export const Timeline = (asset_id: number) => {
   })
   timelineUtilize = getMachineUtilize(timelineData)
 
-  console.log({ assetTransaction, timelineUtilize, timelineColors, timelineData })
+  // console.log({ assetTransaction, timelineUtilize, timelineColors, timelineData })
   return { isTimeline, timelineUtilize, timelineColors, timelineData }
 }
 const getAssetTransaction = (machineTimeline: any[], id: number, filteredDate: string[]) => {
@@ -53,7 +62,7 @@ const getAssetTransaction = (machineTimeline: any[], id: number, filteredDate: s
   let empty = {
     asset_id: id,
     timestamp: filterDate,
-    value : 4
+    value: 4
   }
   let data: any[] = []
   let start: any[] = []
