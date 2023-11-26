@@ -16,7 +16,7 @@ app.use(cors());
 
 // Routes
 app.use('/auth', routerAuth);
-app.use('/table', routerCurrency);
+app.use('/currency', routerCurrency);
 app.use('/event', routerEvent);
 app.use('/machine', routerMachine);
 

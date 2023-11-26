@@ -17,7 +17,7 @@ export default function CurrencyTable() {
         },
     };
     const { data, isLoading } = useQuery({
-        queryFn: async () => await fetch("/table/gets", options)
+        queryFn: async () => await fetch("/currency/gets", options)
             .then((response) => {
                 if (response.ok) {
                     return response.json()

@@ -40,12 +40,16 @@ export const initialState = {
 
     // Task 3
     machineTimeline: [],
+    machineFilterSearch: false,
     machineFilterSide: 1,
     machineFilterPlant: 0,
     machineFilterDepartment: 0,
     machineFilterWorkcenter: 0,
     machineFilterWorkstation: 0,
-    machineFilterDate: new Date().getFullYear() +'-'+ new Date().getMonth() +'-'+ new Date().getDate(),
+    machineFilterDate: {
+                        "from": new Date().getFullYear() +'-'+ new Date().getMonth() +'-'+ new Date().getDate(),
+                        "to": new Date().getFullYear() +'-'+ new Date().getMonth() +'-'+ new Date().getDate()
+                    },
     machineFilterAsset: [],
     machineFilterTimeline: [],
 }
@@ -133,6 +137,11 @@ const reducer = (state: any, action: any) => {
             }
 
         // Task 3
+        case reducerCases.SET_MACHINE_FILTER_SEARCH:
+            return {
+                ...state,
+                machineFilterSearch: action.machineFilterSearch,
+            }
         case reducerCases.SET_MACHINE_FILTER_SITES:
             return {
                 ...state,

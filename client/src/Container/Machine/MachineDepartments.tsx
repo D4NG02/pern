@@ -22,17 +22,17 @@ export default function MachineDepartments() {
                 console.log(response)
             }
         }),
-        queryKey: ["machine_departments", machineFilterPlant],
+        queryKey: ["machine_departments"],
         enabled: !!machineFilterPlant,
     })
 
-    if(status=='success'){
-        // console.log({status, fetchStatus, departments})
-    }
-
     const handleOnChange = (e: any) => {
-        dispatch({ type: reducerCases.SET_MACHINE_FILTER_DEPARTMENTS, machineFilterDepartment: e.target.value })
+        dispatch({ type: reducerCases.SET_MACHINE_FILTER_DEPARTMENTS, machineFilterDepartment: 0 })
         dispatch({ type: reducerCases.SET_MACHINE_FILTER_WORKCENTERS, machineFilterWorkcenter: 0 })
+
+        setTimeout(() => {
+            dispatch({ type: reducerCases.SET_MACHINE_FILTER_DEPARTMENTS, machineFilterDepartment: e.target.value })
+        }, 2);
     }
 
     return (

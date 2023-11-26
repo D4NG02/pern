@@ -1,6 +1,5 @@
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { z } from 'zod';
-import { useMutation, useQueryClient } from 'react-query';
 import dayjs, { Dayjs } from 'dayjs';
 import { Box, Button, Stack } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -29,56 +28,18 @@ import MachinePlant from './MachinePlants';
 import MachineDepartments from './MachineDepartments';
 import MachineWorkcenters from './MachineWorkcenters';
 import MachineWorkstation from './MachineWorkstation';
-import { FetchGetOptions } from './MachineConstant';
-
-
-const inputSchema = z.object({
-  id: z.number(),
-});
-type inputSchemaType = z.infer<typeof inputSchema>;
 
 export default function MachineFilter() {
-  const [{ machineFilterPlant, machineFilterDepartment, machineFilterWorkcenter, machineFilterWorkstation, machineFilterDate }, dispatch] = useStateProvider()
-  const [selectDate, setSelectDate] = useState<Dayjs | null>(dayjs(machineFilterDate));
-  const { options } = FetchGetOptions()
+  const [{ token, machineFilterWorkstation, machineFilterDate }, dispatch] = useStateProvider()
+  const [selectDate, setSelectDate] = useState<Dayjs | null>(dayjs(machineFilterDate.from));
 
-  const getTransaction = async (data: inputSchemaType) => {
-    const { data: response } = await fetch("/machine/assets/" + data.id, options)
-      .then((response) => {
-        if (response.ok) {
-          return response.json()
-        } else if (response.status === 403 && response.statusText === "Forbidden") {
-          sessionStorage.removeItem("token");
-          dispatch({ type: reducerCases.SET_TOKEN, token: null })
-          dispatch({ type: reducerCases.SET_CARD, cardType: null })
-        } else {
-          console.log(response)
-        }
-      })
-    return response;
-  };
-  // eslint-disable-next-line
-  const { mutate, isLoading } = useMutation(
-    getTransaction,
-    {
-      onSuccess: (data: any, variables: inputSchemaType, context: unknown) => {
-        console.log(data)
-      },
-      onError: (error: any, variables: inputSchemaType, context: unknown) => {
-        if (error.status === 403 && error.statusText === "Forbidden") {
-          sessionStorage.removeItem("token");
-          dispatch({ type: reducerCases.SET_TOKEN, token: null })
-          dispatch({ type: reducerCases.SET_CARD, cardType: null })
-        } else {
-          console.log(error)
-        }
-      },
-      onSettled: () => { }
-    }
-  );
-  const handleSearch = () => {
-    // use date to get transaction
-    const data = { id: machineFilterWorkstation };
+  const handleSearch = async() => {
+    let workStationTag = machineFilterWorkstation
+    dispatch({ type: reducerCases.SET_MACHINE_FILTER_WORKSTATIONS, machineFilterWorkstation: 0 })
+    
+    setTimeout(() => {
+      dispatch({ type: reducerCases.SET_MACHINE_FILTER_WORKSTATIONS, machineFilterWorkstation: workStationTag })
+    }, 2);
   }
 
   const filterDate = (selectedDate: any) => {
@@ -86,8 +47,7 @@ export default function MachineFilter() {
     let day = selectedDate?.date()
     let month = selectedDate?.month() ? selectedDate?.month() + 1 : 0
     let year = selectedDate?.year()
-    dispatch({ type: reducerCases.SET_MACHINE_FILTER_DATE, machineFilterDate: year + '-' + month + '-' + day })
-    dispatch({ type: reducerCases.SET_TIMELINE_DATA, machineTimeline: [] })
+    dispatch({ type: reducerCases.SET_MACHINE_FILTER_DATE, machineFilterDate: {"from": year + '-' + month + '-' + day, "to": year + '-' + (month) + '-' + (day+1)} })
   }
 
   return (

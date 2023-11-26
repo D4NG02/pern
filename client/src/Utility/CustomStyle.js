@@ -229,6 +229,35 @@ const CustomComponent = createTheme({
             },
         },
 
+        // Paination Style
+        MuiTablePagination: {
+            styleOverrides: {
+                displayedRows:{
+                    margin: 'unset',
+                    padding: '4px 8px',
+                    borderRadius: '4px',
+                    color: constantStyle.color_primary,
+                    border: '1px solid '+constantStyle.color_primary,
+                },
+                actions: {
+                    gap: '8px',
+                    display: 'flex',
+                    alignItems: 'stretch',
+                    'p': {
+                        padding: '10px 14px',
+                    },
+                    'button': {
+                        borderRadius: '4px',
+                        color: constantStyle.color_primary,
+                        border: '1px solid '+constantStyle.color_primary,
+                    },
+                    '.Mui-disabled': {
+                        backgroundColor: constantStyle.color_base_200,
+                    }
+                }
+            },
+        },
+
 
         // Date picker
         // MuiDateCalendar: {
