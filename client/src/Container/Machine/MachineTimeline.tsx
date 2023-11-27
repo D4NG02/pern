@@ -10,6 +10,7 @@ import { FetchGetOptions } from './MachineConstant';
 export default function MachineTimeline(props: { asset_id: number }) {
     const [{ machineFilterWorkstation, machineFilterDate }, dispatch] = useStateProvider()
     const { from, to } = machineFilterDate
+    const dateDiff = dayjs(new Date().toDateString()).diff(from, 'hour', true).valueOf()
 
     const { options: fetchOption } = FetchGetOptions()
     const { status, fetchStatus, data: transactions } = useQuery({
@@ -60,14 +61,12 @@ export default function MachineTimeline(props: { asset_id: number }) {
         { type: "date", id: "End" },
     ];
 
-    let dateDiff = dayjs(new Date().toDateString()).diff(from, 'hour', true).valueOf()
     let rowToday = [
-        ["Today", "Offline", new Date(new Date().toDateString()),
+        ["", "Offline", new Date(new Date().toDateString()),
             new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes())],
-        ["Today", "No data", new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes()),
+        ["", "No data", new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes()),
             new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1)],
     ]
-    console.log(dateDiff)
     const rows = dateDiff == 0 ? rowToday : [["", "Offline", new Date(new Date(from).toDateString()), new Date(new Date(to).toDateString())]]
 
 

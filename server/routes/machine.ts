@@ -8,8 +8,6 @@ const routerMachine = Router();
 // Get all currency API
 routerMachine.get("/sites", authorize, async (req: Request, res: Response) => {
   try {
-    console.log("-------------------------------------------------------------------")
-    console.log("Get all sites")
     let { rows } = await pool.query("SELECT * FROM sites")
     res.json(rows)
   } catch (error) {
@@ -21,8 +19,6 @@ routerMachine.get("/sites", authorize, async (req: Request, res: Response) => {
 routerMachine.get("/plants/:site_id", authorize, async (req: Request, res: Response) => {
   try {
     const id: Number = req.params.site_id
-    console.log()
-    console.log("Get all plants for site: " + id)
     let { rows } = await pool.query("SELECT * FROM plants WHERE site_id=$1", [id])
     res.json(rows)
   } catch (error) {
@@ -34,8 +30,6 @@ routerMachine.get("/plants/:site_id", authorize, async (req: Request, res: Respo
 routerMachine.get("/departments/:plant_id", authorize, async (req: Request, res: Response) => {
   try {
     const id: Number = req.params.plant_id
-    console.log()
-    console.log("Get all departments for plant: " + id)
     let { rows } = await pool.query("SELECT * FROM departments WHERE plant_id=$1", [id])
     res.json(rows)
   } catch (error) {
@@ -47,8 +41,6 @@ routerMachine.get("/departments/:plant_id", authorize, async (req: Request, res:
 routerMachine.get("/workcenters/:department_id", authorize, async (req: Request, res: Response) => {
   try {
     const id: Number = req.params.department_id
-    console.log()
-    console.log("Get all workcenters for department: " + id)
     let { rows } = await pool.query("SELECT * FROM workcenters WHERE department_id=$1", [id])
     res.json(rows)
   } catch (error) {
@@ -60,8 +52,6 @@ routerMachine.get("/workcenters/:department_id", authorize, async (req: Request,
 routerMachine.get("/workstations/:workcenter_id", authorize, async (req: Request, res: Response) => {
   try {
     const id: Number = req.params.workcenter_id
-    console.log()
-    console.log("Get all workstations for workcenter: " + id)
     let { rows } = await pool.query("SELECT * FROM workstations WHERE workcenter_id=$1", [id])
     res.json(rows)
   } catch (error) {
@@ -73,8 +63,6 @@ routerMachine.get("/workstations/:workcenter_id", authorize, async (req: Request
 routerMachine.get("/assets/:workstation_id", authorize, async (req: Request, res: Response) => {
   try {
     const id: Number = req.params.workstation_id
-    console.log()
-    console.log("Get all assets for workstation: " + id)
     let { rows } = await pool.query("SELECT * FROM assets WHERE workstation_id=$1", [id])
     res.json(rows)
   } catch (error) {
@@ -85,8 +73,6 @@ routerMachine.get("/assets/:workstation_id", authorize, async (req: Request, res
 
 routerMachine.get("/transactions/:asset_id/:timestampFrom/:timestampTo", authorize, async (req: Request, res: Response) => {
   try {
-    console.log()
-    console.log("Get all transactions for asset: ", req.params)
     const asset_id: number = req.params.asset_id
     const timestampFrom = dayjs(req.params.timestampFrom)
     const timestampTo = dayjs(req.params.timestampTo)
@@ -109,15 +95,15 @@ routerMachine.get("/transactions/:asset_id/:timestampFrom/:timestampTo", authori
     const dateTo = req.params.timestampTo
     let isTimeline = false
     let timelineUtilize: number
-    let startTime: string | Date
-    let endTime: string | Date
+    let startTime: string
+    let endTime: string
     let timelineData: any[] = []
     let timelineColors: string[] = []
-    let assetTransaction = getAssetTransaction(data, asset_id, dateFrom, dateTo)
+    let assetTransaction: object[] = getAssetTransaction(data, asset_id, dateFrom, dateTo)
     assetTransaction.map((assetTimeline: any, index: number, assetTimelineArray: any[]) => {
       if (assetTimeline.asset_id == asset_id) {
         isTimeline = true
-        let machineState: any[] = []
+        let machineState: string[] = []
   
         machineState = getMachineState(assetTimelineArray, index)
         timelineColors.push(machineState[1])
@@ -188,34 +174,32 @@ const getMachineState = (assetTimelineArray: any[], index: number) => {
   }
 }
 
-const getMachineStartTime = (filteredDate: string, timestamp: string, index: Number, endTime: string | Date) => {
+const getMachineStartTime = (filteredDate: string, timestamp: string, index: Number, endTime: string) => {
   let start = dayjs(filteredDate)
   let end = dayjs(timestamp)
+  let time: string=''
 
   if ((end.diff(start, 'day', true).valueOf()==0) && (index == 0)) {
-    // timestamp in 1st array is start time
-    console.log('start period')
-    return getDateFormated(filteredDate)
-  } else if ((end.diff(start, 'day', true).valueOf()!=0) && (index == 0)) {
-    // timestamp in 1st array not start time
-    console.log('not start')
-    return getDateFormated(timestamp)
-  } else {
-    console.log('else start')
-    return getDateFormated(endTime)
+    time = getDateFormated(filteredDate)
+    console.log('start period', time)
+  } else if (end.diff(start, 'day', true).valueOf()!=0) {
+    time = timestamp
+    console.log('not start', time)
   }
+
+  return time
 }
 
-const getMachineEndTime = (dateTo: string, assetTimelineArray: any[], index: number, endTime: string | Date) => {
+const getMachineEndTime = (dateTo: string, assetTimelineArray: any[], index: number, endTime: string) => {
   let nextKey = index + 1
   let assetLength = assetTimelineArray.length
 
   if (assetLength > nextKey) {
-    return getDateFormated(assetTimelineArray[nextKey].timestamp)
+    return assetTimelineArray[nextKey].timestamp
   } else if (assetLength - 1 == index) {
     return getDateFormated(dateTo)
   } else {
-    return getDateFormated(assetTimelineArray[nextKey].timestamp)
+    return assetTimelineArray[nextKey].timestamp
   }
 }
 
@@ -235,11 +219,8 @@ const getMachineUtilize = (timelineData: any[], dateFrom: string, dateTo: string
   return Number(((running / total) * 100).toFixed())
 }
 
-const getDateFormated = (timestamp: string | Date) => {
-  const year = new Date(timestamp).getUTCFullYear()
-  const month = new Date(timestamp).getUTCMonth()
-  const date = new Date(timestamp).getUTCDate()
-  const hour = new Date(timestamp).getUTCHours()
-  const minute = new Date(timestamp).getUTCMinutes()
-  return new Date(year, month, date, hour, minute)
+const getDateFormated = (timestamp: string) => {
+  let time: string = new Date(timestamp).toString()
+  // time = time.split(", ")[1].split(":00 GMT")[0]
+  return time
 }
