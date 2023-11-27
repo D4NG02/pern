@@ -1,21 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 import { Stack, Box, Typography } from '@mui/material';
 import { Chart, } from "react-google-charts";
+import dayjs from 'dayjs';
 
 import { useStateProvider } from '../../Utility/Reducer/StateProvider';
 import { reducerCases } from '../../Utility/Reducer/Constant';
+import { FetchGetOptions } from './MachineConstant';
 
 export default function MachineTimeline(props: { asset_id: number }) {
-    const [{ token, machineFilterWorkstation, machineFilterDate }, dispatch] = useStateProvider()
+    const [{ machineFilterWorkstation, machineFilterDate }, dispatch] = useStateProvider()
     const { from, to } = machineFilterDate
 
-    const fetchOption = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'token': token
-        },
-    };
+    const { options: fetchOption } = FetchGetOptions()
     const { status, fetchStatus, data: transactions } = useQuery({
         queryFn: async () => await fetch("/machine/transactions/" + props.asset_id + '/' + from + '/' + to, fetchOption)
             .then((response) => {
@@ -33,25 +29,27 @@ export default function MachineTimeline(props: { asset_id: number }) {
         enabled: !!machineFilterWorkstation,
     })
     if (status == "success") {
-        console.log({ status, fetchStatus, transactions })
+        console.log(transactions)
     }
 
     const options = {
+        avoidOverlappingGridLines: false,
         backgroundColor: "#c9cacd",
-        colors: status == "success" ? transactions.timelineColors : 'black',
+        colors: (status == "success" && transactions.istimeline) ? transactions.timelineColors : ['black'],
         timeline: {
             showRowLabels: false,
             groupByRowLabel: true,
-            barLabelStyle: { fontSize: 10 },
+            barLabelStyle: { fontSize: 8 },
         },
     };
-    const notOptions = {
+    const optionToday = {
+        avoidOverlappingGridLines: false,
         backgroundColor: "#c9cacd",
-        colors: ['gray'],
+        colors: ['black', 'gray'],
         timeline: {
             showRowLabels: false,
             groupByRowLabel: true,
-            barLabelStyle: { fontSize: 10 },
+            barLabelStyle: { fontSize: 8 },
         },
     };
 
@@ -61,9 +59,16 @@ export default function MachineTimeline(props: { asset_id: number }) {
         { type: "date", id: "Start" },
         { type: "date", id: "End" },
     ];
-    const rows = [
-        ["No data", "", new Date(from), new Date(to)],
-    ];
+
+    let dateDiff = dayjs(new Date().toDateString()).diff(from, 'hour', true).valueOf()
+    let rowToday = [
+        ["Today", "Offline", new Date(new Date().toDateString()),
+            new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes())],
+        ["Today", "No data", new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes()),
+            new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1)],
+    ]
+    console.log(dateDiff)
+    const rows = dateDiff == 0 ? rowToday : [["", "Offline", new Date(new Date(from).toDateString()), new Date(new Date(to).toDateString())]]
 
 
     return (
@@ -75,16 +80,20 @@ export default function MachineTimeline(props: { asset_id: number }) {
                 </Box>
             </Box>
             <Box sx={{ padding: '4px 0', width: '100%' }}>
-                {status == 'success' && 
+                {status == 'success' &&
                     <>
                         {transactions.isTimeline && <Chart loader={<div>Loading Chart</div>}
-                                                            chartType="Timeline"
-                                                            options={options}
-                                                            data={[columns, ...transactions.timelineData]} height="90px" />}
-                        {!transactions.isTimeline && <Chart loader={<div>Loading Chart</div>}
-                                                            chartType="Timeline"
-                                                            options={notOptions}
-                                                            data={[columns, ...rows]} height="90px" />}
+                            chartType="Timeline"
+                            options={options}
+                            data={[columns, ...transactions.timelineData]} height="90px" />}
+                        {!transactions.isTimeline &&
+                            <>
+                                {dateDiff == 0 ?
+                                    <Chart loader={<div>Loading Chart</div>} chartType="Timeline" options={optionToday} data={[columns, ...rows]} height="90px" />
+                                    : <Chart loader={<div>Loading Chart</div>} chartType="Timeline" options={options} data={[columns, ...rows]} height="90px" />
+                                }
+                            </>
+                        }
                     </>
                 }
             </Box>

@@ -1,7 +1,7 @@
 import $ from "jquery"
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Stack, Box, Chip, TablePagination } from '@mui/material'
+import { Stack, Box, Chip, TablePagination, Typography, Divider } from '@mui/material'
 
 import { useStateProvider } from '../Utility/Reducer/StateProvider';
 import MachineFilter from '../Container/Machine/MachineFilter';
@@ -10,12 +10,10 @@ import { FetchGetOptions } from '../Container/Machine/MachineConstant';
 import { reducerCases } from '../Utility/Reducer/Constant';
 import { constantStyle } from '../Utility/CustomStyle';
 
-import Asset1 from "../Asset/Asset1.jpg";
-
 export default function MachinePage() {
     const { options } = FetchGetOptions()
-    const [{ machineFilterSearch, machineFilterWorkstation, machineFilterAsset, machineFilterTimeline }, dispatch] = useStateProvider()
-    const [page, setPage] = useState(1);
+    const [{ machineFilterWorkstation, machineFilterAsset, machineFilterTimeline }, dispatch] = useStateProvider()
+    const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(4);
     const [startDisplay, setStartDisplay] = useState(0)
     const [endDisplay, setEndDisplay] = useState(3)
@@ -53,8 +51,9 @@ export default function MachinePage() {
     return (
         <>
             <MachineFilter />
+            <Divider orientation="vertical" sx={{ span: { color: 'transparent', padding: 0, fontSize: '8px' } }}>Divider</Divider>
 
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, marginTop: 2, height: '60vh', overflowY: 'auto',
+            <Box sx={{ display: 'grid', gridTemplateRows: '25% 25% 25% 25%', gap: 1, height: '62vh', overflowY: 'auto',
                         '.MuiTablePagination-actions': { display: 'inline-flex' } }}>
                 {status == 'success' &&
                     assets.filter((asset: any, index: number, array: string[]) => {
@@ -64,29 +63,35 @@ export default function MachinePage() {
                         })
                         .map((asset: any, index: number, array: string[]) => {
                             return (
-                                <Stack spacing={1} data-id={index} key={index} direction='row'>
-                                    <Box sx={{ width: '20%', bgcolor: constantStyle.color_base_400, padding: 1, borderRadius: 1 }}>
-                                        {/* <img src={require(Asset1).default} alt={asset.asset_name} /> */}
-                                        id: {asset.asset_id} <br />
-                                        name: {asset.asset_name} <br />
-                                        path: {asset.image_path}
+                                <Box key={index} sx={{ display: 'grid', gridTemplateColumns: '20% auto', gap: 1 }}>
+                                    <Box sx={{ bgcolor: constantStyle.color_base_400, borderRadius: 1, display: 'grid', gridTemplateColumns: '48% auto', gap: 1 }}>
+                                        <Box sx={{ bgcolor: constantStyle.color_primary, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            <Typography>{asset.asset_name}</Typography>
+                                        </Box>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            <img src={require('../Asset/Asset1.jpg')} height={80} alt={asset.asset_name} />
+                                            {/* <img src={require(asset.image_path)} height={80} alt={asset.asset_name} /> */}
+                                        </Box>
                                     </Box>
-                                    <Box sx={{ width: '80%', bgcolor: constantStyle.color_base_400, padding: 1, borderRadius: 1 }}>
+                                    <Box sx={{ bgcolor: constantStyle.color_base_400, padding: 1, borderRadius: 1 }}>
                                         <MachineTimeline asset_id={asset.asset_id} />
                                     </Box>
-                                </Stack>
+                                </Box>
                             )
                         })
                 }
             </Box>
 
             {status == 'success' &&
-                <Stack paddingTop={2} paddingX={2} spacing={2} direction='row' sx={{ justifyContent: 'flex-end' }}>
+                <>
+                <Divider orientation="vertical" sx={{ span: { color: 'transparent', padding: 0, fontSize: '8px' } }}>Divider</Divider>
+                <Stack paddingX={2} spacing={2} direction='row' sx={{ justifyContent: 'flex-end' }}>
                     <Chip label="Running" color="success" variant='filled' />
                     <Chip label="Idle" color="warning" variant='filled' />
                     <Chip label="Down" color="error" variant='filled' />
                     <Chip label="Offline" sx={{ bgcolor: 'black', color: 'white' }} variant='filled' />
                 </Stack>
+                </>
             }
 
             {status == 'success' &&

@@ -92,9 +92,15 @@ routerMachine.get("/transactions/:asset_id/:timestampFrom/:timestampTo", authori
     const timestampTo = dayjs(req.params.timestampTo)
     let { rows } = await pool.query("SELECT * FROM transactions WHERE asset_id=$1 AND timestamp>=$2", [asset_id, timestampFrom])
 
-    rows = rows.filter((transaction: any, index: number, array: string[]) => {
+    let data: any[]=[]
+    rows = rows.map((transaction: any, index: number, array: string[]) => {
       if (dayjs(transaction.timestamp).isBefore(timestampTo) && dayjs(transaction.timestamp).isAfter(timestampFrom)) {
-        return transaction
+        transaction = {
+          transaction_id: transaction.transaction_id,
+          asset_id: transaction.asset_id,
+          timestamp: getDateFormated(transaction.timestamp),
+          value: transaction.value}
+        data.push(transaction)
       }
     })
 
@@ -104,10 +110,10 @@ routerMachine.get("/transactions/:asset_id/:timestampFrom/:timestampTo", authori
     let isTimeline = false
     let timelineUtilize: number
     let startTime: string | Date
-    let endTime: string
+    let endTime: string | Date
     let timelineData: any[] = []
     let timelineColors: string[] = []
-    let assetTransaction = getAssetTransaction(rows, asset_id, dateFrom, dateTo)
+    let assetTransaction = getAssetTransaction(data, asset_id, dateFrom, dateTo)
     assetTransaction.map((assetTimeline: any, index: number, assetTimelineArray: any[]) => {
       if (assetTimeline.asset_id == asset_id) {
         isTimeline = true
@@ -134,11 +140,10 @@ routerMachine.get("/transactions/:asset_id/:timestampFrom/:timestampTo", authori
 export default routerMachine;
 
 
-const getAssetTransaction = (machineTimeline: any[], id: number, timestampFrom: Date, timestampTo: Date) => {
-  const filterDate = dayjs(timestampFrom)
+const getAssetTransaction = (machineTimeline: any[], id: number, timestampFrom: string, timestampTo: Date) => {
   let empty = {
     asset_id: id,
-    timestamp: timestampFrom +"T00:00:00.000Z",
+    timestamp: getDateFormated(timestampFrom),
     value: 5  // Blank
   }
   let data: any[] = []
@@ -183,38 +188,34 @@ const getMachineState = (assetTimelineArray: any[], index: number) => {
   }
 }
 
-const getMachineStartTime = (filteredDate: string, timestamp: Date, index: Number, endTime: string) => {
-  let startTime: string | Date
-  
+const getMachineStartTime = (filteredDate: string, timestamp: string, index: Number, endTime: string | Date) => {
   let start = dayjs(filteredDate)
   let end = dayjs(timestamp)
 
-  if ((end.diff(start, 'hour', true).valueOf()==0) && (index == 0)) {
+  if ((end.diff(start, 'day', true).valueOf()==0) && (index == 0)) {
     // timestamp in 1st array is start time
-    startTime = dayjs(filteredDate).format('YYYY-M-DD HH:mm')
-  } else if ((end.diff(start, 'hour', true).valueOf()!=0) && (index == 0)) {
+    console.log('start period')
+    return getDateFormated(filteredDate)
+  } else if ((end.diff(start, 'day', true).valueOf()!=0) && (index == 0)) {
     // timestamp in 1st array not start time
-    startTime = dayjs(timestamp).format('YYYY-M-DD HH:mm')
+    console.log('not start')
+    return getDateFormated(timestamp)
   } else {
-    startTime = dayjs(endTime).format('YYYY-M-DD HH:mm')
+    console.log('else start')
+    return getDateFormated(endTime)
   }
-
-  return startTime
 }
 
-const getMachineEndTime = (dateTo: string, assetTimelineArray: any[], index: number, endTime: string) => {
+const getMachineEndTime = (dateTo: string, assetTimelineArray: any[], index: number, endTime: string | Date) => {
   let nextKey = index + 1
   let assetLength = assetTimelineArray.length
 
   if (assetLength > nextKey) {
-    console.log('middle')
-    return dayjs(assetTimelineArray[nextKey].timestamp).format('YYYY-M-DD HH:mm')
+    return getDateFormated(assetTimelineArray[nextKey].timestamp)
   } else if (assetLength - 1 == index) {
-    console.log('last')
-    return dayjs(dateTo).format('YYYY-M-DD HH:mm')
+    return getDateFormated(dateTo)
   } else {
-    console.log('first')
-    return dayjs(assetTimelineArray[nextKey].timestamp).format('YYYY-M-DD HH:mm')
+    return getDateFormated(assetTimelineArray[nextKey].timestamp)
   }
 }
 
@@ -232,4 +233,13 @@ const getMachineUtilize = (timelineData: any[], dateFrom: string, dateTo: string
   })
 
   return Number(((running / total) * 100).toFixed())
+}
+
+const getDateFormated = (timestamp: string | Date) => {
+  const year = new Date(timestamp).getUTCFullYear()
+  const month = new Date(timestamp).getUTCMonth()
+  const date = new Date(timestamp).getUTCDate()
+  const hour = new Date(timestamp).getUTCHours()
+  const minute = new Date(timestamp).getUTCMinutes()
+  return new Date(year, month, date, hour, minute)
 }

@@ -42,13 +42,13 @@ export const initialState = {
     machineTimeline: [],
     machineFilterSearch: false,
     machineFilterSide: 1,
-    machineFilterPlant: 0,
-    machineFilterDepartment: 0,
-    machineFilterWorkcenter: 0,
-    machineFilterWorkstation: 0,
+    machineFilterPlant: 1,
+    machineFilterDepartment: 1,
+    machineFilterWorkcenter: 1,
+    machineFilterWorkstation: 1,
     machineFilterDate: {
-                        "from": new Date().getFullYear() +'-'+ new Date().getMonth() +'-'+ new Date().getDate(),
-                        "to": new Date().getFullYear() +'-'+ new Date().getMonth() +'-'+ new Date().getDate()
+                        "from": new Date(new Date().toDateString()),
+                        "to": new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1)
                     },
     machineFilterAsset: [],
     machineFilterTimeline: [],
