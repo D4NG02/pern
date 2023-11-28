@@ -22,13 +22,17 @@ export default function MachineWorkcenters() {
                 console.log(response)
             }
         }),
-        queryKey: ["machine_workcenters", machineFilterDepartment],
+        queryKey: ["machine_workcenters"],
         enabled: !!machineFilterDepartment,
     })
 
     const handleOnChange = (e: any) => {
-        dispatch({ type: reducerCases.SET_MACHINE_FILTER_WORKCENTERS, machineFilterWorkcenter: e.target.value })
         dispatch({ type: reducerCases.SET_MACHINE_FILTER_WORKSTATIONS, machineFilterWorkstation: 0 })
+        dispatch({ type: reducerCases.SET_MACHINE_FILTER_WORKCENTERS, machineFilterWorkcenter: 0 })
+
+        setTimeout(() => {
+            dispatch({ type: reducerCases.SET_MACHINE_FILTER_WORKCENTERS, machineFilterWorkcenter: e.target.value })
+        }, 2);
     }
 
     return (

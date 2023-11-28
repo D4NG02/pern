@@ -46,11 +46,11 @@ export default function DashboardPage() {
             </AppBar>
 
             <Box height='100%'>
-                {cardType && <Box sx={{ bgcolor: constantStyle.color_primary, paddingY: 1 }}>
-                    <Typography textAlign='center' variant="h5" color='white'>{cardType}</Typography>
+                {cardType && <Box sx={{ bgcolor: constantStyle.color_primary, paddingY: '4px' }}>
+                    <Typography textAlign='center' variant="h6" color='white'>{cardType}</Typography>
                 </Box>}
                 
-                <Box className="container" sx={{ padding: 3 }}>
+                <Box className="container" sx={{ padding: '10px 24px' }}>
                     { cardType==null && <CardCustom /> }
 
                     {/* TASK 1 */}
@@ -61,11 +61,10 @@ export default function DashboardPage() {
 
                     {/* TASK 3 */}
                     { cardType==='Machine Utilization' && 
-                    <>
                         <QueryClientProvider client={queryClient}>
                             <MachinePage />
                         </QueryClientProvider>
-                    </> }
+                    }
                 </Box>
             </Box>
         </Fragment>

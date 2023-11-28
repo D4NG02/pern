@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { FormControl, FormLabel, MenuItem, Select } from '@mui/material';
 import { useStateProvider } from '../../Utility/Reducer/StateProvider';
 import { reducerCases } from '../../Utility/Reducer/Constant';
@@ -9,7 +9,7 @@ export default function MachineSites() {
     const [{ machineFilterSide }, dispatch] = useStateProvider()
     const { options } = FetchGetOptions()
 
-    const { data, isLoading } = useQuery({
+    const { status, fetchStatus, data: sites } = useQuery({
         queryFn: async () => await fetch("/machine/sites", options)
             .then((response) => {
                 if (response.ok) {
@@ -22,13 +22,16 @@ export default function MachineSites() {
                     console.log(response)
                 }
             }),
-        queryKey: "machine_sites"
+        queryKey: ["machine_sites"]
     })
 
     const filterSite = (e: any) => {
-        dispatch({ type: reducerCases.SET_MACHINE_FILTER_SITES, machineFilterSide: e.target.value })
-        
+        dispatch({ type: reducerCases.SET_MACHINE_FILTER_SITES, machineFilterSide: 0 })
         dispatch({ type: reducerCases.SET_MACHINE_FILTER_PLANTS, machineFilterPlant: 0 })
+        
+        setTimeout(() => {
+            dispatch({ type: reducerCases.SET_MACHINE_FILTER_SITES, machineFilterSide: e.target.value })
+        }, 2);
     }
 
     return (
@@ -45,8 +48,8 @@ export default function MachineSites() {
                 <MenuItem disabled value={0}>
                     <em>Sites</em>
                 </MenuItem>
-                { data?.length>0 && 
-                    data.map(function(site: any) {
+                {status=='success' &&
+                    sites.map(function(site: any) {
                         return (
                             <MenuItem key={site.site_id} value={site.site_id}>{site.site_name}</MenuItem>
                         );

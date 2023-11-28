@@ -31,7 +31,7 @@ export default function CurrencyForm() {
     // Add Api
     const queryClient = useQueryClient();
     const addCurrency = async (data: inputSchemaType) => {
-        const { data: response } = await fetch("/table/add", {
+        const { data: response } = await fetch("/currency/add", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -19,7 +19,7 @@ export default function CurrencyDelete() {
 
     const queryClient = useQueryClient();
     const deleteCurrency = async () => {
-        const { data: response } = await fetch('/table/delete/' +row, {
+        const { data: response } = await fetch('/currency/delete/' +row, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
