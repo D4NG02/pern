@@ -30,7 +30,7 @@ export default function RegisterPage(props: { user_id: string }) {
     const [labelPosition, setLabelPosition] = useState('Position')
     const [labelCountry, setLabelCountry] = useState('Country')
 
-    const [{ token }, dispatch] = useStateProvider()
+    const [{ user_name, user_id, token }, dispatch] = useStateProvider()
 
     const queryClient = useQueryClient();
     const userRegister = async (data: registerSchemaType) => {
@@ -42,9 +42,13 @@ export default function RegisterPage(props: { user_id: string }) {
         userRegister,
         {
             onSuccess: (data: any, variables: registerSchemaType, context: unknown) => {
-                reset();
+                console.log(data)
                 dispatch({ type: reducerCases.SET_TOKEN, token: data.token })
+                dispatch({ type: reducerCases.SET_USER_ID, user_id: data.user_id })
+                dispatch({ type: reducerCases.SET_USER_NAME, user_name: data.user_name })
+                
                 sessionStorage.setItem("token", data.token);
+                reset();
             },
             onError: (error: any, variables: registerSchemaType, context: unknown) => {
             },

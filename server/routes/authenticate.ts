@@ -32,7 +32,7 @@ routerAuth.post('/register', async (req: Request, res, Response) => {
 
         // 5. Generate jwt token
         const token = jwtGenerator(newUser.rows[0].user_id)
-        res.json({ token })
+        res.json({ token, user_id, user_name })
     } catch (error) {
         console.log(error.message)
         res.status(500).send("Server Error")
@@ -65,7 +65,7 @@ routerAuth.post('/login', async (req: Request, res, Response) => {
         
         // 4. Give jwt token
         const token = jwtGenerator(user.rows[0].user_id)
-        res.json({ token })
+        res.json({ token, user })
     } catch (error) {
         console.log(error.message)
         res.status(500).send("Server Error")

@@ -35,7 +35,7 @@ export default function CardCustom() {
       <Grid item xs={6}><UI text='Currency' comingSoon={false} /></Grid>
       <Grid item xs={6}><UI text='Calendar' comingSoon={false} /></Grid>
       <Grid item xs={6}><UI text='Machine Utilization' comingSoon={false} /></Grid>
-      <Grid item xs={6}><UI text='Chat' comingSoon={true} /></Grid>
+      <Grid item xs={6}><UI text='Chat' comingSoon={false} /></Grid>
     </Grid>
   );
 }

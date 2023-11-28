@@ -9,7 +9,11 @@ const dateTimeFormat = new Intl.DateTimeFormat('en-US', {
 const date = dateTimeFormat.formatToParts(new Date)
 
 export const initialState = {
+    wrong_user_id: false,
+    user_id: null,
+    user_name: null,
     token: sessionStorage.getItem("token") ? sessionStorage.getItem("token") : null,
+
     row: null,
     country: '',
 
@@ -62,6 +66,18 @@ const reducer = (state: any, action: any) => {
         case reducerCases.SET_TOKEN:
             return {
                 ...state, token: action.token
+            }
+        case reducerCases.SET_IS_USER_ID:
+            return {
+                ...state, wrong_user_id: action.wrong_user_id
+            }
+        case reducerCases.SET_USER_ID:
+            return {
+                ...state, user_id: action.user_id
+            }
+        case reducerCases.SET_USER_NAME:
+            return {
+                ...state, user_name: action.user_name
             }
 
         // Menu feature ???
