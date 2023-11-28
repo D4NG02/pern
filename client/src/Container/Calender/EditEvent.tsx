@@ -18,14 +18,14 @@ import DeleteEvent from "./DeleteEvent";
 export default function EditEvent() {
   const [{ token, eventID, eventDate, eventTitle, eventNote, eventPrio }, dispatch] = useStateProvider()
   const queryClient = useQueryClient();
-  const updateEvent = async () => {
+  const updateEvent = async (data: inputSchemaType) => {
     const { data: response } = await fetch('/event/update', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'token': token
       },
-      body: JSON.stringify({ eventID, eventDate, eventTitle, eventNote, eventPrio })
+      body: JSON.stringify(data)
     }).then((response) => {
       if (response.ok) {
         return response.json()
@@ -40,7 +40,7 @@ export default function EditEvent() {
       onSuccess: (data: any, variables: inputSchemaType, context: unknown) => {
         alert("Updated")
       },
-      onError: () => {
+      onError: (error: any, variables: inputSchemaType, context: unknown) => {
         alert("Has error")
       },
       onSettled: () => {
@@ -51,23 +51,14 @@ export default function EditEvent() {
   
 
 
-  const { register, handleSubmit, reset, formState: { errors }, } = useForm<inputSchemaType>()
+  const { register, handleSubmit, reset, formState: { errors }, } = useForm<inputSchemaType>({ resolver: zodResolver(inputSchema) })
   const handleUpdate: SubmitHandler<inputSchemaType> = (input) => {
     const newEvent = { ...input, eventID, eventDate, eventPrio };
-    console.log(input)
-    dispatch({ type: reducerCases.SET_EVENT_DATE, eventDate: eventDate })
-    dispatch({ type: reducerCases.SET_EVENT_ID, eventID: eventID })
-    dispatch({ type: reducerCases.SET_EVENT_TITLE, eventTitle: input.title })
-    dispatch({ type: reducerCases.SET_EVENT_NOTE, eventNote: input.note })
-    dispatch({ type: reducerCases.SET_EVENT_PRIO, eventPrio: eventPrio })
+    mutate(newEvent);
+    reset()
     
-    setTimeout(()=>{
-      mutate(newEvent);
-      reset()
-  
-      clearReducer()
-      handleClose()
-    }, 200)
+    clearReducer()
+    handleClose()
   }
   const handleClose = () => {
     dispatch({ type: reducerCases.SET_IS_EVENT_EDIT, popupEventEdit: false })
@@ -86,35 +77,38 @@ export default function EditEvent() {
 
   return (
     <form onSubmit={handleSubmit(handleUpdate)}>
-
-      <Box sx={{ position: 'relative', pb: 2, display: 'flex', alignItems: 'baseline' }}>
-        <FormLabel sx={{ pr: 1, color: 'white' }} disabled>Date</FormLabel>
-        <TextField size="small" sx={{ width: '100px', textAlign: 'center' }} variant="standard"
-                  value={eventDate} disabled hiddenLabel />
-
-        <IconButton sx={{ position: 'absolute', right: 0 }} onClick={handleClose}><CloseIcon /></IconButton>
-      </Box>
-
       <Box pb={2}>
-        <FormLabel sx={{ color: 'white' }}>Title</FormLabel>
-        <TextField sx={{ '& .MuiInputBase-root': {bgcolor: 'white'} }}
-                  value={eventTitle}  onChange={(e)=>{
-                    dispatch({ type: reducerCases.SET_EVENT_TITLE, eventTitle: e.target.value })
-                  }}
-                  size="small"  fullWidth 
-                  label={errors.title?.message}
-                  color={errors.title? "error": 'primary'} />
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', pb: '4px' }}>
+          <FormLabel sx={{ color: 'white' }}>Title</FormLabel>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+            <FormLabel sx={{ pr: 1, color: 'white' }} disabled>Date</FormLabel>
+            <TextField size="small" sx={{ width: '100px', textAlign: 'center' }} variant="standard"
+                      value={eventDate} disabled hiddenLabel />
+
+            <IconButton size="small" onClick={handleClose}><CloseIcon /></IconButton>
+          </Box>
+        </Box>
+        <TextField sx={{ '& .MuiInputBase-root': {bgcolor: 'white'} }} value={eventTitle} size="small" fullWidth
+                  label={errors.title?.message} color={errors.title? "error": 'primary'}
+                  {...register('title', {
+                    setValueAs: (value) => {
+                      dispatch({ type: reducerCases.SET_EVENT_TITLE, eventTitle: value })
+                      return eventTitle
+                    },
+                  })} />
       </Box>
 
       <Box pb={2}>
         <FormLabel sx={{ color: 'white' }}>Note</FormLabel>
         <TextField sx={{ '& .MuiInputBase-root': {bgcolor: 'white'} }} multiline minRows={4} maxRows={4}
-                  value={eventNote} onChange={(e)=>{
-                    dispatch({ type: reducerCases.SET_EVENT_NOTE, eventNote: e.target.value })
-                  }}
-                  size="small" fullWidth
-                  label={errors.note?.message}
-                  color={errors.note? "error": 'primary'} />
+                  value={eventNote} size="small"
+                  fullWidth label={errors.note?.message} color={errors.note? "error": 'primary'}
+                  {...register('note', {
+                    setValueAs: (value) => {
+                      dispatch({ type: reducerCases.SET_EVENT_NOTE, eventNote: value })
+                      return eventNote
+                    },
+                  })} />
       </Box>
 
       <Box sx={{ pb: 2, display: 'flex', alignItems: 'baseline' }}>
@@ -127,7 +121,7 @@ export default function EditEvent() {
       </Box>
 
       <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', width: '100' }}>
-        <Button color="info" variant='contained' type="submit" startIcon={<UpdateIcon />}>Update</Button>
+        <Button color="secondary" variant='contained' type="submit" startIcon={<UpdateIcon />}>Update</Button>
         <DeleteEvent />
       </Box>
     </form>
