@@ -22,7 +22,6 @@ export default function DeleteEvent() {
     const [{ token, eventID }, dispatch] = useStateProvider()
     const queryClient = useQueryClient();
     const deleteEvent = async (data: inputSchemaType) => {
-        console.log(data)
         const { data: response } = await fetch("/event/delete",
             {
                 method: 'POST',
@@ -39,7 +38,7 @@ export default function DeleteEvent() {
             }).catch((err) => {
                 return err
             })
-        return response.data;
+        return response;
     };
     const { mutate, isLoading } = useMutation(
         deleteEvent,
@@ -49,8 +48,6 @@ export default function DeleteEvent() {
             },
             onError: (error: any, variables: inputSchemaType, context: unknown) => {
                 console.log(variables)
-                // console.log(error)
-                // alert("Has error")
             },
             onSettled: () => {
                 queryClient.invalidateQueries('create')
@@ -73,12 +70,12 @@ export default function DeleteEvent() {
 
             <Modal open={modal}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                    <Box sx={{ padding: '1rem', bgcolor: constantStyle.color_base_200, boxShadow: 12 }}>
+                    <Box sx={{ padding: '1rem', bgcolor: constantStyle.color_base_200, boxShadow: 12, borderRadius: 2 }}>
                         <Typography textAlign='center' fontSize='1.5rem' pb={2}>Delete note?</Typography>
 
                         <Box sx={{ display: 'flex', gap: '1rem' }}>
-                            <Button color="warning" variant='contained' onClick={handleDelete} startIcon={<DeleteIcon />}>Delete</Button>
-                            <Button color="info" variant='contained' onClick={()=>{setModal(false)}} startIcon={<CloseIcon />}>Cancel</Button>
+                            <Button color="secondary" variant='outlined' onClick={handleDelete} startIcon={<DeleteIcon />}>Delete</Button>
+                            <Button color="warning" variant='contained' onClick={()=>{setModal(false)}} startIcon={<CloseIcon />}>Cancel</Button>
                         </Box>
                     </Box>
                 </Box>

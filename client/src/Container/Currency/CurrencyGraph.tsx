@@ -7,8 +7,7 @@ import { constantStyle } from '../../Utility/CustomStyle';
 import { useStateProvider } from '../../Utility/Reducer/StateProvider';
 
 export default function CurrencyGraph() {
-  const [{ country }] = useStateProvider()
-
+  const [{ token, country }] = useStateProvider()
 
   const LinePlot = (props: { data: {time: string[], value: number[]}, legend: string, title: string }) => {
     
@@ -105,12 +104,9 @@ export default function CurrencyGraph() {
     )
   }
 
-
-
-
-  const options = { method: 'GET', headers: { 'Content-Type': 'application/json' }, };
+  const options = { method: 'GET', headers: { 'Content-Type': 'application/json', 'token': token }, };
   const { data, isLoading } = useQuery({
-    queryFn: () => fetch("/graph/gets", options)
+    queryFn: () => fetch("/table/graph", options)
       .then((response) => {
         if (response.ok) {
           return response.json()

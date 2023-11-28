@@ -1,7 +1,7 @@
 import { reducerCases } from "./Constant"
 
 const dateTimeFormat = new Intl.DateTimeFormat('en-US', {
-    weekday: 'long',
+    weekday: 'short',
     year: 'numeric',
     month: 'numeric',
     day: 'numeric',
@@ -9,14 +9,15 @@ const dateTimeFormat = new Intl.DateTimeFormat('en-US', {
 const date = dateTimeFormat.formatToParts(new Date)
 
 export const initialState = {
-    token: sessionStorage.getItem("token")? sessionStorage.getItem("token"):null,
+    token: sessionStorage.getItem("token") ? sessionStorage.getItem("token") : null,
     row: null,
     country: '',
 
     // For card feature
     cardType: null,
-    
+
     // EVENT
+    eventReloadCalendar: true,
     popupEventAdd: false,
     popupEventEdit: false,
     popupEventHover: false,
@@ -26,16 +27,28 @@ export const initialState = {
     eventNote: null,
     eventPrio: null,
 
-    eventFilterMonth: date.filter((split, index)=>{
-        if(split.type === 'month'){
+    eventFilterMonth: date.filter((split, index) => {
+        if (split.type === 'month') {
             return split.value
         }
     })[0].value,
-    eventFilterYear: Number(date.filter((split, index)=>{
-        if(split.type === 'year'){
+    eventFilterYear: Number(date.filter((split, index) => {
+        if (split.type === 'year') {
             return split.value
         }
     })[0].value),
+
+
+    // Task 3
+    machineTimeline: [],
+    machineFilterSide: 1,
+    machineFilterPlant: 0,
+    machineFilterDepartment: 0,
+    machineFilterWorkcenter: 0,
+    machineFilterWorkstation: 0,
+    machineFilterDate: new Date().getFullYear() +'-'+ new Date().getMonth() +'-'+ new Date().getDate(),
+    machineFilterAsset: [],
+    machineFilterTimeline: [],
 }
 
 export const initialStateType = typeof initialState
@@ -52,7 +65,7 @@ const reducer = (state: any, action: any) => {
             return {
                 ...state, cardType: action.cardType
             }
-            
+
         // Task 1 set row number
         case reducerCases.SET_ROW:
             return {
@@ -65,59 +78,109 @@ const reducer = (state: any, action: any) => {
             }
 
         // Task 2 popup
+        case reducerCases.SET_EVENT_RELOAD_CALENDAR:
+            return {
+                ...state,
+                eventReloadCalendar: action.eventReloadCalendar,
+            }
         case reducerCases.SET_IS_EVENT_ADD:
             return {
-                ...state, 
+                ...state,
                 popupEventAdd: action.popupEventAdd,
             }
         case reducerCases.SET_IS_EVENT_EDIT:
             return {
-                ...state, 
+                ...state,
                 popupEventEdit: action.popupEventEdit,
             }
         case reducerCases.SET_IS_EVENT_HOVER:
             return {
-                ...state, 
+                ...state,
                 popupEventHover: action.popupEventHover,
             }
 
         // Task 2 current event data
         case reducerCases.SET_EVENT_ID:
             return {
-                ...state, 
+                ...state,
                 eventID: action.eventID,
             }
         case reducerCases.SET_EVENT_DATE:
             return {
-                ...state, 
+                ...state,
                 eventDate: action.eventDate,
             }
         case reducerCases.SET_EVENT_TITLE:
             return {
-                ...state, 
+                ...state,
                 eventTitle: action.eventTitle,
             }
         case reducerCases.SET_EVENT_NOTE:
             return {
-                ...state, 
+                ...state,
                 eventNote: action.eventNote,
             }
         case reducerCases.SET_EVENT_PRIO:
             return {
-                ...state, 
+                ...state,
                 eventPrio: action.eventPrio,
             }
 
         // Task 2 Date filter
         case reducerCases.SET_EVENT_FILTER_MONTH:
             return {
-                ...state, 
+                ...state,
                 eventFilterMonth: action.eventFilterMonth,
             }
         case reducerCases.SET_EVENT_FILTER_YEAR:
             return {
-                ...state, 
+                ...state,
                 eventFilterYear: action.eventFilterYear,
+            }
+
+        // Task 3
+        case reducerCases.SET_MACHINE_FILTER_SITES:
+            return {
+                ...state,
+                machineFilterSide: action.machineFilterSide,
+            }
+        case reducerCases.SET_MACHINE_FILTER_PLANTS:
+            return {
+                ...state,
+                machineFilterPlant: action.machineFilterPlant,
+            }
+        case reducerCases.SET_MACHINE_FILTER_DEPARTMENTS:
+            return {
+                ...state,
+                machineFilterDepartment: action.machineFilterDepartment,
+            }
+        case reducerCases.SET_MACHINE_FILTER_WORKCENTERS:
+            return {
+                ...state,
+                machineFilterWorkcenter: action.machineFilterWorkcenter,
+            }
+        case reducerCases.SET_MACHINE_FILTER_WORKSTATIONS:
+            return {
+                ...state,
+                machineFilterWorkstation: action.machineFilterWorkstation,
+            }
+        case reducerCases.SET_MACHINE_FILTER_ASSETS:
+            return {
+                ...state,
+                machineFilterAsset: action.machineFilterAsset,
+            }
+        case reducerCases.SET_MACHINE_FILTER_DATE:
+            return {
+                ...state,
+                machineFilterDate: action.machineFilterDate,
+            }
+
+
+            
+        case reducerCases.SET_TIMELINE_DATA:
+            return {
+                ...state,
+                machineTimeline: action.machineTimeline,
             }
         default:
             console.log("Error reducerCases type")

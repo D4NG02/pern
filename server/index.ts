@@ -1,13 +1,12 @@
 import cors from "cors";
 import "jsonwebtoken";
-import pool from "./db";
 import express, { Router, Request, Response } from 'express';
 
+import authorize from "./middleware/authorization";
 import routerAuth from "./routes/authenticate";
 import routerCurrency from './routes/currency';
-import routerGraph from './routes/currencyGraph';
 import routerEvent from './routes/event';
-import authorize from "./middleware/authorization";
+import routerMachine from "./routes/machine";
 
 const app = express();
 
@@ -18,8 +17,8 @@ app.use(cors());
 // Routes
 app.use('/auth', routerAuth);
 app.use('/table', routerCurrency);
-app.use('/graph', routerGraph);
 app.use('/event', routerEvent);
+app.use('/machine', routerMachine);
 
 const routerRoot = Router();
 routerRoot.get('/', authorize, async(req: Request, res: Response) => {

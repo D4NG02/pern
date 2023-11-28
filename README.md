@@ -3,11 +3,11 @@ This project for training purpose \
 P - postgres \
 E - express \
 R - react \
-N - node \
+N - node
 
 ## Available Scripts Client side
 
-In the project directory, you can run:
+In the client directory, you can run:
 
 ### `npm start`
 
@@ -16,11 +16,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `npm run build`
 
@@ -32,24 +27,32 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
 
+## Server side
 
-## Available Scripts Server side
+### Available Scripts Server side
 
-### `npm run start`
+In the seerver directory, you can run: `npm run start` \
 
 Runs backend server with nodemon.\
 http://localhost:5000 as root of the api.
 
 The server will reload if you make edits.\
 You will also see any lint errors in the console.
+
+### Server Set Up
+Create .env file which in side it has `jwtSecret = CADIT_pern`. \
+This file needed to set up authentication which user will get token as autorize
+
+
+
+## Package
+1. Material ui - https://mui.com/material-ui/getting-started/   \
+2. Full calendar - https://fullcalendar.io/docs  \
+3. Icon - https://mui.com/material-ui/material-icons/  \
+4. Hookform resolver - https://react-hook-form.com/docs/useform#resolver \
+5. Date picker - https://mui.com/x/react-date-pickers/date-picker/ \
+6. Apexcharts - https://apexcharts.com/ \
+7. Timeline chart - https://www.react-google-charts.com/examples/timeline \
+8. Zod - https://zod.dev/ \
