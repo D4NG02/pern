@@ -5,6 +5,7 @@ import { Box, List, ListItemButton, ListItemText } from '@mui/material';
 import { useStateProvider } from '../../Utility/Reducer/StateProvider';
 import { reducerCases } from '../../Utility/Reducer/Constant';
 import { constantStyle } from '../../Utility/CustomStyle';
+import { client, subscribeTopic } from './MQTTHook';
 
 export default function ChatUser() {
     const [{ user_id, token }, dispatch] = useStateProvider()
@@ -31,6 +32,11 @@ export default function ChatUser() {
             }),
         queryKey: ["Users"]
     })
+    if (status == 'success') {
+        data?.map((user: any, index: number, users: string[]) => {
+            subscribeTopic(String(user.user_id))
+        })
+    }
 
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const handleListItemClick = (
@@ -49,12 +55,16 @@ export default function ChatUser() {
                     data?.map((user: any, index: number, users: string[]) => {
                         return (
                             <ListItemButton key={index}
-                                sx={{ borderBottom: '1px solid ' + constantStyle.color_primary,
-                                    borderTopLeftRadius: index==0? '8px': 'unset',
-                                    borderTopRightRadius: index==0? '8px': 'unset' }}
+                                sx={{
+                                    borderBottom: '1px solid ' + constantStyle.color_primary,
+                                    borderTopLeftRadius: index == 0 ? '8px' : 'unset',
+                                    borderTopRightRadius: index == 0 ? '8px' : 'unset',
+                                    // paddingTop: index == 0 ? '0' : 'unset',
+                                    padding: '4px 8px'
+                                }}
                                 selected={selectedIndex === index}
                                 onClick={(event) => handleListItemClick(event, index, user.user_id)}>
-                                <ListItemText primary={user.username} secondary="chat-ss" />
+                                <ListItemText primary={user.username} secondary="chat-ss" sx={{ margin: 'unset' }} />
                             </ListItemButton>
                         )
                     })
