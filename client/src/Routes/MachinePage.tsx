@@ -69,8 +69,7 @@ export default function MachinePage() {
                                             <Typography>{asset.asset_name}</Typography>
                                         </Box>
                                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                            <img src={require('../Asset/Asset1.jpg')} height={80} alt={asset.asset_name} />
-                                            {/* <img src={require(asset.image_path)} height={80} alt={asset.asset_name} /> */}
+                                            <img src={require('../Asset/' +asset.image_path.split("/").slice(-1))} height={80} alt={asset.asset_name} />
                                         </Box>
                                     </Box>
                                     <Box sx={{ bgcolor: constantStyle.color_base_400, padding: 1, borderRadius: 1 }}>

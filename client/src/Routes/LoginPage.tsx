@@ -43,22 +43,21 @@ export default function LoginPage() {
                 dispatch({ type: reducerCases.SET_USER_NAME, user_name: data.user.rows[0].username })
                 
                 sessionStorage.setItem("token", data.token);
+                sessionStorage.setItem("user_id", data.user.rows[0].user_id);
+                sessionStorage.setItem("user_name", data.user.rows[0].username);
                 setErrorUserID("User ID")
                 setErrorPassword("Password")
             },
             onError: (error: any, variables: loginSchemaType, context: unknown) => {
+                console.log(error, variables)
                 setErrorUserID("User ID")
                 setErrorPassword("Password")
                 if(error.response.data.message === "Wrong user id") {
-                    dispatch({ type: reducerCases.SET_TOKEN, wrong_user_id: true })
+                    dispatch({ type: reducerCases.SET_IS_USER_ID, wrong_user_id: true })
                 } else if(error.response.data.message === "Wrong password") {
                     setErrorPassword(error.response.data.message)
-                    dispatch({ type: reducerCases.SET_TOKEN, wrong_user_id: false })
                 }
             },
-            onSettled: () => {
-                queryClient.invalidateQueries('create')
-            }
         }
     );
 

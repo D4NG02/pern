@@ -29,6 +29,7 @@ export default function DashboardPage() {
   
     const handleBack = () => {
         dispatch({ type: reducerCases.SET_CARD, cardType: initialState.cardType })
+        dispatch({ type: reducerCases.SET_CHATS, chats: initialState.chats })
     }
   
     const handleLogout = () => {
@@ -37,6 +38,7 @@ export default function DashboardPage() {
         dispatch({ type: reducerCases.SET_USER_ID, user_id: initialState.user_id })
         dispatch({ type: reducerCases.SET_USER_NAME, user_name: initialState.user_name })
         dispatch({ type: reducerCases.SET_CARD, cardType: initialState.cardType })
+        dispatch({ type: reducerCases.SET_CHATS, chats: initialState.chats })
     }
 
     return (
@@ -68,7 +70,7 @@ export default function DashboardPage() {
                     <Typography textAlign='center' variant="h6" color='white'>{cardType}</Typography>
                 </Box>}
                 
-                <Box className="container" sx={{ padding: '10px 24px' }}>
+                <Box sx={{ padding: '10px 24px' }}>
                     { cardType==null && <CardCustom /> }
 
                     {/* TASK 1 */}
@@ -86,7 +88,9 @@ export default function DashboardPage() {
 
                     {/* TASK 4 */}
                     { cardType==='Chat' && 
-                        <ChatPage />
+                        <QueryClientProvider client={queryClient}>
+                            <ChatPage />
+                        </QueryClientProvider>
                     }
                 </Box>
             </Box>

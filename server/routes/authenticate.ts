@@ -82,4 +82,27 @@ routerAuth.get('/verify', authorize, async (req: Request, res, Response) => {
     }
 })
 
+routerAuth.get("/users/:user_id", authorize, async (req: Request, res: Response) => {
+    try {
+        console.log("Get all users")
+        const { user_id } = req.params
+        let { rows } = await pool.query("SELECT * FROM users WHERE user_id!=$1", [user_id])
+
+        const datas: any[]=[]
+        rows.filter((user: any, index: number, users: any[])=>{
+            const data = {
+                user_id: user.user_id,
+                username: user.username,
+                position: user.position,
+                country: user.country
+            }
+            datas.push(data)
+        })
+        res.json(datas)
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).send("Server Error")
+    }
+})
+
 export default routerAuth;

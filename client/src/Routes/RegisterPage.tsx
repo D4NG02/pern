@@ -46,15 +46,13 @@ export default function RegisterPage(props: { user_id: string }) {
                 dispatch({ type: reducerCases.SET_TOKEN, token: data.token })
                 dispatch({ type: reducerCases.SET_USER_ID, user_id: data.user_id })
                 dispatch({ type: reducerCases.SET_USER_NAME, user_name: data.user_name })
+                dispatch({ type: reducerCases.SET_IS_USER_ID, wrong_user_id: false })
                 
                 sessionStorage.setItem("token", data.token);
+                sessionStorage.setItem("user_id", data.user_id);
+                sessionStorage.setItem("user_name", data.user_name);
                 reset();
             },
-            onError: (error: any, variables: registerSchemaType, context: unknown) => {
-            },
-            onSettled: () => {
-                queryClient.invalidateQueries('create')
-            }
         }
     );
 

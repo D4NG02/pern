@@ -229,7 +229,7 @@ const CustomComponent = createTheme({
             },
         },
 
-        // Paination Style
+        // Pagination Style
         MuiTablePagination: {
             styleOverrides: {
                 displayedRows:{
@@ -253,6 +253,24 @@ const CustomComponent = createTheme({
                     },
                     '.Mui-disabled': {
                         backgroundColor: constantStyle.color_base_200,
+                    }
+                }
+            },
+        },
+
+        // list Style
+        MuiListItemButton: {
+            styleOverrides: {
+                root: {
+
+                    '&.Mui-selected': {
+                        color: 'white',
+                        backgroundColor: constantStyle.color_primary,
+                        '&:hover': {
+                            cursor: 'default',
+                            color: 'white',
+                            backgroundColor: constantStyle.color_primary,
+                        }
                     }
                 }
             },
