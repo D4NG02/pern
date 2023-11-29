@@ -13,17 +13,15 @@ const chatSchema = z.object({
 type chatSchemaType = z.infer<typeof chatSchema>;
 
 export default function ChatForm() {
-    const [{ user_id }, dispatch] = useStateProvider()
+    const [{ user_id, selected_user_id }, dispatch] = useStateProvider()
     const { register, handleSubmit, reset, formState: { errors }, } = useForm<chatSchemaType>({ resolver: zodResolver(chatSchema) })
     const onSubmit: SubmitHandler<chatSchemaType> = (input) => {
         const sentChat = { ...input };
+        const timestamp = new Date().getHours() +':'+ new Date().getHours()
+        const fullData = 'topic-' + String(user_id) + '_timestamp-' + timestamp + '_data-' + sentChat.chat
 
-        client.subscribe(String(user_id), (err) => {
-            if (!err) {
-                client.publish(String(user_id), sentChat.chat);
-                reset()
-            }
-        })
+        client.publish(String(user_id), fullData);
+        reset()
     }
 
     return (
@@ -31,11 +29,11 @@ export default function ChatForm() {
             <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'grid', gridTemplateColumns: 'auto max-content' }}>
                 <TextField size="small" placeholder='Type...' variant="outlined"
                     sx={{ 'div': { borderRadius: 0, borderBottomLeftRadius: '8px' } }}
-                    label={errors.chat?.message}
+                    label={errors.chat?.message} disabled={selected_user_id==null? true:false}
                     color={errors.chat ? "error" : 'primary'}
                     {...register("chat")} />
 
-                <Button variant='contained' type="submit"
+                <Button variant='contained' type="submit" disabled={selected_user_id==null? true:false}
                     sx={{ height: '40px', borderRadius: 0, borderBottomRightRadius: '8px' }}>Sent</Button>
             </form>
         </Box>

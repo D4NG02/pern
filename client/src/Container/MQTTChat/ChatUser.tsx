@@ -36,8 +36,10 @@ export default function ChatUser() {
     const handleListItemClick = (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
         index: number,
+        id: number,
     ) => {
         setSelectedIndex(index)
+        dispatch({ type: reducerCases.SET_CHAT_SELECTION_USER_ID, selected_user_id: id })
     }
 
     return (
@@ -51,7 +53,7 @@ export default function ChatUser() {
                                     borderTopLeftRadius: index==0? '8px': 'unset',
                                     borderTopRightRadius: index==0? '8px': 'unset' }}
                                 selected={selectedIndex === index}
-                                onClick={(event) => handleListItemClick(event, index)}>
+                                onClick={(event) => handleListItemClick(event, index, user.user_id)}>
                                 <ListItemText primary={user.username} secondary="chat-ss" />
                             </ListItemButton>
                         )

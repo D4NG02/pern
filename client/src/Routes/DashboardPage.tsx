@@ -25,11 +25,12 @@ import { initialState } from '../Utility/Reducer/reducer'
 
 export default function DashboardPage() {
     const queryClient = new QueryClient()
-    const [{ user_name, cardType }, dispatch] = useStateProvider()
+    const [{ user_id, user_name, cardType }, dispatch] = useStateProvider()
   
     const handleBack = () => {
         dispatch({ type: reducerCases.SET_CARD, cardType: initialState.cardType })
         dispatch({ type: reducerCases.SET_CHATS, chats: initialState.chats })
+        dispatch({ type: reducerCases.SET_CHAT_SELECTION_USER_ID, selected_user_id: initialState.selected_user_id })
     }
   
     const handleLogout = () => {
@@ -39,6 +40,7 @@ export default function DashboardPage() {
         dispatch({ type: reducerCases.SET_USER_NAME, user_name: initialState.user_name })
         dispatch({ type: reducerCases.SET_CARD, cardType: initialState.cardType })
         dispatch({ type: reducerCases.SET_CHATS, chats: initialState.chats })
+        dispatch({ type: reducerCases.SET_CHAT_SELECTION_USER_ID, selected_user_id: initialState.selected_user_id })
     }
 
     return (
@@ -56,7 +58,7 @@ export default function DashboardPage() {
                         }
                     </Box>
                     <Box>
-                        <Typography variant="caption" sx={{ fontSize: '1rem', padding: '0 8px', color: constantStyle.color_primary }}>{user_name}</Typography>
+                        <Typography variant="caption" sx={{ fontSize: '1rem', padding: '0 8px', color: constantStyle.color_primary }}>{user_id} {user_name}</Typography>
                         <IconButton sx={{ color: 'gray', 'svg': { width: '1.2em', height: '1.2em' } }}
                                 size='large' onClick={handleLogout} aria-label="Logout">
                             <LogoutIcon />
