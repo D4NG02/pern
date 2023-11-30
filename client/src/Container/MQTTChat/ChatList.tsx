@@ -43,7 +43,7 @@ export default function ChatList() {
 
   return (
     <Box className="chart-container" sx={{ overflowY: 'auto', margin: '16px 8px', padding: '0 8px' }}>
-      {selected_user_id !== null &&
+      {
         chats?.filter((chat: any, index: number, chats: string[]) => {
           const chunk = chat.split('_')
           const topic = Number(chunk[0].split('-')[1])

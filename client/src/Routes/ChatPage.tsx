@@ -10,7 +10,7 @@ import { useStateProvider } from '../Utility/Reducer/StateProvider';
 
 
 export default function ChatPage() {
-    const [{ user_id }, dispatch] = useStateProvider()
+    const [{ user_id, selected_user_id }, dispatch] = useStateProvider()
     subscribeTopic(String(user_id))
     
     return (
@@ -18,8 +18,8 @@ export default function ChatPage() {
             <ChatUser />
             <Box sx={{ border: '1px solid ' +constantStyle.color_primary, borderRadius: 2,
                         display: 'grid', gridTemplateRows: '74.4vh max-content' }}>
-                <ChatList />
-                <ChatForm />
+                {selected_user_id !== null && <ChatList />}
+                {selected_user_id !== null && <ChatForm />}
             </Box>
         </Box>
     );
