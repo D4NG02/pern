@@ -6,10 +6,9 @@ import { useStateProvider } from '../../Utility/Reducer/StateProvider';
 import { reducerCases } from '../../Utility/Reducer/Constant';
 import { initialState } from '../../Utility/Reducer/reducer';
 import { constantStyle } from '../../Utility/CustomStyle';
-import { client, subscribeTopic } from './MQTTHook';
 
 export default function ChatUser() {
-    const [{ token, user_id, selected_user_id, chats, topicNotRead }, dispatch] = useStateProvider()
+    const [{ token, user_id, chatSelectedUserId, chats, chatTopicNotRead }, dispatch] = useStateProvider()
 
     const options = {
         method: 'GET',
@@ -33,11 +32,6 @@ export default function ChatUser() {
             }),
         queryKey: ["Users"]
     })
-    if (status == 'success') {
-        data?.map((user: any, index: number, users: string[]) => {
-            subscribeTopic(String(user.user_id))
-        })
-    }
 
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const handleListItemClick = (
@@ -46,10 +40,10 @@ export default function ChatUser() {
         id: number,
     ) => {
         setSelectedIndex(index)
-        dispatch({ type: reducerCases.SET_CHAT_SELECTION_USER_ID, selected_user_id: initialState.selected_user_id })
+        dispatch({ type: reducerCases.SET_CHAT_SELECTION_USER_ID, chatSelectedUserId: initialState.chatSelectedUserId })
 
         setTimeout(() => {
-            dispatch({ type: reducerCases.SET_CHAT_SELECTION_USER_ID, selected_user_id: id })
+            dispatch({ type: reducerCases.SET_CHAT_SELECTION_USER_ID, chatSelectedUserId: id })
         }, 200);
     }
 
@@ -59,18 +53,17 @@ export default function ChatUser() {
                 {
                     data?.map((user: any, index: number, users: string[]) => {
                         let newChat=0
-                        for (const [key, value] of Object.entries(topicNotRead)) {
-                            if (String(user.user_id) == key && String(user.user_id) == selected_user_id) {
-                                topicNotRead[key] = newChat = 0
+                        for (const [key, value] of Object.entries(chatTopicNotRead)) {
+                            if (String(user.user_id) == key && String(user.user_id) == chatSelectedUserId) {
+                                chatTopicNotRead[key] = newChat = 0
                             } else if (String(user.user_id) == key) {
-                                newChat = topicNotRead[key]
+                                newChat = chatTopicNotRead[key]
                             }
                         }
 
                         const currentChatArray = chats?.filter((chat: any, index: number, chats: string[]) => {
                             const chunk = chat.split('_')
                             const topic = chunk[0].split('-')[1]
-                            console.log('each', topic)
                             if (String(user.user_id) == topic) {
                                 return chat
                             }

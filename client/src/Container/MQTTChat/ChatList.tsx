@@ -1,40 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
-import { Box, Chip, Typography } from '@mui/material';
+import { useRef } from 'react';
+import { Box, Typography } from '@mui/material';
 
 import { useStateProvider } from '../../Utility/Reducer/StateProvider';
-import { client } from './MQTTHook';
-import { reducerCases } from '../../Utility/Reducer/Constant';
 import { constantStyle } from '../../Utility/CustomStyle';
-import { topicSubscribe } from "./MQTTHook";
 
 export default function ChatList() {
-  const [{ user_id, selected_user_id, topicNotRead, chats }, dispatch] = useStateProvider()
-
-  client.on("message", (topic, message) => {
-    topicSubscribe.map((topicLoop: string, index: number, topics: string[]) => {
-      if (topic == topicLoop) {
-        let messageString: string = message.toString()
-        dispatch({ type: reducerCases.SET_CHATS, chats: [...chats, messageString] })
-
-        if (!Object.hasOwn(topicNotRead, topic)) {
-          Object.defineProperty(topicNotRead, topic, {
-            value: 1,
-            writable: true,
-            enumerable: true,
-            configurable: true
-          });
-        } else {
-          for (const [key, value] of Object.entries(topicNotRead)) {
-            if (topic === key && String(user_id) !== key) {
-              topicNotRead[key] = topicNotRead[key] + 1
-              console.log(`${key}: ${value}`);
-            }
-          }
-        }
-        dispatch({ type: reducerCases.SET_CHAT_TOPIC_NOT_READ, topicNotRead: { ...topicNotRead } })
-      }
-    })
-  });
+  const [{ user_id, chatSelectedUserId, chatTopicNotRead, chats }, dispatch] = useStateProvider()
 
   const bottomRef = useRef<HTMLDivElement>()
   setTimeout(() => {
@@ -43,11 +14,11 @@ export default function ChatList() {
 
   return (
     <Box className="chart-container" sx={{ overflowY: 'auto', margin: '16px 8px', padding: '0 8px' }}>
-      {
+      { chatSelectedUserId &&
         chats?.filter((chat: any, index: number, chats: string[]) => {
           const chunk = chat.split('_')
           const topic = Number(chunk[0].split('-')[1])
-            if (topic==user_id || topic==selected_user_id) {
+            if (topic==user_id || topic==chatSelectedUserId) {
               return chat
             }
           }).map((chat: any, index: number, chats: string[]) => {

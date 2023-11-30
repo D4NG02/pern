@@ -1,6 +1,4 @@
 import mqtt from "mqtt";
-import { useStateProvider } from '../../Utility/Reducer/StateProvider';
-import { reducerCases } from "../../Utility/Reducer/Constant";
 
 const mqttOption = {
     host: 'localhost',
@@ -10,10 +8,10 @@ const mqttOption = {
 }
 
 export const client = mqtt.connect(mqttOption);
-export const subscribeTopic = (topic: string) => {
-    if (!topicSubscribe.includes(topic)) {
-        topicSubscribe.push(topic)
+export const listTopic: string[] = []
+export const toSubscribeTopic = (topic: string) => {
+    if (!listTopic.includes(topic)) {
+        listTopic.push(topic)
         client.subscribe(topic)
     }
 };
-export const topicSubscribe: string[] = []

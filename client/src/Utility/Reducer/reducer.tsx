@@ -52,16 +52,16 @@ export const initialState = {
     machineFilterWorkcenter: 1,
     machineFilterWorkstation: 1,
     machineFilterDate: {
-                        "from": new Date(new Date().toDateString()),
-                        "to": new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1)
-                    },
+        "from": new Date(new Date().toDateString()),
+        "to": new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1)
+    },
     machineFilterAsset: [],
     machineFilterTimeline: [],
 
     // Task 4
     chats: new Array<string>,
-    selected_user_id: null,
-    topicNotRead: new Object,
+    chatSelectedUserId: null,
+    chatTopicNotRead: new Object,
 }
 
 export const initialStateType = typeof initialState
@@ -142,9 +142,9 @@ const reducer = (state: any, action: any) => {
         case reducerCases.SET_CHATS:
             return { ...state, chats: action.chats }
         case reducerCases.SET_CHAT_SELECTION_USER_ID:
-            return { ...state, selected_user_id: action.selected_user_id }
+            return { ...state, chatSelectedUserId: action.chatSelectedUserId }
         case reducerCases.SET_CHAT_TOPIC_NOT_READ:
-            return { ...state, topicNotRead: action.topicNotRead }
+            return { ...state, chatTopicNotRead: action.chatTopicNotRead }
         default:
             console.log("Error reducerCases type")
             break;

@@ -30,19 +30,21 @@ export default function DashboardPage() {
     const handleBack = () => {
         dispatch({ type: reducerCases.SET_CARD, cardType: initialState.cardType })
         dispatch({ type: reducerCases.SET_CHATS, chats: initialState.chats })
-        dispatch({ type: reducerCases.SET_CHAT_SELECTION_USER_ID, selected_user_id: initialState.selected_user_id })
-        dispatch({ type: reducerCases.SET_CHAT_TOPIC_NOT_READ, topicNotRead: new Object })
+        dispatch({ type: reducerCases.SET_CHAT_SELECTION_USER_ID, chatSelectedUserId: initialState.chatSelectedUserId })
+        dispatch({ type: reducerCases.SET_CHAT_TOPIC_NOT_READ, chatTopicNotRead: new Object })
     }
   
     const handleLogout = () => {
         sessionStorage.removeItem("token");
-        dispatch({ type: reducerCases.SET_TOKEN, token: initialState.token })
-        dispatch({ type: reducerCases.SET_USER_ID, user_id: initialState.user_id })
-        dispatch({ type: reducerCases.SET_USER_NAME, user_name: initialState.user_name })
+        sessionStorage.removeItem("user_name");
+        sessionStorage.removeItem("user_id");
+        dispatch({ type: reducerCases.SET_TOKEN, token: null })
+        dispatch({ type: reducerCases.SET_USER_ID, user_id: null })
+        dispatch({ type: reducerCases.SET_USER_NAME, user_name: null })
         dispatch({ type: reducerCases.SET_CARD, cardType: initialState.cardType })
         dispatch({ type: reducerCases.SET_CHATS, chats: initialState.chats })
-        dispatch({ type: reducerCases.SET_CHAT_SELECTION_USER_ID, selected_user_id: initialState.selected_user_id })
-        dispatch({ type: reducerCases.SET_CHAT_TOPIC_NOT_READ, topicNotRead: new Object })
+        dispatch({ type: reducerCases.SET_CHAT_SELECTION_USER_ID, chatSelectedUserId: initialState.chatSelectedUserId })
+        dispatch({ type: reducerCases.SET_CHAT_TOPIC_NOT_READ, chatTopicNotRead: new Object })
     }
 
     return (
