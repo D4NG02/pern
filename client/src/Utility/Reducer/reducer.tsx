@@ -59,8 +59,9 @@ export const initialState = {
     machineFilterTimeline: [],
 
     // Task 4
-    chats: [],
+    chats: new Array<string>,
     selected_user_id: null,
+    topicNotRead: new Object,
 }
 
 export const initialStateType = typeof initialState
@@ -142,6 +143,8 @@ const reducer = (state: any, action: any) => {
             return { ...state, chats: action.chats }
         case reducerCases.SET_CHAT_SELECTION_USER_ID:
             return { ...state, selected_user_id: action.selected_user_id }
+        case reducerCases.SET_CHAT_TOPIC_NOT_READ:
+            return { ...state, topicNotRead: action.topicNotRead }
         default:
             console.log("Error reducerCases type")
             break;

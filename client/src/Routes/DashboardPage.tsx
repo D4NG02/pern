@@ -31,6 +31,7 @@ export default function DashboardPage() {
         dispatch({ type: reducerCases.SET_CARD, cardType: initialState.cardType })
         dispatch({ type: reducerCases.SET_CHATS, chats: initialState.chats })
         dispatch({ type: reducerCases.SET_CHAT_SELECTION_USER_ID, selected_user_id: initialState.selected_user_id })
+        dispatch({ type: reducerCases.SET_CHAT_TOPIC_NOT_READ, topicNotRead: new Object })
     }
   
     const handleLogout = () => {
@@ -41,6 +42,7 @@ export default function DashboardPage() {
         dispatch({ type: reducerCases.SET_CARD, cardType: initialState.cardType })
         dispatch({ type: reducerCases.SET_CHATS, chats: initialState.chats })
         dispatch({ type: reducerCases.SET_CHAT_SELECTION_USER_ID, selected_user_id: initialState.selected_user_id })
+        dispatch({ type: reducerCases.SET_CHAT_TOPIC_NOT_READ, topicNotRead: new Object })
     }
 
     return (

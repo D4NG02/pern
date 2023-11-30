@@ -37,4 +37,5 @@ export const reducerCases = {
     // Task 4
     SET_CHATS: 'SET_CHATS',
     SET_CHAT_SELECTION_USER_ID: 'SET_CHAT_SELECTION_USER_ID',
+    SET_CHAT_TOPIC_NOT_READ: 'SET_CHAT_TOPIC_NOT_READ',
 }

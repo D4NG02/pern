@@ -17,7 +17,7 @@ export default function ChatForm() {
     const { register, handleSubmit, reset, formState: { errors }, } = useForm<chatSchemaType>({ resolver: zodResolver(chatSchema) })
     const onSubmit: SubmitHandler<chatSchemaType> = (input) => {
         const sentChat = { ...input };
-        const timestamp = new Date().getHours() +':'+ new Date().getHours()
+        const timestamp = new Date().toTimeString().split(' GMT')[0]
         const fullData = 'topic-' + String(user_id) + '_timestamp-' + timestamp + '_data-' + sentChat.chat
 
         client.publish(String(user_id), fullData);
