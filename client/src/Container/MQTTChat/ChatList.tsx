@@ -25,8 +25,8 @@ export default function ChatList() {
           });
         } else {
           for (const [key, value] of Object.entries(topicNotRead)) {
-            if (topic == key) {
-              topicNotRead[key] = topicNotRead[key]+1
+            if (topic === key && String(user_id) !== key) {
+              topicNotRead[key] = topicNotRead[key] + 1
               console.log(`${key}: ${value}`);
             }
           }
@@ -44,7 +44,13 @@ export default function ChatList() {
   return (
     <Box className="chart-container" sx={{ overflowY: 'auto', margin: '16px 8px', padding: '0 8px' }}>
       {selected_user_id !== null &&
-        chats?.map((chat: any, index: number, chats: string[]) => {
+        chats?.filter((chat: any, index: number, chats: string[]) => {
+          const chunk = chat.split('_')
+          const topic = Number(chunk[0].split('-')[1])
+            if (topic==user_id || topic==selected_user_id) {
+              return chat
+            }
+          }).map((chat: any, index: number, chats: string[]) => {
           const textAlign = chat.includes(user_id) ? 'right' : 'left'
           const justifyContent = chat.includes(user_id) ? 'flex-end' : 'flex-start'
           const bgcolor = chat.includes(user_id) ? constantStyle.color_primary : constantStyle.color_base_600

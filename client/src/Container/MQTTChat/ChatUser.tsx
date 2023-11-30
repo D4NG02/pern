@@ -4,11 +4,12 @@ import { Badge, Box, List, ListItemButton, ListItemText } from '@mui/material';
 
 import { useStateProvider } from '../../Utility/Reducer/StateProvider';
 import { reducerCases } from '../../Utility/Reducer/Constant';
+import { initialState } from '../../Utility/Reducer/reducer';
 import { constantStyle } from '../../Utility/CustomStyle';
 import { client, subscribeTopic } from './MQTTHook';
 
 export default function ChatUser() {
-    const [{ token, user_id, chats, topicNotRead }, dispatch] = useStateProvider()
+    const [{ token, user_id, selected_user_id, chats, topicNotRead }, dispatch] = useStateProvider()
 
     const options = {
         method: 'GET',
@@ -45,7 +46,11 @@ export default function ChatUser() {
         id: number,
     ) => {
         setSelectedIndex(index)
-        dispatch({ type: reducerCases.SET_CHAT_SELECTION_USER_ID, selected_user_id: id })
+        dispatch({ type: reducerCases.SET_CHAT_SELECTION_USER_ID, selected_user_id: initialState.selected_user_id })
+
+        setTimeout(() => {
+            dispatch({ type: reducerCases.SET_CHAT_SELECTION_USER_ID, selected_user_id: id })
+        }, 200);
     }
 
     return (
@@ -55,7 +60,9 @@ export default function ChatUser() {
                     data?.map((user: any, index: number, users: string[]) => {
                         let newChat=0
                         for (const [key, value] of Object.entries(topicNotRead)) {
-                            if (String(user.user_id) == key) {
+                            if (String(user.user_id) == key && String(user.user_id) == selected_user_id) {
+                                topicNotRead[key] = newChat = 0
+                            } else if (String(user.user_id) == key) {
                                 newChat = topicNotRead[key]
                             }
                         }
