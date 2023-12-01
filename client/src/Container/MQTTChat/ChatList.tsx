@@ -11,25 +11,28 @@ export default function ChatList() {
   setTimeout(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
   }, 200);
+  
+  let topicTo = user_id +"to"+ chatSelectedUserId
+  let topicFrom = chatSelectedUserId +"to"+ user_id
 
   return (
     <Box className="chart-container" sx={{ overflowY: 'auto', margin: '16px 8px', padding: '0 8px' }}>
       { chatSelectedUserId &&
         chats?.filter((chat: any, index: number, chats: string[]) => {
-          const chunk = chat.split('_')
-          const topic = Number(chunk[0].split('-')[1])
-            if (topic==user_id || topic==chatSelectedUserId) {
+            const chunk = chat.split('_')
+            const topic = chunk[0]
+            if (topic == topicTo || topic == topicFrom) {
               return chat
             }
           }).map((chat: any, index: number, chats: string[]) => {
-          const textAlign = chat.includes(user_id) ? 'right' : 'left'
-          const justifyContent = chat.includes(user_id) ? 'flex-end' : 'flex-start'
-          const bgcolor = chat.includes(user_id) ? constantStyle.color_primary : constantStyle.color_base_600
+          const textAlign = chat.includes(topicTo) ? 'right' : 'left'
+          const justifyContent = chat.includes(topicTo) ? 'flex-end' : 'flex-start'
+          const bgcolor = chat.includes(topicTo) ? constantStyle.color_primary : constantStyle.color_base_600
 
           const chunk = chat.split('_')
-          const topic = chunk[0].split('-')[1]
-          const time = chunk[1].split('-')[1]
-          const data = chunk[2].split('-')[1]
+          const topic = chunk[0]
+          const time = chunk[1]
+          const data = chunk[2]
           return (
             <Box key={index} sx={{ display: 'flex', justifyContent: justifyContent, marginBottom: 1 }}>
               <Box sx={{ bgcolor: bgcolor, color: 'white', padding: '4px 8px', borderRadius: 2, textAlign: textAlign }}>

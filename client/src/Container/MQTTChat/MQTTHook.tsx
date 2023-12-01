@@ -12,11 +12,11 @@ const mqttOption = {
 export const client = mqtt.connect(mqttOption);
 
 export const useMessageTopic = () => {
-    const [{ user_id, chats, chatListTopic, chatTopicNotRead }, dispatch] = useStateProvider()
+    const [{ user_id, chatSelectedUserId, chats, chatListTopic, chatTopicNotRead }, dispatch] = useStateProvider()
 
-    console.log('useMessageTopic')
+    let topicTo = user_id +"to"+ chatSelectedUserId
+    let topicFrom = chatSelectedUserId +"to"+ user_id
     client.on("message", (topic, message) => {
-        console.log("on messa")
         chatListTopic.filter((topicLoop: string, index: number, topics: string[]) => {
             if (topic == topicLoop) {
                 let messageString: string = message.toString()
@@ -24,7 +24,6 @@ export const useMessageTopic = () => {
                 for (const [key, value] of Object.entries(chatTopicNotRead)) {
                     if (topic === key && String(user_id) !== key) {
                         chatTopicNotRead[key] = (chatTopicNotRead[key] + 1)
-                        console.log(chatTopicNotRead[key])
                     }
                 }
 

@@ -22,15 +22,24 @@ export default function DashboardPage() {
     const [{ token, user_id, user_name, cardType, chatTopicNotRead, chatListTopic }, dispatch] = useStateProvider()
 
 
-    // Subscribe the al user id as topic
-    if (!chatListTopic.includes(String(user_id))) {
-        chatListTopic.push(String(user_id))
-        client.subscribe(String(user_id))
+    // Subscribe the all user id as topic
+    let users_id: string[]=[]
+    if (!users_id.includes(String(user_id))) {
+        users_id.push(String(user_id))
     }
-    const toSubscribeTopic = (topic: string) => {
-        if (!chatListTopic.includes(topic)) {
-            chatListTopic.push(topic)
-            client.subscribe(topic)
+    const insertUserID = (topic: string) => {
+        if (!users_id.includes(topic)) {
+            users_id.push(topic)
+        }
+    }
+    const setTopicNotRead = (topic: string) => {
+        if (!Object.hasOwn(chatTopicNotRead, topic)) {
+            Object.defineProperty(chatTopicNotRead, topic, {
+                value: 0,
+                writable: true,
+                enumerable: true,
+                configurable: true
+            });
         }
     }
     const options = {
@@ -40,7 +49,7 @@ export default function DashboardPage() {
             'token': token
         },
     };
-    const { status, fetchStatus, data: users } = useQuery({
+    const { status, fetchStatus, data: data } = useQuery({
         queryFn: async () => await fetch("/auth/users/" + user_id, options)
             .then((response) => {
                 if (response.ok) {
@@ -56,17 +65,34 @@ export default function DashboardPage() {
         queryKey: ["Users"]
     })
     if (status == 'success') {
-        users?.map((user: any, index: number, users: string[]) => {
+        data?.map((user: any, index: number, users: string[]) => {
             let topic = String(user.user_id)
-            toSubscribeTopic(topic)
-            if (!Object.hasOwn(chatTopicNotRead, topic)) {
-                Object.defineProperty(chatTopicNotRead, topic, {
-                    value: 0,
-                    writable: true,
-                    enumerable: true,
-                    configurable: true
-                });
+            insertUserID(topic)
+        })
+
+        // set topic
+        users_id?.map((user: any, index: number, users: string[]) => {
+            if (index !== users.length-1) {
+                let topic1 = user +"to"+ users[index +1]
+                let topic2 = users[index +1] +"to"+ user
+                if (!chatListTopic.includes(topic1) && !chatListTopic.includes(topic2)) {
+                    chatListTopic.push(topic1, topic2)
+                    setTopicNotRead(topic1)
+                    setTopicNotRead(topic2)
+                }
+            } else {
+                let topic1 = user +"to"+ users[0]
+                let topic2 = users[0] +"to"+ user
+                if (!chatListTopic.includes(topic1) && !chatListTopic.includes(topic2)) {
+                    chatListTopic.push(topic1, topic2)
+                    setTopicNotRead(topic1)
+                    setTopicNotRead(topic2)
+                }
             }
+        })
+        // subscript topic
+        chatListTopic?.map((topic: any, index: number, topics: string[]) => {
+            client.subscribe(topic)
         })
     }
 
