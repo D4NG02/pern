@@ -42,7 +42,13 @@ export default function ChatUser() {
         setSelectedIndex(index)
         dispatch({ type: reducerCases.SET_CHAT_SELECTION_USER_ID, chatSelectedUserId: initialState.chatSelectedUserId })
 
+        for (const [key, value] of Object.entries(chatTopicNotRead)) {
+            if (chatSelectedUserId) {
+                chatTopicNotRead[chatSelectedUserId] = 0
+            }
+        }
         setTimeout(() => {
+            dispatch({ type: reducerCases.SET_CHAT_TOPIC_NOT_READ, chatTopicNotRead: { ...chatTopicNotRead } })
             dispatch({ type: reducerCases.SET_CHAT_SELECTION_USER_ID, chatSelectedUserId: id })
         }, 200);
     }
@@ -81,7 +87,7 @@ export default function ChatUser() {
                                 selected={selectedIndex === index}
                                 onClick={(event) => handleListItemClick(event, index, user.user_id)}>
                                 <ListItemText primary={user.username} secondary={currentChat? currentChat:"No Message"} sx={{ margin: 'unset' }} />
-                                {newChat!=0 && <Badge badgeContent={newChat}
+                                {newChat!=0 && <Badge badgeContent={newChat/2}
                                     sx={{ '& span': { color: 'white', bgcolor: constantStyle.color_primary, right: '8px' } }} />}
                             </ListItemButton>
                         )
