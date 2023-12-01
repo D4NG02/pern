@@ -62,6 +62,7 @@ export const initialState = {
     chats: new Array<string>,
     chatSelectedUserId: null,
     chatTopicNotRead: new Object,
+    chatListTopic: new Array<string>,
 }
 
 export const initialStateType = typeof initialState
@@ -145,6 +146,8 @@ const reducer = (state: any, action: any) => {
             return { ...state, chatSelectedUserId: action.chatSelectedUserId }
         case reducerCases.SET_CHAT_TOPIC_NOT_READ:
             return { ...state, chatTopicNotRead: action.chatTopicNotRead }
+        case reducerCases.SET_CHAT_LIST_TOPIC:
+            return { ...state, chatListTopic: action.chatListTopic }
         default:
             console.log("Error reducerCases type")
             break;
