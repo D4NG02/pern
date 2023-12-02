@@ -90,7 +90,7 @@ export default function ChatUser() {
                                 selected={selectedIndex === index}
                                 onClick={(event) => handleListItemClick(event, index, user.user_id, topicNotRead)}>
                                 <ListItemText primary={user.username} secondary={thisTopicLatest ? thisTopicLatest : "No Message"} sx={{ margin: 'unset' }} />
-                                {newChat!=0 && <Badge badgeContent={newChat / 2}
+                                {newChat!=0 && <Badge badgeContent={newChat}
                                     sx={{ '& span': { color: 'white', bgcolor: constantStyle.color_primary, right: '8px' } }} />}
                             </ListItemButton>
                         )

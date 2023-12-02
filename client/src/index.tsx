@@ -14,16 +14,14 @@ import App from './App';
 
 const queryClient = new QueryClient();
 
-const root = ReactDOM.createRoot( document.getElementById('root') as HTMLElement );
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-  <React.StrictMode>
-    <StateProvider initialState={initialState} reducer={reducer}>
-      <ThemeProvider theme={CustomComponent}>
-        <QueryClientProvider client={queryClient}>
-          <App />
-        </QueryClientProvider>
-      </ThemeProvider>
-    </StateProvider>
-  </React.StrictMode>
+  <StateProvider initialState={initialState} reducer={reducer}>
+    <ThemeProvider theme={CustomComponent}>
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
+    </ThemeProvider>
+  </StateProvider>
 );
 
