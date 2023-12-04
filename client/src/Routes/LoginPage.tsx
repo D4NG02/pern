@@ -26,7 +26,7 @@ export default function LoginPage() {
     const [ErrorUserID, setErrorUserID] = useState('User ID')
     const [ErrorPassword, setErrorPassword] = useState('Password')
 
-    const [{ token }, dispatch] = useStateProvider()
+    const [{ wrong_user_id, token }, dispatch] = useStateProvider()
 
     const queryClient = useQueryClient();
     const userLogin = async (data: loginSchemaType) => {
@@ -39,23 +39,25 @@ export default function LoginPage() {
         {
             onSuccess: (data: any, variables: loginSchemaType, context: unknown) => {
                 dispatch({ type: reducerCases.SET_TOKEN, token: data.token })
+                dispatch({ type: reducerCases.SET_USER_ID, user_id: data.user.rows[0].user_id })
+                dispatch({ type: reducerCases.SET_USER_NAME, user_name: data.user.rows[0].username })
+                
                 sessionStorage.setItem("token", data.token);
+                sessionStorage.setItem("user_id", data.user.rows[0].user_id);
+                sessionStorage.setItem("user_name", data.user.rows[0].username);
                 setErrorUserID("User ID")
                 setErrorPassword("Password")
             },
             onError: (error: any, variables: loginSchemaType, context: unknown) => {
-                console.log(error.response.data)
+                console.log(error, variables)
                 setErrorUserID("User ID")
                 setErrorPassword("Password")
                 if(error.response.data.message === "Wrong user id") {
-                    setErrorUserID(error.response.data.message)
+                    dispatch({ type: reducerCases.SET_IS_USER_ID, wrong_user_id: true })
                 } else if(error.response.data.message === "Wrong password") {
                     setErrorPassword(error.response.data.message)
                 }
             },
-            onSettled: () => {
-                queryClient.invalidateQueries('create')
-            }
         }
     );
 
@@ -74,7 +76,7 @@ export default function LoginPage() {
 
     return (
         <Fragment>
-            {!token && ErrorUserID!=="Wrong user id" &&
+            {!token && !wrong_user_id &&
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                     <Box sx={{ width: '50vw', border: '1px solid ' +constantStyle.color_primary, borderRadius: 2 }}>
                         <Typography variant='h5' sx={{ padding: 2, borderTopLeftRadius: '8px', borderTopRightRadius: '8px', bgcolor: constantStyle.color_primary }}>Login</Typography>
@@ -123,7 +125,7 @@ export default function LoginPage() {
                 </Box>
             }
 
-            {ErrorUserID=="Wrong user id" && <RegisterPage user_id={userID} />}
+            {wrong_user_id && <RegisterPage user_id={userID} />}
         </Fragment>
     );
 }

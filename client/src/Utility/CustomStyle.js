@@ -229,7 +229,7 @@ const CustomComponent = createTheme({
             },
         },
 
-        // Paination Style
+        // Pagination Style
         MuiTablePagination: {
             styleOverrides: {
                 displayedRows:{
@@ -258,48 +258,26 @@ const CustomComponent = createTheme({
             },
         },
 
+        // list Style
+        MuiListItemButton: {
+            styleOverrides: {
+                root: {
 
-        // Date picker
-        // MuiDateCalendar: {
-        //     styleOverrides: {
-        //         root: {
-        //             color: '#1565c0',
-        //             borderRadius: 4,
-        //             borderWidth: 0,
-        //             borderColor: '#2196f3',
-        //             border: '0px solid',
-        //             backgroundColor: 'white',
-        //         }
-        //     }
-        // },
-        // MuiPickersCalendarHeader: {
-        //     styleOverrides: {
-        //         root: {
-        //             color: 'white',
-        //             borderRadius: 0,
-        //             borderWidth: 0,
-        //             borderColor: '#2196f3',
-        //             border: '0px solid',
-        //             backgroundColor: constantStyle.color_primary,
-        //         }
-        //     }
-        // },
-        // MuiPickersDay: {
-        //     styleOverrides: {
-        //         root: {
-        //             color: 'white',
-        //             borderRadius: 20,
-        //             border: 'unset',
-        //             backgroundColor: constantStyle.color_primary,
-        //         },
-        //         today: {
-        //             color: 'white',
-        //             borderRadius: 20,
-        //             border: '0',
-        //             backgroundColor: constantStyle.color_base_400,
-        //         }
-        //     }
-        // }
+                    '&.Mui-selected': {
+                        color: 'white',
+                        backgroundColor: constantStyle.color_primary,
+                        '&:hover': {
+                            cursor: 'default',
+                            color: 'white',
+                            backgroundColor: constantStyle.color_primary,
+                        },
+                        '& p': {
+                            color: 'rgba(0, 0, 0, 0.4)'
+                        }
+                    }
+                }
+            },
+        },
     },
 })
 

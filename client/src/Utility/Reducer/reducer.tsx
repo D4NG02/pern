@@ -9,7 +9,11 @@ const dateTimeFormat = new Intl.DateTimeFormat('en-US', {
 const date = dateTimeFormat.formatToParts(new Date)
 
 export const initialState = {
+    wrong_user_id: false,
+    user_id: sessionStorage.getItem("user_id") ? sessionStorage.getItem("user_id") : null,
+    user_name: sessionStorage.getItem("user_name") ? sessionStorage.getItem("user_name") : null,
     token: sessionStorage.getItem("token") ? sessionStorage.getItem("token") : null,
+
     row: null,
     country: '',
 
@@ -48,11 +52,17 @@ export const initialState = {
     machineFilterWorkcenter: 1,
     machineFilterWorkstation: 1,
     machineFilterDate: {
-                        "from": new Date(new Date().toDateString()),
-                        "to": new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1)
-                    },
+        "from": new Date(new Date().toDateString()),
+        "to": new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1)
+    },
     machineFilterAsset: [],
     machineFilterTimeline: [],
+
+    // Task 4
+    chats: new Array<string>,
+    chatSelectedUserId: null,
+    chatTopicNotRead: new Object,
+    chatListTopic: new Array<string>,
 }
 
 export const initialStateType = typeof initialState
@@ -60,137 +70,84 @@ export const initialStateType = typeof initialState
 const reducer = (state: any, action: any) => {
     switch (action.type) {
         case reducerCases.SET_TOKEN:
-            return {
-                ...state, token: action.token
-            }
+            return { ...state, token: action.token }
+        case reducerCases.SET_IS_USER_ID:
+            return { ...state, wrong_user_id: action.wrong_user_id }
+        case reducerCases.SET_USER_ID:
+            return { ...state, user_id: action.user_id }
+        case reducerCases.SET_USER_NAME:
+            return { ...state, user_name: action.user_name }
 
         // Menu feature ???
         case reducerCases.SET_CARD:
-            return {
-                ...state, cardType: action.cardType
-            }
+            return { ...state, cardType: action.cardType }
 
         // Task 1 set row number
         case reducerCases.SET_ROW:
-            return {
-                ...state, row: action.row
-            }
+            return { ...state, row: action.row }
         // Task 1 set country
         case reducerCases.SET_COUNTRY:
-            return {
-                ...state, country: action.country
-            }
+            return { ...state, country: action.country }
 
         // Task 2 popup
         case reducerCases.SET_EVENT_RELOAD_CALENDAR:
-            return {
-                ...state,
-                eventReloadCalendar: action.eventReloadCalendar,
-            }
+            return { ...state, eventReloadCalendar: action.eventReloadCalendar, }
         case reducerCases.SET_IS_EVENT_ADD:
-            return {
-                ...state,
-                popupEventAdd: action.popupEventAdd,
-            }
+            return { ...state, popupEventAdd: action.popupEventAdd, }
         case reducerCases.SET_IS_EVENT_EDIT:
-            return {
-                ...state,
-                popupEventEdit: action.popupEventEdit,
-            }
+            return { ...state, popupEventEdit: action.popupEventEdit, }
         case reducerCases.SET_IS_EVENT_HOVER:
-            return {
-                ...state,
-                popupEventHover: action.popupEventHover,
-            }
+            return { ...state, popupEventHover: action.popupEventHover, }
 
         // Task 2 current event data
         case reducerCases.SET_EVENT_ID:
-            return {
-                ...state,
-                eventID: action.eventID,
-            }
+            return { ...state, eventID: action.eventID, }
         case reducerCases.SET_EVENT_DATE:
-            return {
-                ...state,
-                eventDate: action.eventDate,
-            }
+            return { ...state, eventDate: action.eventDate, }
         case reducerCases.SET_EVENT_TITLE:
-            return {
-                ...state,
-                eventTitle: action.eventTitle,
-            }
+            return { ...state, eventTitle: action.eventTitle, }
         case reducerCases.SET_EVENT_NOTE:
-            return {
-                ...state,
-                eventNote: action.eventNote,
-            }
+            return { ...state, eventNote: action.eventNote, }
         case reducerCases.SET_EVENT_PRIO:
-            return {
-                ...state,
-                eventPrio: action.eventPrio,
-            }
+            return { ...state, eventPrio: action.eventPrio, }
 
         // Task 2 Date filter
         case reducerCases.SET_EVENT_FILTER_MONTH:
-            return {
-                ...state,
-                eventFilterMonth: action.eventFilterMonth,
-            }
+            return { ...state, eventFilterMonth: action.eventFilterMonth, }
         case reducerCases.SET_EVENT_FILTER_YEAR:
-            return {
-                ...state,
-                eventFilterYear: action.eventFilterYear,
-            }
+            return { ...state, eventFilterYear: action.eventFilterYear, }
 
         // Task 3
         case reducerCases.SET_MACHINE_FILTER_SEARCH:
-            return {
-                ...state,
-                machineFilterSearch: action.machineFilterSearch,
-            }
+            return { ...state, machineFilterSearch: action.machineFilterSearch, }
         case reducerCases.SET_MACHINE_FILTER_SITES:
-            return {
-                ...state,
-                machineFilterSide: action.machineFilterSide,
-            }
+            return { ...state, machineFilterSide: action.machineFilterSide, }
         case reducerCases.SET_MACHINE_FILTER_PLANTS:
-            return {
-                ...state,
-                machineFilterPlant: action.machineFilterPlant,
-            }
+            return { ...state, machineFilterPlant: action.machineFilterPlant, }
         case reducerCases.SET_MACHINE_FILTER_DEPARTMENTS:
-            return {
-                ...state,
-                machineFilterDepartment: action.machineFilterDepartment,
-            }
+            return { ...state, machineFilterDepartment: action.machineFilterDepartment, }
         case reducerCases.SET_MACHINE_FILTER_WORKCENTERS:
-            return {
-                ...state,
-                machineFilterWorkcenter: action.machineFilterWorkcenter,
-            }
+            return { ...state, machineFilterWorkcenter: action.machineFilterWorkcenter, }
         case reducerCases.SET_MACHINE_FILTER_WORKSTATIONS:
-            return {
-                ...state,
-                machineFilterWorkstation: action.machineFilterWorkstation,
-            }
+            return { ...state, machineFilterWorkstation: action.machineFilterWorkstation, }
         case reducerCases.SET_MACHINE_FILTER_ASSETS:
-            return {
-                ...state,
-                machineFilterAsset: action.machineFilterAsset,
-            }
+            return { ...state, machineFilterAsset: action.machineFilterAsset, }
         case reducerCases.SET_MACHINE_FILTER_DATE:
-            return {
-                ...state,
-                machineFilterDate: action.machineFilterDate,
-            }
+            return { ...state, machineFilterDate: action.machineFilterDate, }
 
-
-            
         case reducerCases.SET_TIMELINE_DATA:
-            return {
-                ...state,
-                machineTimeline: action.machineTimeline,
-            }
+            return { ...state, machineTimeline: action.machineTimeline, }
+
+
+        // Task 4
+        case reducerCases.SET_CHATS:
+            return { ...state, chats: action.chats }
+        case reducerCases.SET_CHAT_SELECTION_USER_ID:
+            return { ...state, chatSelectedUserId: action.chatSelectedUserId }
+        case reducerCases.SET_CHAT_TOPIC_NOT_READ:
+            return { ...state, chatTopicNotRead: action.chatTopicNotRead }
+        case reducerCases.SET_CHAT_LIST_TOPIC:
+            return { ...state, chatListTopic: action.chatListTopic }
         default:
             console.log("Error reducerCases type")
             break;
