@@ -10,11 +10,11 @@ export default function ChatPage() {
     useMessageTopic()
 
     return (
-        <Box sx={{ height: '80vh', display: 'grid', gridTemplateColumns: '14% auto', gap: 3, padding: '16px 0' }}>
+        <Box sx={{ height: '80vh', display: 'grid', gridTemplateColumns: '14% auto', gap: 2, padding: '16px 0' }}>
             <ChatUser />
             <Box sx={{
                 border: '1px solid ' + constantStyle.color_primary, borderRadius: 2,
-                display: 'grid', gridTemplateRows: '74.4vh max-content'
+                display: 'grid', gridTemplateRows: 'auto max-content'
             }}>
                 <ChatList />
                 <ChatForm />
