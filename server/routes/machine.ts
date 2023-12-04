@@ -78,19 +78,20 @@ routerMachine.get("/transactions/:asset_id/:timestampFrom/:timestampTo", authori
     const timestampTo = dayjs(req.params.timestampTo)
     let { rows } = await pool.query("SELECT * FROM transactions WHERE asset_id=$1 AND timestamp>=$2", [asset_id, timestampFrom])
 
-    let data: any[]=[]
+    let data: any[] = []
     rows = rows.map((transaction: any, index: number, array: string[]) => {
       if (dayjs(transaction.timestamp).isBefore(timestampTo) && dayjs(transaction.timestamp).isAfter(timestampFrom)) {
         transaction = {
           transaction_id: transaction.transaction_id,
           asset_id: transaction.asset_id,
           timestamp: getDateFormated(transaction.timestamp),
-          value: transaction.value}
+          value: transaction.value
+        }
         data.push(transaction)
       }
     })
 
-    
+
     const dateFrom = req.params.timestampFrom
     const dateTo = req.params.timestampTo
     let isTimeline = false
@@ -104,19 +105,21 @@ routerMachine.get("/transactions/:asset_id/:timestampFrom/:timestampTo", authori
       if (assetTimeline.asset_id == asset_id) {
         isTimeline = true
         let machineState: string[] = []
-  
+
         machineState = getMachineState(assetTimelineArray, index)
-        timelineColors.push(machineState[1])
+        if (!timelineColors.includes(machineState[1])) {
+          timelineColors.push(machineState[1])
+        }
 
         startTime = getMachineStartTime(dateFrom, assetTimeline.timestamp, index, endTime)
         endTime = getMachineEndTime(dateTo, assetTimelineArray, index, endTime)
-        
+
         timelineData.push(["Utilize", machineState[0], startTime, endTime])
       }
     })
     timelineUtilize = getMachineUtilize(timelineData, dateFrom, dateTo)
-    
-    res.json({asset_id, isTimeline, timelineUtilize, timelineColors, timelineData, assetTransaction})
+
+    res.json({ asset_id, isTimeline, timelineUtilize, timelineColors, timelineData, assetTransaction })
   } catch (error) {
     console.log(error.message)
     res.status(500).send(error.message)
@@ -135,14 +138,14 @@ const getAssetTransaction = (machineTimeline: any[], id: number, timestampFrom: 
   let data: any[] = []
   let start: any[] = []
   let end: any[] = []
-  
+
   // timestamp in 1st array not start time
   machineTimeline.map((transaction: any, index: number, dataArray: any[]) => {
     if ((dayjs(transaction.timestamp).isAfter(timestampFrom)) && (index == 0)) {
       start.push(empty)
     }
   })
-  
+
   data = start.concat(machineTimeline)
   return data
 }
@@ -152,11 +155,11 @@ const getMachineState = (assetTimelineArray: any[], index: number) => {
 
   switch (state) {
     case 1:
-      return ['Running', 'green'];
+      return ['Running', '#2e7d32'];
     case 2:
-      return ['Idle', 'orange'];
+      return ['Idle', '#ed6c02'];
     case 3:
-      return ['Down', 'red'];
+      return ['Down', '#d32f2f'];
     case 4:
       return ['Offline', 'black'];
     case 5:
@@ -169,12 +172,12 @@ const getMachineState = (assetTimelineArray: any[], index: number) => {
 const getMachineStartTime = (filteredDate: string, timestamp: string, index: Number, endTime: string) => {
   let start = dayjs(filteredDate)
   let end = dayjs(timestamp)
-  let time: string=''
+  let time: string = ''
 
-  if ((end.diff(start, 'day', true).valueOf()==0) && (index == 0)) {
-    time = "Date(" +start.year()+ ", " +start.month()+ ", " +start.date()+  ", " +start.hour()+ ", " +start.minute()+ ", " +start.second()+ ")"
-  } else if (end.diff(start, 'day', true).valueOf()!=0) {
-    time = "Date(" +end.year()+ ", " +end.month()+ ", " +end.date()+  ", " +end.hour()+ ", " +end.minute()+ ", " +end.second()+ ")"
+  if ((end.diff(start, 'day', true).valueOf() == 0) && (index == 0)) {
+    time = "Date(" + start.year() + ", " + start.month() + ", " + start.date() + ", " + start.hour() + ", " + start.minute() + ", " + start.second() + ")"
+  } else if (end.diff(start, 'day', true).valueOf() != 0) {
+    time = "Date(" + end.year() + ", " + end.month() + ", " + end.date() + ", " + end.hour() + ", " + end.minute() + ", " + end.second() + ")"
   }
 
   return time
@@ -186,13 +189,13 @@ const getMachineEndTime = (dateTo: string, assetTimelineArray: any[], index: num
 
   if (assetLength > nextKey) {
     let time = dayjs(assetTimelineArray[nextKey].timestamp)
-    return "Date(" +time.year()+ ", " +time.month()+ ", " +time.date()+  ", " +time.hour()+ ", " +time.minute()+ ", " +time.second()+ ")"
+    return "Date(" + time.year() + ", " + time.month() + ", " + time.date() + ", " + time.hour() + ", " + time.minute() + ", " + time.second() + ")"
   } else if (assetLength - 1 == index) {
     let end = dayjs(dateTo)
-    return "Date(" +end.year()+ ", " +end.month()+ ", " +end.date()+  ", " +end.hour()+ ", " +end.minute()+ ", " +end.second()+ ")"
+    return "Date(" + end.year() + ", " + end.month() + ", " + end.date() + ", " + end.hour() + ", " + end.minute() + ", " + end.second() + ")"
   } else {
     let time = dayjs(assetTimelineArray[nextKey].timestamp)
-    return "Date(" +time.year()+ ", " +time.month()+ ", " +time.date()+  ", " +time.hour()+ ", " +time.minute()+ ", " +time.second()+ ")"
+    return "Date(" + time.year() + ", " + time.month() + ", " + time.date() + ", " + time.hour() + ", " + time.minute() + ", " + time.second() + ")"
   }
 }
 

@@ -27,7 +27,6 @@ export default function MachineFilter() {
     dispatch({ type: reducerCases.SET_MACHINE_FILTER_WORKSTATIONS, machineFilterWorkstation: 0 })
     
     setTimeout(() => {
-      console.clear()
       dispatch({ type: reducerCases.SET_MACHINE_FILTER_WORKSTATIONS, machineFilterWorkstation: workStationTag })
     }, 2);
   }
@@ -42,7 +41,7 @@ export default function MachineFilter() {
 
   return (
     <>
-      <Stack spacing='4px' direction='row' useFlexGap flexWrap="wrap">
+      <Stack spacing='4px' direction='row' useFlexGap flexWrap="wrap" paddingBottom={1}>
         <FilterAltIcon sx={{ fontSize: '2em' }} />
         <MachineSites />
         <MachinePlant />

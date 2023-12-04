@@ -70,7 +70,6 @@ routerCurrency.post("/add", authorize, async (req: Request, res: Response) => {
 // Update single currency
 routerCurrency.put('/update/:id', authorize, async(req: Request, res: Response) => {
     try {
-        console.log("Update currency: " +req)
         const { id } = req.params
         const { country } = req.body.country
         const { value } = req.body.value
@@ -88,8 +87,6 @@ routerCurrency.put('/update/:id', authorize, async(req: Request, res: Response) 
 // Get all currency API
 routerCurrency.get("/gets", authorize, async(req: Request, res: Response) => {
     try {
-        console.log("Get all currency")
-    
         let allCurrencytable = await pool.query("SELECT * FROM currencytable")
         res.json(allCurrencytable.rows)
     } catch (error) {
@@ -100,7 +97,6 @@ routerCurrency.get("/gets", authorize, async(req: Request, res: Response) => {
 // Get single currency
 routerCurrency.get('/get/:id', authorize, async(req: Request, res: Response) => {    
     try {
-        console.log("Get selected currency: " +req.params)
         const { id } = req.params.id
         let currencytable = await pool.query(
                                     "SELECT * FROM currencytable WHERE table_id=$1",
@@ -117,7 +113,6 @@ routerCurrency.get('/get/:id', authorize, async(req: Request, res: Response) => 
 routerCurrency.delete('/delete/:id', authorize, async(req: Request, res: Response) => {
     try {
         const { id } = req.params
-        console.log(id)
         let deleteTable = await pool.query(
                                     "DELETE FROM currencytable WHERE table_id=$1",
                                     [id]
@@ -130,8 +125,6 @@ routerCurrency.delete('/delete/:id', authorize, async(req: Request, res: Respons
 });
 
 routerCurrency.get("/graph", authorize, (req: Request, res: Response) => {
-    console.log("Get all graph")
-
     var data = new Graph()
     res.json(data);
 })

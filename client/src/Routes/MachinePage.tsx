@@ -51,9 +51,8 @@ export default function MachinePage() {
     return (
         <>
             <MachineFilter />
-            <Divider orientation="vertical" sx={{ span: { color: 'transparent', padding: 0, fontSize: '8px' } }}>Divider</Divider>
 
-            <Box sx={{ display: 'grid', gridTemplateRows: '25% 25% 25% 25%', gap: 1, height: '62vh', overflowY: 'auto',
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, overflowY: 'auto',
                         '.MuiTablePagination-actions': { display: 'inline-flex' } }}>
                 {status == 'success' &&
                     assets.filter((asset: any, index: number, array: string[]) => {
@@ -72,7 +71,7 @@ export default function MachinePage() {
                                             <img src={require('../Asset/' +asset.image_path.split("/").slice(-1))} height={80} alt={asset.asset_name} />
                                         </Box>
                                     </Box>
-                                    <Box sx={{ bgcolor: constantStyle.color_base_400, padding: 1, borderRadius: 1 }}>
+                                    <Box sx={{ bgcolor: constantStyle.color_base_400, padding: '8px 20px', borderRadius: 1 }}>
                                         <MachineTimeline asset_id={asset.asset_id} />
                                     </Box>
                                 </Box>
@@ -82,15 +81,12 @@ export default function MachinePage() {
             </Box>
 
             {status == 'success' &&
-                <>
-                <Divider orientation="vertical" sx={{ span: { color: 'transparent', padding: 0, fontSize: '8px' } }}>Divider</Divider>
-                <Stack paddingX={2} spacing={2} direction='row' sx={{ justifyContent: 'flex-end' }}>
+                <Stack padding={1} spacing={2} direction='row' sx={{ justifyContent: 'flex-end' }}>
                     <Chip label="Running" color="success" variant='filled' />
                     <Chip label="Idle" color="warning" variant='filled' />
                     <Chip label="Down" color="error" variant='filled' />
                     <Chip label="Offline" sx={{ bgcolor: 'black', color: 'white' }} variant='filled' />
                 </Stack>
-                </>
             }
 
             {status == 'success' &&

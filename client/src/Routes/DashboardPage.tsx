@@ -118,7 +118,7 @@ export default function DashboardPage() {
     }
 
     return (
-        <Box sx={{ display: 'grid', gridTemplateRows: 'max-content auto' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Box sx={{  display: 'flex', justifyContent: 'space-between',
                 bgcolor: 'white', boxShadow: 'unset', padding: '4px 24px',
                 '& img': { height: '2.6em' }
@@ -141,28 +141,26 @@ export default function DashboardPage() {
                 </Box>
             </Box>
 
-            <Box>
-                {cardType &&
-                    <Box sx={{ bgcolor: constantStyle.color_primary, paddingY: '4px' }}>
-                        <Typography textAlign='center' variant="h6" color='white'>{cardType}</Typography>
-                    </Box>
-                }
-
-                <Box sx={{ padding: '10px 24px' }}>
-                    {cardType == null && <CardCustom />}
-
-                    {/* TASK 1 */}
-                    {cardType === 'Currency' && <CurrencyPage />}
-
-                    {/* TASK 2 */}
-                    {cardType === 'Calendar' && <CalendarPage />}
-
-                    {/* TASK 3 */}
-                    {cardType === 'Machine Utilization' && <MachinePage />}
-
-                    {/* TASK 4 */}
-                    {cardType === 'Chat' && <ChatPage />}
+            {cardType &&
+                <Box sx={{ bgcolor: constantStyle.color_primary, paddingY: '4px' }}>
+                    <Typography textAlign='center' variant="h6" color='white'>{cardType}</Typography>
                 </Box>
+            }
+            
+            <Box sx={{ padding: '16px 24px' }}>
+                {cardType == null && <CardCustom />}
+
+                {/* TASK 1 */}
+                {cardType === 'Currency' && <CurrencyPage />}
+
+                {/* TASK 2 */}
+                {cardType === 'Calendar' && <CalendarPage />}
+
+                {/* TASK 3 */}
+                {cardType === 'Machine Utilization' && <MachinePage />}
+
+                {/* TASK 4 */}
+                {cardType === 'Chat' && <ChatPage />}
             </Box>
         </Box>
     );
