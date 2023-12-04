@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Stack, Box, Typography } from '@mui/material';
-import { Chart, } from "react-google-charts";
+import { Chart } from "react-google-charts";
 import dayjs from 'dayjs';
 
 import { useStateProvider } from '../../Utility/Reducer/StateProvider';
@@ -36,7 +36,7 @@ export default function MachineTimeline(props: { asset_id: number }) {
     const options = {
         avoidOverlappingGridLines: false,
         backgroundColor: "#c9cacd",
-        colors: (status == "success" && transactions.istimeline) ? transactions.timelineColors : ['black'],
+        colors: (status == "success" && transactions.isTimeline) ? transactions.timelineColors : ['black'],
         timeline: {
             showRowLabels: false,
             groupByRowLabel: true,
@@ -75,7 +75,7 @@ export default function MachineTimeline(props: { asset_id: number }) {
             <Box sx={{ padding: '4px 32px' }}>
                 <Box sx={{ padding: 2, bgcolor: 'orange', borderRadius: 2, textAlign: 'center' }}>
                     <Typography variant="subtitle1" color="White">Utilize</Typography>
-                    <Typography variant="subtitle2" color='white'>0%</Typography>
+                    <Typography variant="subtitle2" color='white'>{transactions? transactions.timelineUtilize:0}%</Typography>
                 </Box>
             </Box>
             <Box sx={{ padding: '4px 0', width: '100%' }}>
