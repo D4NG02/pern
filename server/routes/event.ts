@@ -7,7 +7,6 @@ const routerEvent = Router();
 // Get all currency API
 routerEvent.get("/gets", authorize, async(req: Request, res: Response) => {
   try {
-    console.log("Get all event")
     let {rows} = await pool.query("SELECT * FROM event")
     res.json(rows)
   } catch (error) {
@@ -35,9 +34,6 @@ routerEvent.post("/add", authorize, async(req: Request, res: Response) => {
 // Update currency API
 routerEvent.post("/update", authorize, async(req: Request, res: Response) => {
   try {
-    console.log("Update event: " +req)
-    console.table(req.body)
-
     const { eventID, eventDate, title, note, eventPrio } = req.body
 
     const updateEvent = await pool.query(
@@ -56,8 +52,6 @@ routerEvent.post("/update", authorize, async(req: Request, res: Response) => {
 routerEvent.post("/delete", authorize, async(req: Request, res: Response) => {
   try {
     const { eventID } = req.body
-    console.log("Delete event: " +eventID)
-    
     const updateEvent = await pool.query( "DELETE FROM event WHERE event_id=$1", [eventID] )
     
     res.json(updateEvent.command)

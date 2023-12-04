@@ -3,7 +3,7 @@ import { useStateProvider } from '../../Utility/Reducer/StateProvider';
 import { reducerCases } from '../../Utility/Reducer/Constant';
 import { FetchGetOptions } from './MachineConstant';
 
-export default function MachineAssets() {
+export default function useMachineAssets() {
     const [{ machineFilterWorkstation }, dispatch] = useStateProvider()
     const { options } = FetchGetOptions()
     const { status, fetchStatus, data: assets } = useQuery({
@@ -19,12 +19,8 @@ export default function MachineAssets() {
                 console.log(response)
             }
         }),
-        queryKey: ["machine_assets", machineFilterWorkstation],
+        queryKey: ["machine_assets"],
         enabled: !!machineFilterWorkstation,
     })
-
-    if(status=='success'){
-        console.log(assets)
-    }
 }
 

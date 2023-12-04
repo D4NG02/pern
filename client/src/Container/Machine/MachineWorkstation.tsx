@@ -9,7 +9,7 @@ export default function MachineWorkstation() {
     const [{ machineFilterWorkcenter, machineFilterWorkstation }, dispatch] = useStateProvider()
     const { options } = FetchGetOptions()
 
-    const { status, fetchStatus, data: workstations } = useQuery({
+    const { status: workstationStatus, fetchStatus: workstationFetchStatus, data: workstations } = useQuery({
         queryFn: async () => await fetch("/machine/workstations/" + machineFilterWorkcenter, options)
         .then((response) => {
             if (response.ok) {
@@ -22,12 +22,17 @@ export default function MachineWorkstation() {
                 console.log(response)
             }
         }),
-        queryKey: ["machine_workstations", machineFilterWorkcenter],
-        enabled: !!machineFilterWorkcenter,
+        queryKey: ["machine_workstations"],
+        enabled: machineFilterWorkcenter!=0,
     })
+    
     const filterWorkstation = (e: any) => {
-        dispatch({ type: reducerCases.SET_MACHINE_FILTER_WORKSTATIONS, machineFilterWorkstation: e.target.value })
-        dispatch({ type: reducerCases.SET_MACHINE_FILTER_ASSETS, machineFilterAsset: 0 })
+        dispatch({ type: reducerCases.SET_MACHINE_FILTER_WORKSTATIONS, machineFilterWorkstation: 0 })
+        dispatch({ type: reducerCases.SET_MACHINE_FILTER_ASSETS, machineFilterAsset: [] })
+        
+        setTimeout(() => {
+            dispatch({ type: reducerCases.SET_MACHINE_FILTER_WORKSTATIONS, machineFilterWorkstation: e.target.value })
+        }, 2);
     }
 
     return (
@@ -44,7 +49,7 @@ export default function MachineWorkstation() {
                 <MenuItem disabled value={0}>
                     <em>Workstation</em>
                 </MenuItem>
-                {status=='success' &&
+                {workstationStatus=='success' &&
                     workstations.map(function (workstation: {workstation_id: number, workstation_name: string }) {
                         return (
                             <MenuItem key={workstation.workstation_id} value={workstation.workstation_id}>{workstation.workstation_name}</MenuItem>

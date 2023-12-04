@@ -106,7 +106,7 @@ export default function CurrencyGraph() {
 
   const options = { method: 'GET', headers: { 'Content-Type': 'application/json', 'token': token }, };
   const { data, isLoading } = useQuery({
-    queryFn: () => fetch("/table/graph", options)
+    queryFn: () => fetch("/currency/graph", options)
       .then((response) => {
         if (response.ok) {
           return response.json()

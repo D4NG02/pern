@@ -6,7 +6,7 @@ import { constantStyle } from '../../Utility/CustomStyle';
 import { FetchGetOptions } from './MachineConstant';
 
 export default function MachinePlant() {
-    const [{ machineFilterSide, machineFilterPlant, machineFilterDepartment }, dispatch] = useStateProvider()
+    const [{ machineFilterSide, machineFilterPlant }, dispatch] = useStateProvider()
     const { options } = FetchGetOptions()
 
     const { status, fetchStatus, data: plants } = useQuery({
@@ -22,13 +22,16 @@ export default function MachinePlant() {
                 console.log(response)
             }
         }),
-        queryKey: ["machine_plants", machineFilterSide],
-        enabled: !!machineFilterSide,
+        queryKey: ["machine_plants"],
+        enabled: machineFilterSide!=0,
     })
 
     const handleOnChange = (e: any) => {
-        dispatch({ type: reducerCases.SET_MACHINE_FILTER_PLANTS, machineFilterPlant: e.target.value })
+        dispatch({ type: reducerCases.SET_MACHINE_FILTER_PLANTS, machineFilterPlant: 0 })
         dispatch({ type: reducerCases.SET_MACHINE_FILTER_DEPARTMENTS, machineFilterDepartment: 0 })
+        setTimeout(() => {
+            dispatch({ type: reducerCases.SET_MACHINE_FILTER_PLANTS, machineFilterPlant: e.target.value })
+        }, 2);
     }
 
     return (

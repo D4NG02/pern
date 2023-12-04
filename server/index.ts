@@ -1,8 +1,7 @@
 import cors from "cors";
 import "jsonwebtoken";
-import express, { Router, Request, Response } from 'express';
+import express from 'express';
 
-import authorize from "./middleware/authorization";
 import routerAuth from "./routes/authenticate";
 import routerCurrency from './routes/currency';
 import routerEvent from './routes/event';
@@ -16,21 +15,41 @@ app.use(cors());
 
 // Routes
 app.use('/auth', routerAuth);
-app.use('/table', routerCurrency);
+app.use('/currency', routerCurrency);
 app.use('/event', routerEvent);
 app.use('/machine', routerMachine);
-
-const routerRoot = Router();
-routerRoot.get('/', authorize, async(req: Request, res: Response) => {
-    try {
-        console.log("Root " +req.user)
-        res.json(req.user)
-    } catch (error) {
-        console.log(error.message)
-        res.status(500).send("Server Error")
-    }
-});
 
 app.listen(5000, () => {
     console.log(`[server]: Server is running at http://localhost:5000`)
 })
+
+
+function print(path, layer) {
+    if (layer.route) {
+        layer.route.stack.forEach(print.bind(null, path.concat(split(layer.route.path))))
+    } else if (layer.name === 'router' && layer.handle.stack) {
+        layer.handle.stack.forEach(print.bind(null, path.concat(split(layer.regexp))))
+    } else if (layer.method) {
+        console.log('%s /%s',
+            layer.method.toUpperCase(),
+            path.concat(split(layer.regexp)).filter(Boolean).join('/'))
+    }
+}
+
+function split(thing) {
+    if (typeof thing === 'string') {
+        return thing.split('/')
+    } else if (thing.fast_slash) {
+        return ''
+    } else {
+        var match = thing.toString()
+            .replace('\\/?', '')
+            .replace('(?=\\/|$)', '$')
+            .match(/^\/\^((?:\\[.*+?^${}()|[\]\\\/]|[^.*+?^${}()|[\]\\\/])*)\$\//)
+        return match
+            ? match[1].replace(/\\(.)/g, '$1').split('/')
+            : '<complex:' + thing.toString() + '>'
+    }
+}
+
+// app._router.stack.forEach(print.bind(null, []))

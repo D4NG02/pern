@@ -66,8 +66,7 @@ CREATE TABLE assets(
 
 CREATE TABLE transactions(
     transaction_id SERIAL PRIMARY KEY,
-    timestamp VARCHAR(255),
-    asset_id INTEGER REFERENCES assets(asset_id)
+    asset_id INTEGER REFERENCES assets(asset_id) NOT NULL,
+    timestamp TIMESTAMP NOT NULL,
+    value INTEGER NOT NULL
 );
-INSERT INTO transactions (timestamp, asset_id) VALUES ('20/5/2021 0:48', 3);
-SELECT * FROM transactions
