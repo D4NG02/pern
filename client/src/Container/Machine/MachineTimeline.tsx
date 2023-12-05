@@ -34,7 +34,7 @@ export default function MachineTimeline(props: { asset_id: number }) {
     const options = {
         avoidOverlappingGridLines: false,
         backgroundColor: "#c9cacd",
-        colors: (status == "success" && transactions.isTimeline) ? transactions.timelineColors : ['black'],
+        colors: (status == "success" && transactions.isTimeline) ? transactions.timelineColors : ['darkgray'],
         timeline: {
             showRowLabels: false,
             groupByRowLabel: true,
@@ -63,7 +63,7 @@ export default function MachineTimeline(props: { asset_id: number }) {
         ["", "No data", new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getMinutes()),
             new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1)],
     ]
-    const rows = dateDiff == 0 ? rowToday : [["", "Offline", new Date(new Date(from).toDateString()), new Date(new Date(to).toDateString())]]
+    const rows = dateDiff == 0 ? rowToday : [["", "No data", new Date(new Date(from).toDateString()), new Date(new Date(to).toDateString())]]
 
     return (
         <Stack direction='row' alignItems='center'>
@@ -75,7 +75,7 @@ export default function MachineTimeline(props: { asset_id: number }) {
             </Box>
             <Box sx={{
                 padding: '4px 0', width: '100%',
-                '& text': { fontSize: '12px' },
+                '& text': { fontSize: '10px' },
             }}>
                 {status == 'success' &&
                     <>

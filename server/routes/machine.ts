@@ -155,11 +155,11 @@ const getMachineState = (assetTimelineArray: any[], index: number) => {
 
   switch (state) {
     case 1:
-      return ['Running', '#2e7d32'];
+      return ['Running', 'green'];
     case 2:
-      return ['Idle', '#ed6c02'];
+      return ['Idle', 'orange'];
     case 3:
-      return ['Down', '#d32f2f'];
+      return ['Down', 'red'];
     case 4:
       return ['Offline', 'black'];
     case 5:

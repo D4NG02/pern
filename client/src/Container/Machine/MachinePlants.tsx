@@ -35,13 +35,13 @@ export default function MachinePlant() {
     }
 
     return (
-        <FormControl size="small" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', pr: 2 }}>
+        <FormControl size="small" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <FormLabel sx={{ pr: 1 }}>Plant</FormLabel>
-            <Select sx={{
+            <Select sx={{ borderRadius: 0,
                 'div': { padding: '0 14px', paddingRight: '14px' },
                 'svg': {
                     position: 'relative', right: 'unset', top: 'unset', color: 'white',
-                    bgcolor: constantStyle.color_primary, borderRadius: 1
+                    bgcolor: constantStyle.color_primary, borderRadius: 0
                 }
             }} value={machineFilterPlant} onChange={handleOnChange}>
 

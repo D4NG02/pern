@@ -57,6 +57,7 @@ export const initialState = {
     },
     machineFilterAsset: [],
     machineFilterTimeline: [],
+    machineFilterPage: 0,
 
     // Task 4
     chats: new Array<string>,
@@ -134,6 +135,8 @@ const reducer = (state: any, action: any) => {
             return { ...state, machineFilterAsset: action.machineFilterAsset, }
         case reducerCases.SET_MACHINE_FILTER_DATE:
             return { ...state, machineFilterDate: action.machineFilterDate, }
+        case reducerCases.SET_MACHINE_FILTER_PAGE:
+            return { ...state, machineFilterPage: action.machineFilterPage, }
 
         case reducerCases.SET_TIMELINE_DATA:
             return { ...state, machineTimeline: action.machineTimeline, }

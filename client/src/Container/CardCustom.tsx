@@ -10,11 +10,18 @@ export default function CardCustom() {
   const UI = (props: { text: string, comingSoon: boolean }) => {
     const displayCard = () => {
       dispatch({ type: reducerCases.SET_CARD, cardType: props.text })
+
+      if (props.text == "Machine Utilization") {
+        dispatch({ type: reducerCases.SET_MACHINE_FILTER_SEARCH, machineFilterSearch: true })
+        setTimeout(() => {
+          window.handleSearch()
+        }, 800);
+      }
     }
 
     return (
       <Card className="outlined" sx={{ ":hover": { bgcolor: constantStyle.color_base_400 } }}>
-        { props.comingSoon?
+        {props.comingSoon ?
           <CardContent>
             <Typography sx={{ fontSize: { xs: 14, sm: 18, md: 24 } }} align='center' variant="h5" component='h5'>{props.text}</Typography>
           </CardContent>
@@ -31,7 +38,7 @@ export default function CardCustom() {
 
   return (
     <Grid container padding={{ xs: 6, sm: 12, md: 22 }} rowSpacing={{ xs: 3, sm: 6, md: 12 }} columnSpacing={{ xs: 3, sm: 6, md: 12 }}
-        direction="row" justifyContent="center" alignItems="center">
+      direction="row" justifyContent="center" alignItems="center">
       <Grid item xs={6}><UI text='Currency' comingSoon={false} /></Grid>
       <Grid item xs={6}><UI text='Calendar' comingSoon={false} /></Grid>
       <Grid item xs={6}><UI text='Machine Utilization' comingSoon={false} /></Grid>

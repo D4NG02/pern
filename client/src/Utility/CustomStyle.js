@@ -71,7 +71,7 @@ const constantStyle = {
     color_on_danger_lighter: '#f31155',
     color_on_danger_dark: '#fff',
     color_on_danger_darker: '#fff',
-    
+
 
     OpenSans: "Open Sans",
     Arial: "Arial",
@@ -88,7 +88,7 @@ const CustomComponent = createTheme({
                     color: constantStyle.color_primary,
 
                     '&.outlined': {
-                        border: '2px solid' +constantStyle.color_primary
+                        border: '2px solid' + constantStyle.color_primary
                     }
                 },
             },
@@ -148,7 +148,7 @@ const CustomComponent = createTheme({
                 textPrimary: {
                     color: constantStyle.color_on_primary,
                     backgroundColor: constantStyle.color_primary,
-                    
+
                     '&:hover': {
                         color: constantStyle.color_on_primary,
                         backgroundColor: constantStyle.color_primary,
@@ -164,20 +164,20 @@ const CustomComponent = createTheme({
                 //     }
                 // },
 
-                containedPrimary : {
+                containedPrimary: {
                     color: constantStyle.color_on_primary,
                     backgroundColor: constantStyle.color_primary,
-                    
+
                     '&:hover': {
                         color: constantStyle.color_on_primary,
                         backgroundColor: constantStyle.color_primary_light,
                     },
                 },
 
-                containedWarning : {
+                containedWarning: {
                     color: constantStyle.color_on_primary,
                     backgroundColor: constantStyle.color_warning,
-                    
+
                     '&:hover': {
                         color: constantStyle.color_on_primary,
                         backgroundColor: constantStyle.color_warning_light,
@@ -191,7 +191,7 @@ const CustomComponent = createTheme({
                     fontFamily: 'inherit',
                 },
 
-                outlined: {  
+                outlined: {
                     // color: constantStyle.color_secondary,
                     // borderColor: constantStyle.color_secondary,
                     // ':hover': {
@@ -206,18 +206,18 @@ const CustomComponent = createTheme({
         MuiTableRow: {
             styleOverrides: {
                 root: {
-                    
+
                     '& th': {
                         fontFamily: 'inherit',
                         color: constantStyle.color_on_primary,
                         backgroundColor: constantStyle.color_primary,
-                        border: '2px solid ' +constantStyle.color_on_primary,
+                        border: '2px solid ' + constantStyle.color_on_primary,
                     },
                     '& td': {
                         fontFamily: 'inherit',
                         color: constantStyle.color_on_secondary,
                         backgroundColor: constantStyle.color_base_500,
-                        border: '2px solid ' +constantStyle.color_on_secondary,
+                        border: '2px solid ' + constantStyle.color_on_secondary,
                     },
                     '&.Mui-selected': {
                         '& td': {
@@ -232,12 +232,12 @@ const CustomComponent = createTheme({
         // Pagination Style
         MuiTablePagination: {
             styleOverrides: {
-                displayedRows:{
+                displayedRows: {
                     margin: 'unset',
                     padding: '4px 8px',
                     borderRadius: '4px',
                     color: constantStyle.color_primary,
-                    border: '1px solid '+constantStyle.color_primary,
+                    border: '1px solid ' + constantStyle.color_primary,
                 },
                 actions: {
                     gap: '8px',
@@ -249,7 +249,7 @@ const CustomComponent = createTheme({
                     'button': {
                         borderRadius: '4px',
                         color: constantStyle.color_primary,
-                        border: '1px solid '+constantStyle.color_primary,
+                        border: '1px solid ' + constantStyle.color_primary,
                     },
                     '.Mui-disabled': {
                         backgroundColor: constantStyle.color_base_200,
@@ -277,6 +277,21 @@ const CustomComponent = createTheme({
                     }
                 }
             },
+        },
+
+        // calendar Style
+        MuiPickersDay: {
+            styleOverrides: {
+                root: {
+                    '&.Mui-selected': {
+                        cursor: 'default',
+                        backgroundColor: constantStyle.color_primary +' !important',
+                    },
+                    '&:hover': {
+                        backgroundColor: constantStyle.color_base_400,
+                    }
+                },
+            }
         },
     },
 })
